@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.suitapp.fragment.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_nav_cart"
+            app:destination="@id/nav_cart" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_search"
+            app:destination="@id/nav_search"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_search"
+        android:name="com.example.suitapp.fragment.SearchFragment"
+        android:label="@string/menu_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_nav_search_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_notifications"
+        android:name="com.example.suitapp.fragment.NotificationFragment"
+        android:label="@string/menu_notifications"
+        tools:layout="@layout/fragment_notification_list" />
+
+    <fragment
+        android:id="@+id/nav_favs"
+        android:name="com.example.suitapp.fragment.FavsFragment"
+        android:label="@string/menu_favs"
+        tools:layout="@layout/fragment_favs_list" >
+        <action
+            android:id="@+id/action_nav_favs_to_nav_search"
+            app:destination="@id/nav_search"
+            app:enterAnim="@anim/nav_default_pop_enter_anim" />
+        <action
+            android:id="@+id/action_nav_favs_to_nav_cart"
+            app:destination="@id/nav_cart" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_shopping"
+        android:name="com.example.suitapp.fragment.ShoppingFragment"
+        android:label="@string/menu_shopping"
+        tools:layout="@layout/fragment_shopping" />
+
+    <fragment
+        android:id="@+id/nav_account"
+        android:name="com.example.suitapp.fragment.AccountFragment"
+        android:label="@string/menu_account"
+        tools:layout="@layout/fragment_account" />
+
+    <fragment
+        android:id="@+id/nav_categories"
+        android:name="com.example.suitapp.fragment.CategoryFragment"
+        android:label="@string/menu_categories"
+        tools:layout="@layout/fragment_category_list" />
+
+    <fragment
+        android:id="@+id/nav_stores"
+        android:name="com.example.suitapp.fragment.StoresFragment"
+        android:label="@string/menu_stores"
+        tools:layout="@layout/fragment_store_list" />
+
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.example.suitapp.fragment.AboutFragment"
+        android:label="@string/menu_about"
+        tools:layout="@layout/fragment_about" />
+
+    <fragment
+        android:id="@+id/nav_cart"
+        android:name="com.example.suitapp.fragment.CartFragment"
+        android:label="@string/menu_cart"
+        tools:layout="@layout/fragment_cart_list" >
+        <action
+            android:id="@+id/action_nav_cart_to_nav_search"
+            app:destination="@id/nav_search" />
+    </fragment>
+</navigation>
