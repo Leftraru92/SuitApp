@@ -38,14 +38,11 @@ public class HomeFragment extends Fragment {
 
     View root;
     private HomeViewModel homeViewModel;
-    private SearchViewModel searchViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
-        searchViewModel =
-                new ViewModelProvider(getActivity()).get(SearchViewModel.class);
 
         root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
@@ -63,11 +60,6 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Navigation.findNavController(root).navigate(R.id.action_nav_home_to_nav_search);
             }
-        });
-        //Escucho el buscador
-        searchViewModel.getSelected().observe(getViewLifecycleOwner(), s -> {
-            Log.d(Constants.LOG, s);
-            tiet.setText(s);
         });
 
         return root;

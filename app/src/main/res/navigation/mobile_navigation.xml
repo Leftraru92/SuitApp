@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_nav_search_to_nav_home"
             app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_search_to_nav_article"
+            app:destination="@id/nav_article" />
     </fragment>
 
     <fragment
@@ -68,7 +71,15 @@
         android:id="@+id/nav_categories"
         android:name="com.example.suitapp.fragment.CategoryFragment"
         android:label="@string/menu_categories"
-        tools:layout="@layout/fragment_category_list" />
+        tools:layout="@layout/fragment_category_list" >
+        <action
+            android:id="@+id/action_nav_categories_to_nav_article"
+            app:destination="@id/nav_article"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_stores"
@@ -89,6 +100,19 @@
         tools:layout="@layout/fragment_cart_list" >
         <action
             android:id="@+id/action_nav_cart_to_nav_search"
+            app:destination="@id/nav_search" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_article"
+        android:name="com.example.suitapp.fragment.ArticleFragment"
+        android:label="@string/menu_articles"
+        tools:layout="@layout/fragment_articles" >
+        <action
+            android:id="@+id/action_nav_article_to_nav_cart"
+            app:destination="@id/nav_cart" />
+        <action
+            android:id="@+id/action_nav_article_to_nav_search"
             app:destination="@id/nav_search" />
     </fragment>
 </navigation>

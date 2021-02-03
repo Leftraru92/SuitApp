@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -59,28 +60,31 @@ public class SearchFragment extends Fragment {
         //muestra el boton expandido
         searchView.setIconified(false);
         //no deja colapsar el botón
-        searchView.setOnCloseListener(() -> true);
+        searchView.setOnCloseListener(() -> {
+            return true;
+        });
 
-        searchView.setQuery(searchViewModel.getSelected().getValue(), false);
+        searchView.setQuery(searchViewModel.getSearchText().getValue(), false);
 
         //Escucho las modificaciones y el enviar
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(Constants.LOG, "onQueryTextSubmit " + query);
-                searchViewModel.select(query);
-                Navigation.findNavController(root).navigate(R.id.action_nav_search_to_nav_home);
+                searchViewModel.setSearchText(query);
+                Navigation.findNavController(root).navigate(R.id.action_nav_search_to_nav_article);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //Log.d(Constants.LOG, "onQueryTextChange");
+                if (TextUtils.isEmpty(newText))
+                    searchViewModel.setSearchText("");
                 return false;
             }
         });
 
-        searchViewModel.getSelected().observe(getViewLifecycleOwner(), s -> {
+        searchViewModel.getSearchText().observe(getViewLifecycleOwner(), s -> {
             searchView.setQuery(s, false);
         });
     }

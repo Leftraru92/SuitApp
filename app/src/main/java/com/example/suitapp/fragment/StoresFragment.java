@@ -11,15 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.suitapp.R;
 import com.example.suitapp.adapter.StoresRecyclerViewAdapter;
 import com.example.suitapp.dummy.DummyContent;
+import com.example.suitapp.dummy.DummyStores;
 
 /**
  * A fragment representing a list of Items.
  */
-public class StoresFragment extends Fragment {
+public class StoresFragment extends Fragment implements StoresRecyclerViewAdapter.OnStoreListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -66,8 +68,13 @@ public class StoresFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new StoresRecyclerViewAdapter(DummyContent.ITEMS));
+            recyclerView.setAdapter(new StoresRecyclerViewAdapter(DummyStores.ITEMS, false, this));
         }
         return view;
+    }
+
+    @Override
+    public void onStoreClick(int position) {
+        Toast.makeText(getContext(), "Se tocó la tienda " + DummyStores.ITEMS.get(position).getName(), Toast.LENGTH_LONG).show();
     }
 }

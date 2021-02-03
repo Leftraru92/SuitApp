@@ -27,7 +27,7 @@ public class FavsRecyclerViewAdapter extends RecyclerView.Adapter<FavsRecyclerVi
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_fav, parent, false);
+                .inflate(R.layout.card_fav, parent, false);
         return new ViewHolder(view);
     }
 

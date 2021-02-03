@@ -20,16 +20,18 @@ import java.util.List;
 public class CategorieRecyclerViewAdapter extends RecyclerView.Adapter<CategorieRecyclerViewAdapter.ViewHolder> {
 
     private final List<Category> mValues;
+    OnCategoryListener onCategoryListener;
 
-    public CategorieRecyclerViewAdapter(List<Category> items) {
+    public CategorieRecyclerViewAdapter(List<Category> items, OnCategoryListener onCategoryListener) {
         mValues = items;
+        this.onCategoryListener = onCategoryListener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_category, parent, false);
-        return new ViewHolder(view);
+                .inflate(R.layout.card_category, parent, false);
+        return new ViewHolder(view, onCategoryListener);
     }
 
     @Override
@@ -44,22 +46,30 @@ public class CategorieRecyclerViewAdapter extends RecyclerView.Adapter<Categorie
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
         public Category mItem;
+        OnCategoryListener onCategoryListener;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view, OnCategoryListener onCategoryListener) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.item_number);
             mContentView = (TextView) view.findViewById(R.id.content);
+            this.onCategoryListener = onCategoryListener;
+
+            view.setOnClickListener(this);
         }
 
         @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+        public void onClick(View v) {
+            onCategoryListener.onCategoryClick(getAdapterPosition());
         }
+    }
+
+    public interface OnCategoryListener{
+        void onCategoryClick(int position);
     }
 }

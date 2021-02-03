@@ -9,16 +9,6 @@ public class SearchViewModel extends ViewModel {
     private MutableLiveData<String> mText;
     private final MutableLiveData<String> searchText;
 
-    private final MutableLiveData<String> selected = new MutableLiveData<String>();
-
-    public void select(String item) {
-        selected.setValue(item);
-    }
-
-    public LiveData<String> getSelected() {
-        return selected;
-    }
-
     public SearchViewModel() {
         mText = new MutableLiveData<>();
         searchText = new MutableLiveData<>();

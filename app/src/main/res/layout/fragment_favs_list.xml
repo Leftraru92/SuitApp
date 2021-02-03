@@ -9,4 +9,4 @@
     android:background="@color/bluegray_50"
     app:layoutManager="LinearLayoutManager"
     tools:context=".fragment.FavsFragment"
-    tools:listitem="@layout/fragment_fav" />
+    tools:listitem="@layout/card_fav" />

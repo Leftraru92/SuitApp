@@ -19,5 +19,7 @@
     <string name="menu_logout">Salir</string>
 
     <string name="menu_cart">Carrito</string>
+    <string name="menu_articles">Artículos</string>
     <string name="search_hint">Buscar artículos y tiendas</string>
+    <string name="filter">Filtrar</string>
 </resources>

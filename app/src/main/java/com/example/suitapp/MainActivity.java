@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home,  R.id.nav_shopping, R.id.nav_notifications, R.id.nav_favs,
-                R.id.nav_account, R.id.nav_categories, R.id.nav_stores)
+                R.id.nav_account, R.id.nav_categories, R.id.nav_stores, R.id.nav_article)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                if(destination.getId() == R.id.nav_home)
+                if(destination.getId() == R.id.nav_home || destination.getId() == R.id.nav_article)
                    toolbar.findViewById(R.id.etSearch).setVisibility(View.VISIBLE);
                 else
                     toolbar.findViewById(R.id.etSearch).setVisibility(View.GONE);
