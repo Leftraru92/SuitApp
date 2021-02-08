@@ -1,8 +1,5 @@
 package com.example.suitapp.fragment;
 
-import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,8 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,7 +19,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import com.example.suitapp.Constants;
+import com.example.suitapp.util.Constants;
 import com.example.suitapp.R;
 import com.example.suitapp.viewmodel.SearchViewModel;
 
@@ -72,6 +67,7 @@ public class SearchFragment extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 Log.d(Constants.LOG, "onQueryTextSubmit " + query);
                 searchViewModel.setSearchText(query);
+                searchViewModel.setStore(false);
                 Navigation.findNavController(root).navigate(R.id.action_nav_search_to_nav_article);
                 return false;
             }

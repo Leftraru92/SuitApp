@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="20dp"
+    >
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true"
+    android:overScrollMode="ifContentScrolls"
+    android:paddingBottom="10dp">
+
+    <View
+        android:id="@+id/divider7"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="?android:attr/listDivider" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clOrdenarPorContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clOrdenarPor"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/selectable_item_background"
+            android:paddingHorizontal="16dp">
+
+            <Button
+                android:id="@+id/btDesplegar"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="false"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="30dp"
+                app:icon="@drawable/ic_chevron_right_solid"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@color/indigo_500"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeWidth="0dp" />
+
+            <TextView
+                android:id="@+id/lbOrdenarPor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ordenar Por:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/lbOrdenarPorSelec"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/lbOrdenarPorSelec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/indigo_500"
+                android:textSize="13sp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbOrdenarPor"
+                tools:text="Fecha " />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutExpandOrdenar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:background="@color/bluegray_100"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clOrdenarPor">
+
+            <RadioGroup
+                android:id="@+id/rgOrdenarPor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:divider="?android:attr/listDivider"
+                android:showDividers="middle">
+
+                <RadioButton
+                    android:id="@+id/orden1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginLeft="8dp"
+                    android:text="un filtro"
+                    android:tag="un filtro"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/orden2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginLeft="8dp"
+                    android:text="dos filtro"
+                    android:tag="dos filtro"
+                    android:checked="true"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/orden3"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginLeft="8dp"
+                    android:text="filtro 3"
+                    android:tag="filtro 3"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/orden4"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginLeft="8dp"
+                    android:text="filtro 4"
+                    android:tag="filtro 4"
+                    android:textSize="14sp" />
+
+            </RadioGroup>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="?android:attr/listDivider" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:visibility="visible"
+        android:paddingHorizontal="8dp">
+
+        <Button
+            android:id="@+id/btnLimpiar"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selectable_item_background"
+            android:text="Limpiar Filtros"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:rippleColor="@color/cian_400" />
+
+        <TextView
+            android:id="@+id/lbFiltrar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filtrar Por:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clFiltroNumOs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:background="@drawable/selectable_item_background"
+            android:paddingHorizontal="8dp">
+
+            <TextView
+                android:id="@+id/lbFiltroNumOs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Número de Os"
+                app:layout_constraintBottom_toTopOf="@+id/lbNumOs"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/lbNumOs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/cian_400"
+                android:textSize="13sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbFiltroNumOs"
+                tools:text="Fecha " />
+
+            <Button
+                android:id="@+id/btDesplegarOs"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="false"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="30dp"
+                app:icon="@drawable/ic_chevron_right_slim"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@color/indigo_500"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeWidth="0dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/divider40"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutExpandNumOs"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:background="@color/bluegray_100"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clOrdenarPor">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilFiltroNumOs"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="4dp"
+                android:hint="Ingrese número"
+                app:boxBackgroundColor="@color/bluegray_100"
+                app:boxBackgroundMode="filled"
+                app:counterEnabled="false"
+                app:counterMaxLength="8"
+                app:endIconMode="clear_text"
+                app:errorEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tvFiltroNumOs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textSize="12sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                android:id="@+id/divider15"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clFiltrarCat"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:background="@drawable/selectable_item_background"
+            android:paddingHorizontal="8dp">
+
+            <Button
+                android:id="@+id/btDesplegarCat"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="false"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="30dp"
+                app:icon="@drawable/ic_chevron_right_slim"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@color/indigo_500"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeWidth="0dp" />
+
+            <TextView
+                android:id="@+id/lbFiltrarCat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Elegir Tipo de OS"
+                app:layout_constraintBottom_toTopOf="@+id/lbCategoriaSelec"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/lbCategoriaSelec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/cian_400"
+                android:textSize="13sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbFiltrarCat"
+                tools:text="Fecha " />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/divider19"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutExpandCategoria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bluegray_100"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clOrdenarPor">
+
+            <RadioGroup
+                android:id="@+id/rgCategorias"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:divider="?android:attr/listDivider"
+                android:showDividers="middle">
+
+                <RadioButton
+                    android:id="@+id/catTodos"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginLeft="8dp"
+                    android:checked="true"
+                    android:text="Todos"
+                    android:textSize="14sp" />
+
+            </RadioGroup>
+
+            <View
+                android:id="@+id/divider16"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clFiltrarEstado"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:background="@drawable/selectable_item_background"
+            android:paddingHorizontal="8dp">
+
+            <Button
+                android:id="@+id/btDesplegarEstado"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="false"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="30dp"
+                app:icon="@drawable/ic_chevron_right_slim"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@color/indigo_500"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeWidth="0dp" />
+
+            <TextView
+                android:id="@+id/lbFiltrarEstado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Elegir Estado del formulario"
+                app:layout_constraintBottom_toTopOf="@+id/lbEstadoSelec"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/lbEstadoSelec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/cian_400"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbFiltrarEstado" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/divider24"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutExpandEstado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bluegray_100"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clOrdenarPor">
+
+            <RadioGroup
+                android:id="@+id/rgEstado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:divider="?android:attr/listDivider"
+                android:showDividers="middle">
+
+                <RadioButton
+                    android:id="@+id/estadoTodos"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:checked="true"
+                    android:text="Todos"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/asignado"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:text="estado 1"
+                    android:tag="estado 1"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/asignado2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:text="estado 2"
+                    android:tag="estado 2"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/asignado3"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:text="estado 3"
+                    android:tag="estado 3"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/asignado4"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:text="estado 4"
+                    android:tag="estado 4"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/asignado5"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:text="estado 5"
+                    android:tag="estado 5"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="14sp" />
+
+            </RadioGroup>
+
+            <View
+                android:id="@+id/divider17"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clFiltroFecha"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:paddingHorizontal="8dp">
+
+            <Button
+                android:id="@+id/btnFecha"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selectable_item_background"
+                android:text="SELECCIONE"
+                android:textAlignment="textEnd"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/cian_400" />
+
+            <TextView
+                android:id="@+id/lbFiltroFecha"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Fecha generación"
+                app:layout_constraintBottom_toTopOf="@+id/lbFechaSelec"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/lbFechaSelec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/cian_400"
+                android:textSize="13sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbFiltroFecha"
+                tools:text="Fecha " />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/divider9"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="?android:attr/listDivider" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
+</ScrollView>

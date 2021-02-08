@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import com.example.suitapp.adapter.GenresRecyclerViewAdapter;
 import com.example.suitapp.dummy.DummyCategories;
 import com.example.suitapp.dummy.DummyContent;
 import com.example.suitapp.dummy.DummyGenres;
+import com.example.suitapp.viewmodel.SearchViewModel;
 
 /**
  * A fragment representing a list of Items.
@@ -30,6 +32,7 @@ public class CategoryFragment extends Fragment implements GenresRecyclerViewAdap
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    SearchViewModel searchViewModel;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -61,6 +64,8 @@ public class CategoryFragment extends Fragment implements GenresRecyclerViewAdap
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_category_list, container, false);
+        searchViewModel = new ViewModelProvider(getActivity()).get(SearchViewModel.class);
+
         RecyclerView recyclerView = root.findViewById(R.id.list);
         RecyclerView recyclerGenres = root.findViewById(R.id.genres_list);
 
@@ -74,12 +79,14 @@ public class CategoryFragment extends Fragment implements GenresRecyclerViewAdap
     @Override
     public void onGenreClick(int position) {
         Toast.makeText(getContext(), "Toco el género  " + DummyGenres.ITEMS.get(position).getName(), Toast.LENGTH_LONG).show();
+        searchViewModel.setStore(false);
         Navigation.findNavController(root).navigate(R.id.action_nav_categories_to_nav_article);
     }
 
     @Override
     public void onCategoryClick(int position) {
         Toast.makeText(getContext(), "Toco la categoría  " + DummyCategories.ITEMS.get(position).getName(), Toast.LENGTH_LONG).show();
+        searchViewModel.setStore(false);
         Navigation.findNavController(root).navigate(R.id.action_nav_categories_to_nav_article);
     }
 }

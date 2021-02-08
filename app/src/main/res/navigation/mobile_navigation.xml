@@ -20,6 +20,13 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_article"
+            app:destination="@id/nav_article"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
 
     <fragment
@@ -114,5 +121,41 @@
         <action
             android:id="@+id/action_nav_article_to_nav_search"
             app:destination="@id/nav_search" />
+        <action
+            android:id="@+id/action_nav_article_to_nav_article_detail"
+            app:destination="@id/nav_article_detail"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_article_detail"
+        android:name="com.example.suitapp.fragment.ArticleDetailFragment"
+        android:label="@string/menu_article_detail"
+        tools:layout="@layout/fragment_article_detail" >
+        <action
+            android:id="@+id/action_nav_article_detail_to_nav_cart"
+            app:destination="@id/nav_cart" />
+        <action
+            android:id="@+id/action_nav_article_detail_to_nav_search"
+            app:destination="@id/nav_search" />
+        <action
+            android:id="@+id/action_nav_article_detail_to_nav_article_added"
+            app:destination="@id/nav_article_added"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_article_added"
+        android:name="com.example.suitapp.fragment.ArticleAddedFragment"
+        tools:layout="@layout/fragment_article_added" >
+        <action
+            android:id="@+id/action_nav_article_added_to_nav_cart"
+            app:launchSingleTop="true"
+            app:destination="@id/nav_cart" />
     </fragment>
 </navigation>

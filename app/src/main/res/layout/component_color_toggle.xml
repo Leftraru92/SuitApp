@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/btnMic5"
+    android:tag="Rosa"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    app:toggle_backgroundColor="@color/white"
+    app:toggle_borderColor="@color/white"
+    app:toggle_borderWidth="8dp"
+    app:toggle_btnCornerRadius="50dp"
+    app:toggle_icon="@drawable/bg_circle"
+    app:toggle_iconColor="#FFAAAA"
+    app:toggle_iconPadding="28dp"
+    app:toggle_selectedBackgroundColor="@color/white"
+    app:toggle_selectedBorderColor="@color/cian_400"
+    app:toggle_selectedTextColor="#FFAAAA" />

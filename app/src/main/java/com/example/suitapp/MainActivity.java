@@ -6,10 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -33,7 +31,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        AppBarLayout appBarLayout = findViewById(R.id.appBarLayout);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar subToolbar = findViewById(R.id.subToolbar);
         TextInputLayout etSearch = findViewById(R.id.etSearch);
         setSupportActionBar(toolbar);
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); //oculta el teclado
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home,  R.id.nav_shopping, R.id.nav_notifications, R.id.nav_favs,
-                R.id.nav_account, R.id.nav_categories, R.id.nav_stores, R.id.nav_article)
+                R.id.nav_account, R.id.nav_categories, R.id.nav_stores, R.id.nav_article, R.id.nav_article_detail)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -54,11 +54,20 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                appBarLayout.setExpanded(true);
+
+                //muestro oculto searchview
                 if(destination.getId() == R.id.nav_home || destination.getId() == R.id.nav_article)
                    toolbar.findViewById(R.id.etSearch).setVisibility(View.VISIBLE);
                 else
                     toolbar.findViewById(R.id.etSearch).setVisibility(View.GONE);
 
+                if(destination.getId() == R.id.nav_article)
+                    subToolbar.setVisibility(View.VISIBLE);
+                else
+                    subToolbar.setVisibility(View.GONE);
+
+                //si el teclado esta visible se oculta al cambiar de pantalla
                 if(imm.isAcceptingText() && getCurrentFocus()!=null)
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
             }

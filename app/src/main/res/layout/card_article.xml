@@ -33,6 +33,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:scaleType="fitCenter"
+                android:background="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHeight_max="@dimen/card_article_max_height"
                 app:layout_constraintStart_toStartOf="parent"

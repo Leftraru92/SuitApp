@@ -1,7 +1,6 @@
 package com.example.suitapp.dummy;
 
 import com.example.suitapp.R;
-import com.example.suitapp.model.Category;
 import com.example.suitapp.model.Genre;
 
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class DummyGenres {
         int i = 0;
         ITEMS.add(new Genre(++i, "Mujeres", R.drawable.card_mujer, 0));
         ITEMS.add(new Genre(++i, "Hombres", R.drawable.card_hombre, 0));
-        ITEMS.add(new Genre(++i, "Niños", R.drawable.card_ninos, 0));
+        ITEMS.add(new Genre(++i, "Niños", R.drawable.card_ninios, 0));
     }
 
 

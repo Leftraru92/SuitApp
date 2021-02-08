@@ -69,6 +69,8 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleRecy
             this.tvColor = (TextView) view.findViewById(R.id.tvColor);
             this.ivArticle = view.findViewById(R.id.ivArticle);
             this.onArticleListener = onArticleListener;
+
+            view.setOnClickListener(this);
         }
 
         @Override

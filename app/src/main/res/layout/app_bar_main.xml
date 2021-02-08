@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/Theme.SuitApp.PopupOverlay"
             app:contentInsetStartWithNavigation="0dp">
 
@@ -50,6 +51,50 @@
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/subToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/alto_filtro"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/Theme.SuitApp.PopupOverlay"
+            app:contentInsetStartWithNavigation="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/resultQty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="100 Resultados"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btFiltrar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_marginHorizontal="12dp"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:gravity="end|center_vertical"
+                    android:text="@string/filter"
+                    app:cornerRadius="24dp"
+                    app:icon="@drawable/ic_filter_list_black_24dp"
+                    app:iconTint="@android:color/white"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="@color/indigo_500"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
 
 

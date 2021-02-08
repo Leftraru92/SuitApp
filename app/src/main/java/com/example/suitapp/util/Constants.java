@@ -1,4 +1,4 @@
-package com.example.suitapp;
+package com.example.suitapp.util;
 
 public class Constants {
 

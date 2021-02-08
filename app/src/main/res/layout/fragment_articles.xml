@@ -13,43 +13,71 @@
         android:animateLayoutChanges="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/llFiltro"
+            android:id="@+id/store_banner"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/alto_filtro"
-            android:background="@color/indigo_500"
-            android:elevation="15dp"
-            android:orientation="horizontal"
-            android:animateLayoutChanges="true"
+            android:layout_height="@dimen/store_banner_height"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_collapseMode="pin">
 
-            <TextView
-                android:id="@+id/resultQty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="100 Resultados"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <Button
-                android:id="@+id/btFiltrar"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_marginHorizontal="12dp"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                android:gravity="end|center_vertical"
-                android:text="@string/filter"
-                app:cornerRadius="24dp"
-                app:icon="@drawable/ic_filter_list_black_24dp"
-                app:iconTint="@color/white"
-                android:backgroundTint="@color/indigo_500"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <ImageView
+                android:id="@+id/ivBanner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/card_mujer"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_collapseMode="parallax"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_fade"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/ivBanner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="120dp"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:textAlignment="textStart"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="Nombre Tienda" />
+
+                <TextView
+                    android:id="@+id/lbInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:text="Más Info..."
+                    android:textAlignment="textStart"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@color/cian_200"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -64,7 +92,7 @@
             app:layout_constraintBottom_toTopOf="@+id/list"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/llFiltro"
+            app:layout_constraintTop_toBottomOf="@+id/store_banner"
             tools:context=".fragment.ArticleFragment"
             tools:itemCount="5"
             tools:listitem="@layout/card_store_circle" />
