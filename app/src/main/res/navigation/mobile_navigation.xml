@@ -5,6 +5,15 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/nav_home">
 
+    <action android:id="@+id/action_move_to_home"
+        app:destination="@id/nav_home"/>
+
+    <action android:id="@+id/action_move_to_login"
+        app:destination="@id/nav_login"/>
+
+    <action android:id="@+id/action_move_to_article"
+        app:destination="@id/nav_article_detail"/>
+
     <fragment
         android:id="@+id/nav_home"
         android:name="com.example.suitapp.fragment.HomeFragment"
@@ -27,6 +36,20 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_article_detail"
+            app:destination="@id/nav_article_detail"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_login"
+            app:destination="@id/nav_login"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" />
     </fragment>
 
     <fragment
@@ -60,6 +83,20 @@
         <action
             android:id="@+id/action_nav_favs_to_nav_cart"
             app:destination="@id/nav_cart" />
+        <action
+            android:id="@+id/action_nav_favs_to_nav_article_detail"
+            app:destination="@id/nav_article_detail"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_nav_favs_to_nav_article_added"
+            app:destination="@id/nav_article_added"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
 
     <fragment
@@ -155,7 +192,17 @@
         tools:layout="@layout/fragment_article_added" >
         <action
             android:id="@+id/action_nav_article_added_to_nav_cart"
+            app:destination="@id/nav_cart"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
             app:launchSingleTop="true"
-            app:destination="@id/nav_cart" />
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_login"
+        android:name="com.example.suitapp.fragment.LoginFragment"
+        tools:layout="@layout/fragment_login" >
     </fragment>
 </navigation>

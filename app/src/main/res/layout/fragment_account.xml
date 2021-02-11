@@ -4,20 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_200"
     tools:context=".fragment.AccountFragment">
 
-    <TextView
-        android:id="@+id/text_account"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_stores"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/gray_200"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:itemCount="2"
+        tools:listitem="@layout/card_my_store" />
+
+    <Button
+        android:id="@+id/btBuyNow"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/bt_add_store"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        app:cornerRadius="10dp"
+        app:icon="@drawable/ic_store_solid"
+        app:iconGravity="textStart"
+        app:iconPadding="12dp"
+        app:iconSize="20dp"
+        app:iconTint="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/list_stores" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

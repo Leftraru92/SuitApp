@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 
 import com.example.suitapp.adapter.CartItemRecyclerViewAdapter;
 import com.example.suitapp.R;
+import com.example.suitapp.dummy.DummyArticles;
 import com.example.suitapp.dummy.DummyContent;
 
 /**
@@ -73,7 +74,7 @@ public class CartFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new CartItemRecyclerViewAdapter(DummyContent.ITEMS));
+            recyclerView.setAdapter(new CartItemRecyclerViewAdapter(DummyArticles.ITEMS));
         }
         setHasOptionsMenu(true);
         return root;

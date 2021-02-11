@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:clipToPadding="false"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="8dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="3"
             app:layout_constraintEnd_toEndOf="parent"

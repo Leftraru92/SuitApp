@@ -27,6 +27,11 @@
     <!-- Botones -->
     <string name="bt_see_cart">Ver carrito</string>
     <string name="bt_buy_cart">Comprar carrito</string>
+    <string name="bt_delete">Eliminar</string>
+    <string name="bt_add_to_cart">Agregar al carrito</string>
+    <string name="bt_more_from_store">Más productos del vendedor</string>
+    <string name="bt_edit">Editar</string>
+    <string name="bt_add_store">Agregar Tienda</string>
 
     <!-- Mensajes -->
     <string name="select_variant">Seleccione una variante</string>
@@ -39,4 +44,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

@@ -5,10 +5,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.suitapp.R;
 import com.example.suitapp.dummy.DummyContent.DummyItem;
+import com.example.suitapp.model.Article;
 
 import java.util.List;
 
@@ -18,10 +21,14 @@ import java.util.List;
  */
 public class FavsRecyclerViewAdapter extends RecyclerView.Adapter<FavsRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Article> mValues;
+    private OnFavListener onFavListener;
+    private OnAddToCartListener onAddToCartListener;
 
-    public FavsRecyclerViewAdapter(List<DummyItem> items) {
+    public FavsRecyclerViewAdapter(List<Article> items, OnFavListener onFavListener, OnAddToCartListener onAddToCartListener) {
         mValues = items;
+        this.onFavListener = onFavListener;
+        this.onAddToCartListener = onAddToCartListener;
     }
 
     @Override
@@ -34,8 +41,9 @@ public class FavsRecyclerViewAdapter extends RecyclerView.Adapter<FavsRecyclerVi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.tvPrice.setText(mValues.get(position).getPriceFormated());
+        holder.tvArticleName.setText(mValues.get(position).getName());
+        holder.ivArticle.setImageResource(mValues.get(position).getImage());
     }
 
     @Override
@@ -43,22 +51,39 @@ public class FavsRecyclerViewAdapter extends RecyclerView.Adapter<FavsRecyclerVi
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView tvPrice, tvArticleName;
+        public final ImageView ivArticle;
+        public Article mItem;
+        public Button btAddToCart;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            tvPrice = (TextView) view.findViewById(R.id.tvPrice);
+            tvArticleName = (TextView) view.findViewById(R.id.tvArticleName);
+            ivArticle = view.findViewById(R.id.ivArticle);
+            btAddToCart = view.findViewById(R.id.btAddToCart);
+
+            btAddToCart.setOnClickListener(this);
+            view.setOnClickListener(this);
         }
 
         @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+        public void onClick(View v) {
+            if (v.getId() == R.id.btAddToCart)
+                onAddToCartListener.OnAddToCartClick(getAdapterPosition());
+            else
+                onFavListener.onFavClick(getAdapterPosition());
         }
+    }
+
+    public interface OnFavListener {
+        void onFavClick(int position);
+    }
+
+    public interface OnAddToCartListener {
+        void OnAddToCartClick(int position);
     }
 }

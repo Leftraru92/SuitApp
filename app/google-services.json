@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "396255124955",
+    "project_id": "suitapp-uai",
+    "storage_bucket": "suitapp-uai.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:396255124955:android:b13644da193627ae821bfe",
+        "android_client_info": {
+          "package_name": "com.example.suitapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "396255124955-1snfpvfgulisfncfii9opsocro6v9h26.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.suitapp",
+            "certificate_hash": "95e88962ba75368d0092aeb62b6088fd67de7e0e"
+          }
+        },
+        {
+          "client_id": "396255124955-8422d53koteuttt1n8bfi3q06upsrube.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL9JRV8hUqIkQralvLB30H_yK80aJ10Zk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "396255124955-8422d53koteuttt1n8bfi3q06upsrube.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

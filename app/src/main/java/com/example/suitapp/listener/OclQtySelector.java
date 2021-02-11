@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -115,6 +116,10 @@ public class OclQtySelector implements View.OnClickListener, OnQtyListener {
         dialogSelect.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
+                TextInputEditText tietQty = viewInputQty.findViewById(R.id.tietQty);
+                tietQty.requestFocus();
+                //TODO: show keyboard
+
                 Button b = dialogSelect.getButton(AlertDialog.BUTTON_POSITIVE);
                 b.setOnClickListener(view -> {
                     validateInsertQty(viewInputQty);

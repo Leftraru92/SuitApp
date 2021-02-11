@@ -5,10 +5,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.suitapp.R;
 import com.example.suitapp.dummy.DummyContent.DummyItem;
+import com.example.suitapp.model.Article;
 
 import java.util.List;
 
@@ -18,9 +20,9 @@ import java.util.List;
  */
 public class CartItemRecyclerViewAdapter extends RecyclerView.Adapter<CartItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Article> mValues;
 
-    public CartItemRecyclerViewAdapter(List<DummyItem> items) {
+    public CartItemRecyclerViewAdapter(List<Article> items) {
         mValues = items;
     }
 
@@ -34,8 +36,11 @@ public class CartItemRecyclerViewAdapter extends RecyclerView.Adapter<CartItemRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.tvArticleVariant.setText("Color: Negro, Talle: M");
+        holder.tvArticleName.setText(mValues.get(position).getName());
+        holder.tvPrice.setText("$ " + mValues.get(position).getPrice());
+        holder.tvQuantity.setText("1");
+        holder.ivArticle.setImageResource(mValues.get(position).getImage());
     }
 
     @Override
@@ -45,20 +50,18 @@ public class CartItemRecyclerViewAdapter extends RecyclerView.Adapter<CartItemRe
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView tvArticleName, tvArticleVariant, tvQuantity, tvPrice;
+        public final ImageView ivArticle;
+        public Article mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            tvArticleName = (TextView) view.findViewById(R.id.tvArticleName);
+            tvArticleVariant = (TextView) view.findViewById(R.id.tvArticleVariant);
+            tvQuantity = (TextView) view.findViewById(R.id.tvQuantity);
+            tvPrice = (TextView) view.findViewById(R.id.tvPrice);
+            ivArticle = view.findViewById(R.id.ivArticle);
         }
     }
 }

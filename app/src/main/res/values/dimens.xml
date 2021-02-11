@@ -8,7 +8,9 @@
     <dimen name="text_margin">16dp</dimen>
 
     <dimen name="card_genres">80dp</dimen>
+    <dimen name="image_fav_height">120dp</dimen>
     <dimen name="card_article_max_height">220dp</dimen>
+    <dimen name="card_article2_height">140dp</dimen>
     <dimen name="circle_stores_height">80dp</dimen>
     <dimen name="article_image">260dp</dimen>
     <dimen name="premium_store_height">160dp</dimen>
@@ -16,4 +18,6 @@
 
     <dimen name="alto_filtro">40dp</dimen>
     <dimen name="button_height">52dp</dimen>
+    <dimen name="link_height">32dp</dimen>
+    <dimen name="title_card_height">48dp</dimen>
 </resources>

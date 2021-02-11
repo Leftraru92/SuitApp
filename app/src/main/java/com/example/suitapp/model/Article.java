@@ -1,5 +1,9 @@
 package com.example.suitapp.model;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 public class Article {
     private int id;
     private String name;
@@ -24,7 +28,13 @@ public class Article {
     }
 
     public float getPrice() {
+        DecimalFormat formatea = new DecimalFormat("###,###.##");
         return price;
+    }
+
+    public String getPriceFormated() {
+        DecimalFormat formatea = new DecimalFormat("$ ###,###.##", DecimalFormatSymbols.getInstance(Locale.ITALY));
+        return formatea.format(price);
     }
 
     public int getImage() {

@@ -65,6 +65,15 @@
             android:background="@color/bluegray_100"
             app:layout_constraintBottom_toBottomOf="parent" />
 
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/ivArticle"
+            app:layout_constraintEnd_toEndOf="@+id/ivArticle"
+            app:layout_constraintTop_toBottomOf="@+id/ivArticle"
+            app:srcCompat="@drawable/ic_check_circle_solid" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

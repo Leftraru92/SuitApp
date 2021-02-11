@@ -21,12 +21,13 @@ import android.widget.Toast;
 
 import com.example.suitapp.adapter.FavsRecyclerViewAdapter;
 import com.example.suitapp.R;
+import com.example.suitapp.dummy.DummyArticles;
 import com.example.suitapp.dummy.DummyContent;
 
 /**
  * A fragment representing a list of Items.
  */
-public class FavsFragment extends Fragment {
+public class FavsFragment extends Fragment implements FavsRecyclerViewAdapter.OnFavListener, FavsRecyclerViewAdapter.OnAddToCartListener {
 
     View root;
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -73,7 +74,7 @@ public class FavsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new FavsRecyclerViewAdapter(DummyContent.ITEMS));
+            recyclerView.setAdapter(new FavsRecyclerViewAdapter(DummyArticles.ITEMS, this, this));
         }
         setHasOptionsMenu(true);
         return root;
@@ -96,5 +97,15 @@ public class FavsFragment extends Fragment {
             default:
                 return NavigationUI.onNavDestinationSelected(item, Navigation.findNavController(root));
         }
+    }
+
+    @Override
+    public void onFavClick(int position) {
+        Navigation.findNavController(root).navigate(R.id.action_nav_favs_to_nav_article_detail);
+    }
+
+    @Override
+    public void OnAddToCartClick(int position) {
+        Navigation.findNavController(root).navigate(R.id.action_nav_favs_to_nav_article_added);
     }
 }

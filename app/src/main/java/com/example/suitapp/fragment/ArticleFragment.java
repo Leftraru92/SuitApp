@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.suitapp.util.Constants;
-import com.example.suitapp.adapter.ArticleRecyclerViewAdapter;
+import com.example.suitapp.adapter.ArticleAdapter;
 import com.example.suitapp.R;
 import com.example.suitapp.adapter.StoresRecyclerViewAdapter;
 import com.example.suitapp.dummy.DummyArticles;
@@ -34,7 +34,7 @@ import com.google.android.material.textfield.TextInputEditText;
 /**
  * A fragment representing a list of Items.
  */
-public class ArticleFragment extends Fragment implements StoresRecyclerViewAdapter.OnStoreListener, ArticleRecyclerViewAdapter.OnArticleListener {
+public class ArticleFragment extends Fragment implements StoresRecyclerViewAdapter.OnStoreListener, ArticleAdapter.OnArticleListener {
 
     View root;
     SearchViewModel searchViewModel;
@@ -123,7 +123,7 @@ public class ArticleFragment extends Fragment implements StoresRecyclerViewAdapt
         }
 
         RecyclerView recyclerView = root.findViewById(R.id.list);
-        recyclerView.setAdapter(new ArticleRecyclerViewAdapter(DummyArticles.ITEMS, this));
+        recyclerView.setAdapter(new ArticleAdapter(DummyArticles.ITEMS, this, R.layout.card_article));
     }
 
     @Override

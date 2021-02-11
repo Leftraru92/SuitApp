@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton;
 import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup;
@@ -27,9 +28,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.suitapp.MainActivity;
 import com.example.suitapp.R;
+import com.example.suitapp.adapter.ArticleAdapter;
+import com.example.suitapp.adapter.ArticlesGroupAdapter;
 import com.example.suitapp.adapter.ImageAdapter;
+import com.example.suitapp.dummy.DummyArticles;
+import com.example.suitapp.dummy.DummyArticlesGroup;
 import com.example.suitapp.listener.OclQtySelector;
+import com.example.suitapp.util.SingletonUser;
 import com.example.suitapp.util.Util;
 import com.example.suitapp.viewmodel.ArticleDetailViewModel;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -38,7 +45,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArticleDetailFragment extends Fragment {
+public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdapter.OnGroupListener {
 
     ArticleDetailViewModel adViewModel;
     View root;
@@ -86,6 +93,9 @@ public class ArticleDetailFragment extends Fragment {
         ViewPager2 viewPager = root.findViewById(R.id.viewPager);
         Button btAddToCart = root.findViewById(R.id.btAddToCart);
         btAddToCart.setOnClickListener(v -> onAddToCart());
+
+        RecyclerView recyclerGroups = root.findViewById(R.id.article_groups_list);
+        recyclerGroups.setAdapter(new ArticlesGroupAdapter(DummyArticlesGroup.ITEMS, this, root, R.layout.card_article_group_horizontal_scroll));
 
         List<Integer> lImagenes = new ArrayList<>();
         lImagenes.add(R.drawable.buzo);
@@ -234,10 +244,14 @@ public class ArticleDetailFragment extends Fragment {
     }
 
     private void onAddToCart() {
-        if (validateVariants())
-            Navigation.findNavController(root).navigate(R.id.action_nav_article_detail_to_nav_article_added);
-        else
-            Snackbar.make(tvColor, getResources().getString(R.string.error_select_variant), BaseTransientBottomBar.LENGTH_LONG).show();
+        if (SingletonUser.getInstance(getContext()).isLogued()) {
+            if (validateVariants())
+                Navigation.findNavController(root).navigate(R.id.action_nav_article_detail_to_nav_article_added);
+            else
+                Snackbar.make(tvColor, getResources().getString(R.string.error_select_variant), BaseTransientBottomBar.LENGTH_LONG).show();
+        }else {
+            ((MainActivity)getActivity()).mostrarMensaje();
+        }
     }
 
     private boolean validateVariants() {
@@ -253,5 +267,10 @@ public class ArticleDetailFragment extends Fragment {
         }
 
         return result;
+    }
+
+    @Override
+    public void onGroupClick(int position) {
+
     }
 }

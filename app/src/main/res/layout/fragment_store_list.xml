@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="16dp"
     android:background="@color/gray_200"
-    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
     app:spanCount="2"
     tools:context=".fragment.StoresFragment"
     tools:listitem="@layout/card_stores" />

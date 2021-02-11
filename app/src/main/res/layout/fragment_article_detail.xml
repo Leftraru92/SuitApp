@@ -418,5 +418,18 @@
 
         </androidx.viewpager2.widget.ViewPager2>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/article_groups_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:clipToPadding="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btAddToCart"
+            tools:itemCount="2"
+            tools:listitem="@layout/card_article_group_horizontal_scroll" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

@@ -2,7 +2,6 @@ package com.example.suitapp.adapter;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,25 +9,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.suitapp.R;
-import com.example.suitapp.dummy.DummyContent.DummyItem;
 import com.example.suitapp.model.Article;
 
 import java.util.List;
 
-public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleRecyclerViewAdapter.ViewHolder> {
+public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHolder> {
 
     private final List<Article> mValues;
     OnArticleListener onArticleListener;
+    private final int card;
 
-    public ArticleRecyclerViewAdapter(List<Article> items, OnArticleListener onArticleListener) {
+    public ArticleAdapter(List<Article> items, OnArticleListener onArticleListener, int card) {
         mValues = items;
         this.onArticleListener = onArticleListener;
+        this.card = card;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_article, parent, false);
+                .inflate(card, parent, false);
         return new ViewHolder(view, onArticleListener);
     }
 
@@ -38,12 +38,14 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleRecy
         holder.tvId.setText(String.valueOf(mValues.get(position).getId()));
         holder.tvName.setText(mValues.get(position).getName());
         holder.tvPrice.setText("$ " + mValues.get(position).getPrice());
-        if(mValues.get(position).getColors()>0) {
-            holder.tvColor.setText(mValues.get(position).getColors() + " colores");
-            holder.tvColor.setVisibility(View.VISIBLE);
+
+        if(holder.tvColor != null) {
+            if (mValues.get(position).getColors() > 0) {
+                holder.tvColor.setText(mValues.get(position).getColors() + " colores");
+                holder.tvColor.setVisibility(View.VISIBLE);
+            } else
+                holder.tvColor.setVisibility(View.GONE);
         }
-        else
-            holder.tvColor.setVisibility(View.GONE);
         holder.ivArticle.setImageResource(mValues.get(position).getImage());
         holder.ivArticle.setClipToOutline(true);
     }
