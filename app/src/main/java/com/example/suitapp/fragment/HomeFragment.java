@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment implements GenresRecyclerViewAdapter.
 
         //Store list
         RecyclerView recyclerViewStores = root.findViewById(R.id.listStores);
-        recyclerViewStores.setAdapter(new StoresRecyclerViewAdapter(DummyStores.ITEMS, true, this));
+        recyclerViewStores.setAdapter(new StoresRecyclerViewAdapter(DummyStores.ITEMS, R.layout.card_store_circle, this));
 
         setHasOptionsMenu(true);
 

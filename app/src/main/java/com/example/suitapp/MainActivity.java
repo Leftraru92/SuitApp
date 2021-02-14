@@ -86,10 +86,12 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                appBarLayout.setExpanded(true);
 
                 boolean isLogued = SingletonUser.getInstance(getBaseContext()).isLogued();
                 updateMenu();
 
+                //Si no está logueado no dejo que entre a algunas pantallas
                 if (!isLogued && (destination.getId() == R.id.nav_cart || destination.getId() == R.id.nav_account ||
                         destination.getId() == R.id.nav_favs || destination.getId() == R.id.nav_shopping)) {
                     controller.navigateUp();
@@ -117,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                     subToolbar.setVisibility(View.GONE);
 
                 //si el teclado esta visible se oculta al cambiar de pantalla
-                if (imm.isAcceptingText() && getCurrentFocus() != null)
+                if (getCurrentFocus() != null)
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
             }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_store_name">
+
+    <fragment
+        android:id="@+id/nav_store_name"
+        android:name="com.example.suitapp.fragment.addStore.StoreNameFragment"
+        android:label="@string/store_name"
+        tools:layout="@layout/fragment_store_name" >
+        <action
+            android:id="@+id/action_nav_store_name_to_nav_address_store"
+            app:destination="@id/nav_address_store"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_address_store"
+        android:name="com.example.suitapp.fragment.addStore.StoreAddressFragment"
+        android:label="@string/store_address"
+        tools:layout="@layout/fragment_store_address" >
+        <action
+            android:id="@+id/action_nav_address_store_to_imageStoreFragment"
+            app:destination="@id/nav_image_store"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_image_store"
+        android:name="com.example.suitapp.fragment.addStore.ImageStoreFragment"
+        android:label="@string/store_image"
+        tools:layout="@layout/fragment_image_store">
+        <action
+            android:id="@+id/action_nav_image_store_to_nav_shipping_store"
+            app:destination="@id/nav_shipping_store"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_shipping_store"
+        android:name="com.example.suitapp.fragment.addStore.StoreShippingFragment"
+        android:label="@string/store_shipping"
+        tools:layout="@layout/fragment_store_shipping"/>
+
+
+</navigation>

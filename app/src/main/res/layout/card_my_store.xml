@@ -31,9 +31,9 @@
             android:id="@+id/ivStore"
             android:layout_width="@dimen/circle_stores_height"
             android:layout_height="@dimen/circle_stores_height"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:src="@drawable/card_hombre"
             app:civ_border_color="@color/titulos"
             app:civ_border_width="4dp"
@@ -42,10 +42,10 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvArticleName"
+            android:id="@+id/tvName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="24dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="sans-serif-medium"
             android:text="8 Galones"

@@ -20,7 +20,7 @@
         tools:listitem="@layout/card_my_store" />
 
     <Button
-        android:id="@+id/btBuyNow"
+        android:id="@+id/btAddStore"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="@dimen/button_height"

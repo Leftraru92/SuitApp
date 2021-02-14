@@ -12,7 +12,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:src="@drawable/pantalon"
-        app:civ_border_color="#FFFFFF"
+        app:civ_border_color="@color/white"
         app:civ_border_width="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

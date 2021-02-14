@@ -21,32 +21,26 @@ import java.util.List;
 public class StoresRecyclerViewAdapter extends RecyclerView.Adapter<StoresRecyclerViewAdapter.ViewHolder> {
 
     private final List<Store> mValues;
-    private boolean circle;
+    private int card;
     OnStoreListener onStoreListener;
 
-    public StoresRecyclerViewAdapter(List<Store> items, boolean circle, OnStoreListener onStoreListener) {
+    public StoresRecyclerViewAdapter(List<Store> items, int card, OnStoreListener onStoreListener) {
         mValues = items;
-        this.circle = circle;
+        this.card = card;
         this.onStoreListener = onStoreListener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        int layout;
-        if (circle)
-            layout = R.layout.card_store_circle;
-        else
-            layout = R.layout.card_stores;
-
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(layout, parent, false);
+                .inflate(card, parent, false);
         return new ViewHolder(view, onStoreListener);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.tvId.setText(String.valueOf(mValues.get(position).getId()));
+//        holder.tvId.setText(String.valueOf(mValues.get(position).getId()));
         holder.tvName.setText(mValues.get(position).getName());
         holder.ivStore.setImageResource(mValues.get(position).getImage());
     }

@@ -32,19 +32,39 @@
     <string name="bt_more_from_store">Más productos del vendedor</string>
     <string name="bt_edit">Editar</string>
     <string name="bt_add_store">Agregar Tienda</string>
+    <string name="bt_next">Continuar</string>
+    <string name="bt_add_image">Agregar imagen</string>
 
     <!-- Mensajes -->
     <string name="select_variant">Seleccione una variante</string>
     <string name="msg_article_added">Agregaste a tu carrito</string>
+    <string name="selec_option_img">Seleccione una opción</string>
+    <string name="selec_galery">Seleccionar de la galería</string>
+    <string name="capture_photo">Capturar una foto</string>
 
     <!-- Errores -->
     <string name="mandatory_field">Debe completar el campo</string>
     <string name="max_stock">Sin stock suficiente</string>
     <string name="error_select_variant">Debe seleccionar una variante</string>
+    <string name="error_max_length">Excede la cantidad de caracteres</string>
+    <string name="error_select_option">Debe seleccionar una opción</string>
+    <string name="error_complete_form">Complete el formulario para continuar</string>
+
+    <!--Agregar tienda -->
+    <string name="store_name">Indicá el nombre de la tienda</string>
+    <string name="store_coord">Ubique su tienda en el mapa</string>
+    <string name="store_address">Indicá la dirección de la tienda</string>
+    <string name="store_image">Agregá imágenes de la tienda</string>
+    <string name="store_logo">Cargá una imagen que represente tu tienda</string>
+    <string name="store_portada">Cargá una imagen de portada de tu tienda</string>
+    <string name="store_desc">Describí tu tienda</string>
+    <string name="store_shipping">¿Realiza envíos?</string>
+    <string name="review_publish">Revisá y publicá</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="fileprovider">com.example.suitapp</string>
 </resources>

@@ -68,7 +68,7 @@ public class StoresFragment extends Fragment implements StoresRecyclerViewAdapte
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new StoresRecyclerViewAdapter(DummyStores.ITEMS, false, this));
+            recyclerView.setAdapter(new StoresRecyclerViewAdapter(DummyStores.ITEMS, R.layout.card_stores, this));
         }
         return view;
     }

@@ -119,7 +119,7 @@ public class ArticleFragment extends Fragment implements StoresRecyclerViewAdapt
             store_banner.setVisibility(View.GONE);
             //TODO: get info adapter stores
             recyclerViewStores.setVisibility(View.VISIBLE);
-            recyclerViewStores.setAdapter(new StoresRecyclerViewAdapter(DummyStores.ITEMS, true, this));
+            recyclerViewStores.setAdapter(new StoresRecyclerViewAdapter(DummyStores.ITEMS, R.layout.card_store_circle, this));
         }
 
         RecyclerView recyclerView = root.findViewById(R.id.list);

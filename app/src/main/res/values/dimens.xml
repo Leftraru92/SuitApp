@@ -8,6 +8,7 @@
     <dimen name="text_margin">16dp</dimen>
 
     <dimen name="card_genres">80dp</dimen>
+    <dimen name="store_logo_height">140dp</dimen>
     <dimen name="image_fav_height">120dp</dimen>
     <dimen name="card_article_max_height">220dp</dimen>
     <dimen name="card_article2_height">140dp</dimen>
