@@ -1,7 +1,6 @@
 package com.example.suitapp.listener;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -11,34 +10,37 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.suitapp.R;
-import com.example.suitapp.model.DialogSelectItem;
-import com.example.suitapp.viewmodel.DialogSelectViewModel;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.suitapp.model.DialogSelectItemList;
+import com.example.suitapp.util.Constants;
+import com.example.suitapp.viewmodel.DialogSelectItemViewModel;
 
 import java.util.Map;
 
 import androidx.appcompat.app.AlertDialog;
 
-public class OclSelectDialog {
+public class OclSelectDialog implements View.OnClickListener {
 
     private Context context;
-    private DialogSelectViewModel viewModel;
-    private DialogSelectItem listItems;
+    private DialogSelectItemViewModel viewModel;
+    private DialogSelectItemList listItems;
+    private int requestId;
 
     private View viewInflater;
     private LayoutInflater inflater;
     AlertDialog dialog;
 
-    public OclSelectDialog(Context context, DialogSelectViewModel viewModel, DialogSelectItem listItems) {
+    public OclSelectDialog(Context context, DialogSelectItemViewModel viewModel, DialogSelectItemList listItems, int requestId) {
         this.context = context;
         this.viewModel = viewModel;
         this.listItems = listItems;
+        this.requestId = requestId;
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         viewInflater = inflater.inflate(R.layout.dialog_select_province, null);
     }
 
-    public void selectItem() {
+    @Override
+    public void onClick(View v) {
 
         TextView tvProvince = viewInflater.findViewById(R.id.tvProvince);
         final RadioGroup rgProvinces = viewInflater.findViewById(R.id.rgProvinces);
@@ -62,14 +64,14 @@ public class OclSelectDialog {
 
 
         generateRadioButtons(rgProvinces, null, inflater);
-        openDialog(rgProvinces);
+        openDialog();
     }
 
-    private void openDialog(RadioGroup rgProvinces) {
+    private void openDialog() {
         if(dialog==null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-            builder.setTitle("Seleccione Provincia")
+            builder.setTitle("Seleccione una opción")
                     .setView(viewInflater)
                     .setNegativeButton(android.R.string.no, null);
 
@@ -84,7 +86,7 @@ public class OclSelectDialog {
         rgProvinces.removeAllViews();
         rgProvinces.clearCheck();
 
-        int itemSelected = viewModel.getSelectValue();
+        int itemSelected = viewModel.getSelectValue(requestId);
 
         for (Map.Entry<Integer, String> entry : listItems.getList().entrySet()) {
 
@@ -114,8 +116,9 @@ public class OclSelectDialog {
         int selectedItemId = rgProvinces.getCheckedRadioButtonId();
 
         if (selectedItemId > 0) {
-            viewModel.selectValue(selectedItemId, listItems.getList().get(selectedItemId));
+            viewModel.selectValue(selectedItemId, listItems.getList().get(selectedItemId), requestId);
             dialog.dismiss();
         }
     }
+
 }

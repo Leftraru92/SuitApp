@@ -17,6 +17,17 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <argument
+            android:name="fromReview"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_nav_store_name_to_nav_store_review"
+            app:destination="@id/nav_store_review"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
 
     <fragment
@@ -31,6 +42,17 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <argument
+            android:name="fromReview"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_nav_address_store_to_nav_store_review"
+            app:destination="@id/nav_store_review"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
     </fragment>
 
     <fragment
@@ -45,13 +67,115 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <argument
+            android:name="fromReview"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_nav_image_store_to_nav_store_review"
+            app:destination="@id/nav_store_review"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_nav_image_store_to_nav_view_image"
+            app:destination="@id/nav_view_image" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_shipping_store"
         android:name="com.example.suitapp.fragment.addStore.StoreShippingFragment"
         android:label="@string/store_shipping"
-        tools:layout="@layout/fragment_store_shipping"/>
+        tools:layout="@layout/fragment_store_shipping">
+        <action
+            android:id="@+id/action_nav_shipping_store_to_nav_store_review"
+            app:destination="@id/nav_store_review"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <argument
+            android:name="fromReview"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_store_review"
+        android:name="com.example.suitapp.fragment.addStore.StoreReviewFragment"
+        android:label="@string/review_publish"
+        tools:layout="@layout/fragment_store_review">
+        <action
+            android:id="@+id/action_nav_store_review_to_nav_store_name"
+            app:destination="@id/nav_store_name"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" >
+            <argument
+                android:name="fromReview"
+                android:defaultValue="true" />
+        </action>
+        <action
+            android:id="@+id/action_nav_store_review_to_nav_address_store"
+            app:destination="@id/nav_address_store"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left">
+            <argument
+                android:name="fromReview"
+                android:defaultValue="true" />
+        </action>
+        <action
+            android:id="@+id/action_nav_store_review_to_nav_image_store"
+            app:destination="@id/nav_image_store"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left">
+            <argument
+                android:name="fromReview"
+                android:defaultValue="true" />
+        </action>
+        <action
+            android:id="@+id/action_nav_store_review_to_nav_shipping_store"
+            app:destination="@id/nav_shipping_store"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left">
+            <argument
+                android:name="fromReview"
+                android:defaultValue="true" />
+        </action>
+        <action
+            android:id="@+id/action_nav_store_review_to_nav_congrats"
+            app:destination="@id/nav_congrats"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_view_image"
+        android:name="com.example.suitapp.fragment.addStore.ViewImageFragment"
+        android:label="@string/store_shipping"
+        tools:layout="@layout/fragment_view_image">
+
+        <argument
+            android:name="imageView"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_congrats"
+        android:name="com.example.suitapp.fragment.addStore.CongratsFragment"
+        android:label="@string/store_shipping"
+        tools:layout="@layout/fragment_congrats">
+    </fragment>
 
 
 </navigation>

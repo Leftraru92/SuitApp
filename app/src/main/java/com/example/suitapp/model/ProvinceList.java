@@ -1,14 +1,11 @@
-package com.example.suitapp.dummy;
-
-import com.example.suitapp.model.DialogSelectItem;
-import com.example.suitapp.model.Province;
+package com.example.suitapp.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ProvinceList implements DialogSelectItem {
+public class ProvinceList implements DialogSelectItemList {
 
     public static final List<Province> ITEMS = new ArrayList<>();
 

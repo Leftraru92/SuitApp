@@ -1,14 +1,199 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nestedScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.addStore.StoreShippingFragment">
+    android:fillViewport="true"
+    android:background="@color/white">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:animateLayoutChanges="true">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ccShippingType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/lbShippingType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/type_shipping"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/titulos"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@+id/tvCountImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
+                android:id="@+id/tgShippingType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:flexWrap="wrap"
+                app:justifyContent="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbShippingType"
+                app:toggle_requiredAmount="0"
+                app:toggle_selectableAmount="3">
+
+                <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+                    android:id="@+id/btShipping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/store_logo_height"
+                    app:layout_flexGrow="1"
+                    app:toggle_icon="@drawable/ic_truck_solid"
+                    app:toggle_btnCornerRadius="8dp"
+                    app:toggle_iconGravity="top|center"
+                    app:toggle_iconPaddingHorizontal="15dp"
+                    app:toggle_iconPaddingTop="15dp"
+                    app:toggle_selectedBackgroundColor="@color/cian_400"
+                    app:toggle_selectedTextColor="@android:color/white"
+                    app:toggle_text="Por correo"
+                    app:toggle_textGravity="bottom|center"
+                    app:toggle_textPaddingBottom="20dp" />
+
+                <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+                    android:id="@+id/btPersonal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/store_logo_height"
+                    app:layout_flexGrow="1"
+                    app:toggle_icon="@drawable/ic_people_arrows_solid"
+                    app:toggle_iconGravity="top|center"
+                    app:toggle_iconPaddingHorizontal="15dp"
+                    app:toggle_iconPaddingTop="15dp"
+                    app:toggle_btnCornerRadius="8dp"
+                    app:toggle_selectedBackgroundColor="@color/cian_400"
+                    app:toggle_selectedTextColor="@android:color/white"
+                    app:toggle_text="En persona"
+                    app:toggle_textGravity="bottom|center"
+                    app:toggle_textPaddingBottom="20dp" />
+
+            </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ccShipping"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:layout_marginTop="8dp"
+            android:background="@color/gray_200"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ccShippingType"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/lbShippingPrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/shipping_price"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/titulos"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/lbDesc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="Ingrese el costo de envío por provincia. Debe cargar todas las provincias a las que realiza envíos."
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbShippingPrice" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listShipping"
+                android:name="com.example.suitapp.CategoryFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clipToPadding="false"
+                android:paddingHorizontal="16dp"
+                app:layoutManager="LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbDesc"
+                tools:context=".fragment.CategoryFragment"
+                tools:itemCount="3"
+                tools:listitem="@layout/card_shipping_price" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btAddShipping"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/link_height"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/bt_add_shipping"
+                android:textAllCaps="false"
+                android:textColor="@color/cian_400"
+                app:icon="@drawable/ic_baseline_add_24"
+                app:iconSize="22dp"
+                app:iconTint="@color/cian_400"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/listShipping" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/btContinue"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/bt_next"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_chevron_right_slim"
+            app:iconGravity="end"
+            app:iconPadding="12dp"
+            app:iconSize="20dp"
+            app:iconTint="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ccShipping" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

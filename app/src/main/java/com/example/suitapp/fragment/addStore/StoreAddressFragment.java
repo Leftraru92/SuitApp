@@ -3,7 +3,6 @@ package com.example.suitapp.fragment.addStore;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -14,9 +13,10 @@ import android.widget.Button;
 
 import com.example.suitapp.AddStoreActivity;
 import com.example.suitapp.R;
-import com.example.suitapp.dummy.ProvinceList;
+import com.example.suitapp.model.ProvinceList;
 import com.example.suitapp.listener.OclSelectDialog;
 import com.example.suitapp.model.Province;
+import com.example.suitapp.util.Constants;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -34,14 +34,10 @@ public class StoreAddressFragment extends Fragment {
     TextInputLayout tilProvince, tilCity, tilStreet, tilNumber, tilFloor, tilApartment;
     TextInputEditText tietProvince, tietCity, tietStreet, tietNumber, tietFloor, tietApartment;
     AddStoreActivity activity;
+    boolean fromReview;
 
-    public StoreAddressFragment() {
-        // Required empty public constructor
-    }
-
-    public static StoreAddressFragment newInstance(String param1, String param2) {
-        StoreAddressFragment fragment = new StoreAddressFragment();
-        return fragment;
+    public static StoreAddressFragment newInstance() {
+        return new StoreAddressFragment();
     }
 
     @Override
@@ -58,8 +54,11 @@ public class StoreAddressFragment extends Fragment {
     }
 
     private void init() {
-        activity =  ((AddStoreActivity) getActivity());
+        activity = ((AddStoreActivity) getActivity());
         mViewModel = new ViewModelProvider(getActivity()).get(AddStoreViewModel.class);
+        fromReview = false;
+        if (getArguments() != null)
+            fromReview = StoreNameFragmentArgs.fromBundle(getArguments()).getFromReview();
 
         //bind
         tilProvince = root.findViewById(R.id.tilProvince);
@@ -77,29 +76,33 @@ public class StoreAddressFragment extends Fragment {
         tietApartment = root.findViewById(R.id.tietApartment);
 
         //listener
-        OclSelectDialog oclSelectDialog = new OclSelectDialog(getContext(), mViewModel, (new ProvinceList()));
-        tietProvince.setOnClickListener(view -> {
-            oclSelectDialog.selectItem();
-        });
+        OclSelectDialog oclSelectDialog = new OclSelectDialog(getContext(), mViewModel, (new ProvinceList()), Constants.SELECT_PROVINCE);
+        tietProvince.setOnClickListener(oclSelectDialog);
         ((Button) root.findViewById(R.id.btContinue)).setOnClickListener(v -> next());
+        tilProvince.setEndIconOnClickListener(v -> mViewModel.selectValue(0, "", Constants.SELECT_PROVINCE));
 
         //viewmodel
-        mViewModel.getProvince().observe(getViewLifecycleOwner(), (Observer<String>) s -> {
-            tietProvince.setText(s);
-        });
-        tilProvince.setEndIconOnClickListener(v -> {
-            mViewModel.selectValue(0, "");
-        });
+        mViewModel.getProvince().observe(getViewLifecycleOwner(), s -> tietProvince.setText(s));
+        mViewModel.getCity().observe(getViewLifecycleOwner(), s -> tietCity.setText(s));
+        mViewModel.getStreet().observe(getViewLifecycleOwner(), s -> tietStreet.setText(s));
+        mViewModel.getNumber().observe(getViewLifecycleOwner(), s -> tietNumber.setText(s));
+        mViewModel.getFloor().observe(getViewLifecycleOwner(), s -> tietFloor.setText(s));
+        mViewModel.getApartment().observe(getViewLifecycleOwner(), s -> tietApartment.setText(s));
+
     }
 
     private void next() {
         if (validate()) {
             mViewModel.setCity(tietCity.getText().toString());
+            mViewModel.setStreet(tietStreet.getText().toString());
             mViewModel.setNumber(tietNumber.getText().toString());
             mViewModel.setFloor(tietFloor.getText().toString());
             mViewModel.setApartment(tietApartment.getText().toString());
 
-            Navigation.findNavController(root).navigate(R.id.action_nav_address_store_to_imageStoreFragment);
+            if (fromReview)
+                Navigation.findNavController(root).navigate(R.id.action_nav_address_store_to_nav_store_review);
+            else
+                Navigation.findNavController(root).navigate(R.id.action_nav_address_store_to_imageStoreFragment);
         } else {
             activity.mostrarMensaje("Complete el formulario para continuar");
         }
@@ -109,12 +112,12 @@ public class StoreAddressFragment extends Fragment {
         int error = 0;
         error += activity.validateItem(tilProvince, tietProvince, true, false);
         error += activity.validateItem(tilCity, tietCity, true, true);
-        error += activity.validateItem(tilStreet, tietStreet, false, true);
-        error += activity.validateItem(tilNumber, tietNumber, false, true);
-        error += activity.validateItem(tilFloor, tietFloor, false, true);
-        error += activity.validateItem(tilApartment, tietApartment, false, true);
+        error += activity.validateItem(tilStreet, tietStreet, (!tietNumber.getText().toString().isEmpty() || !tietFloor.getText().toString().isEmpty() || !tietApartment.getText().toString().isEmpty()), true); //mandatorio si se ingresó el número
+        error += activity.validateItem(tilNumber, tietNumber, (!tietStreet.getText().toString().isEmpty()), true); //mandatorio si se ingresó la calle
+        error += activity.validateItem(tilFloor, tietFloor, (!tietApartment.getText().toString().isEmpty()), true); //mandatorio si se ingresó el depto
+        error += activity.validateItem(tilApartment, tietApartment, (!tietFloor.getText().toString().isEmpty()), true); //mandatorio si se ingresó el piso
 
-        return (error==0);
+        return (error == 0);
     }
 
 }

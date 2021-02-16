@@ -6,8 +6,10 @@ public class Constants {
     public static String LOG = "SuitApp";
     public static String LAST_PHOTO_URI ="";
     public static final String IMAGE_DIRECTORY = "/SUITAPP";
-    public static final int IMAGE_SIZE = 256;
+    public static final int IMAGE_SIZE = 512;
 
     public static final int IMAGE_PORTADA = 1;
     public static final int IMAGE_LOGO = 2;
+    public static final int SELECT_PROVINCE = 1;
+    public static final int SELECT_SHIPPING = 2;
 }

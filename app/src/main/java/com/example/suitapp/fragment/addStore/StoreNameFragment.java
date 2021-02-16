@@ -28,6 +28,7 @@ public class StoreNameFragment extends Fragment {
     private TextInputEditText tietStoreName, tietStoreDesc;
     View root;
     AddStoreActivity activity;
+    boolean fromReview;
 
     public static StoreNameFragment newInstance() {
         return new StoreNameFragment();
@@ -36,16 +37,18 @@ public class StoreNameFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        root =  inflater.inflate(R.layout.fragment_store_name, container, false);
-
+        root = inflater.inflate(R.layout.fragment_store_name, container, false);
         init();
 
         return root;
     }
 
-    private void init(){
-        activity =  ((AddStoreActivity) getActivity());
+    private void init() {
+        activity = ((AddStoreActivity) getActivity());
         mViewModel = new ViewModelProvider(getActivity()).get(AddStoreViewModel.class);
+        fromReview = false;
+        if (getArguments() != null)
+            fromReview = StoreNameFragmentArgs.fromBundle(getArguments()).getFromReview();
 
         //bind
         tilStoreName = root.findViewById(R.id.tilStoreName);
@@ -54,7 +57,7 @@ public class StoreNameFragment extends Fragment {
         tietStoreDesc = root.findViewById(R.id.tietStoreDesc);
 
         //show keyboard
-        tietStoreName.requestFocus();
+        //tietStoreName.requestFocus();
         //InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         //imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
@@ -67,11 +70,14 @@ public class StoreNameFragment extends Fragment {
     }
 
     private void next() {
-        if(validate()){
+        if (validate()) {
             mViewModel.setName(tietStoreName.getText().toString());
             mViewModel.setDesc(tietStoreDesc.getText().toString());
-            Navigation.findNavController(root).navigate(R.id.action_nav_store_name_to_nav_address_store);
-        }else {
+            if (fromReview)
+                Navigation.findNavController(root).navigate(R.id.action_nav_store_name_to_nav_store_review);
+            else
+                Navigation.findNavController(root).navigate(R.id.action_nav_store_name_to_nav_address_store);
+        } else {
             activity.mostrarMensaje(getString(R.string.error_complete_form));
         }
     }
@@ -82,7 +88,7 @@ public class StoreNameFragment extends Fragment {
         error += activity.validateItem(tilStoreName, tietStoreName, true, true);
         error += activity.validateItem(tilStoreDesc, tietStoreDesc, false, true);
 
-        return error==0;
+        return error == 0;
     }
 
 }

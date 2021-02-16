@@ -34,6 +34,8 @@
     <string name="bt_add_store">Agregar Tienda</string>
     <string name="bt_next">Continuar</string>
     <string name="bt_add_image">Agregar imagen</string>
+    <string name="bt_publish">Publicar</string>
+    <string name="bt_add_shipping">Agregar costo de envío</string>
 
     <!-- Mensajes -->
     <string name="select_variant">Seleccione una variante</string>
@@ -49,6 +51,8 @@
     <string name="error_max_length">Excede la cantidad de caracteres</string>
     <string name="error_select_option">Debe seleccionar una opción</string>
     <string name="error_complete_form">Complete el formulario para continuar</string>
+    <string name="error_shipping">Debe seleccionar al menos un método de entrega</string>
+    <string name="error_shipping_prov">Debe ingresar al menos un costo de envío</string>
 
     <!--Agregar tienda -->
     <string name="store_name">Indicá el nombre de la tienda</string>
@@ -59,6 +63,8 @@
     <string name="store_portada">Cargá una imagen de portada de tu tienda</string>
     <string name="store_desc">Describí tu tienda</string>
     <string name="store_shipping">¿Realiza envíos?</string>
+    <string name="type_shipping">¿Cómo querés entregar tus productos?</string>
+    <string name="shipping_price">Indique el costo del envío por correo</string>
     <string name="review_publish">Revisá y publicá</string>
 
     <!-- TODO: Remove or change this placeholder text -->

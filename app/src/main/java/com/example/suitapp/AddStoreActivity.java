@@ -53,14 +53,20 @@ public class AddStoreActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            appBarLayout.setExpanded(true);
+            tvTitle.setText(destination.getLabel());
 
-            @Override
-            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                tvTitle.setText(destination.getLabel());
+            if (getCurrentFocus() != null)
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
-                if (getCurrentFocus() != null)
-                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            //muestro oculto toolbar
+            if (destination.getId() == R.id.nav_view_image || destination.getId() == R.id.nav_congrats) {
+                toolbar.setVisibility(View.GONE);
+                subToolbar.setVisibility(View.GONE);
+            }else {
+                toolbar.setVisibility(View.VISIBLE);
+                subToolbar.setVisibility(View.VISIBLE);
             }
         });
     }
