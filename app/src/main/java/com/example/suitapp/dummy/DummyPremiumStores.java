@@ -1,9 +1,7 @@
 package com.example.suitapp.dummy;
 
 import com.example.suitapp.R;
-import com.example.suitapp.model.Genre;
 import com.example.suitapp.model.PremiumStore;
-import com.example.suitapp.model.Store;
 
 import java.util.ArrayList;
 import java.util.List;

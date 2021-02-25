@@ -68,14 +68,14 @@ public class ShippingPriceAdapter extends RecyclerView.Adapter<ShippingPriceAdap
         @Override
         public void onClick(View v) {
             if(v.getId() == R.id.btDelete)
-                onShippingPriceListener.onShippingPriceClick(getAdapterPosition(), Constants.IMAGE_PORTADA);
+                onShippingPriceListener.onShippingPriceClick(getAdapterPosition(), Constants.ACTION.DELETE);
             else
-                onShippingPriceListener.onShippingPriceClick(getAdapterPosition(), Constants.IMAGE_LOGO);
+                onShippingPriceListener.onShippingPriceClick(getAdapterPosition(), Constants.ACTION.UPDATE);
         }
     }
 
     public interface OnShippingPriceListener{
-        void onShippingPriceClick(int adapterPosition, int position);
+        void onShippingPriceClick(int adapterPosition, Constants.ACTION action);
     }
 
 }

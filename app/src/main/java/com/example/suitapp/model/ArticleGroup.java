@@ -1,5 +1,10 @@
 package com.example.suitapp.model;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArticleGroup {
@@ -11,6 +16,18 @@ public class ArticleGroup {
         this.id = id;
         this.title = title;
         this.articleList = articleList;
+    }
+
+    public ArticleGroup(JSONObject dataItem) throws JSONException {
+        id = dataItem.getInt("groupId");
+        title = dataItem.getString("title");
+        articleList = new ArrayList<>();
+
+        JSONArray articlesArray = dataItem.getJSONArray("articulos");
+        for (int i = 0; i < articlesArray.length(); i++) {
+            JSONObject articleItem = articlesArray.getJSONObject(i);
+            articleList.add(new Article(articleItem));
+        }
     }
 
     public int getId() {

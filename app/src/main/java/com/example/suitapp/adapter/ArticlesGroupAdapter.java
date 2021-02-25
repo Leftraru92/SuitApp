@@ -1,27 +1,22 @@
 package com.example.suitapp.adapter;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.suitapp.R;
 import com.example.suitapp.model.ArticleGroup;
-import com.example.suitapp.util.Constants;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ArticlesGroupAdapter extends RecyclerView.Adapter<ArticlesGroupAdapter.ViewHolder> implements ArticleAdapter.OnArticleListener {
 
-    private final List<ArticleGroup> articleGroups;
+    private List<ArticleGroup> articleGroups;
     OnGroupListener onGroupListener;
     View root;
     int card;
@@ -53,12 +48,24 @@ public class ArticlesGroupAdapter extends RecyclerView.Adapter<ArticlesGroupAdap
 
     @Override
     public int getItemCount() {
-        return articleGroups.size();
+        if (articleGroups == null)
+            return 0;
+        else
+            return articleGroups.size();
+    }
+
+    public void setItems(List<ArticleGroup> artcilegroups) {
+        this.articleGroups = artcilegroups;
     }
 
     @Override
     public void onArticleClick(int position) {
         Navigation.findNavController(root).navigate(R.id.action_move_to_article);
+
+    }
+
+    @Override
+    public void onArticleEditClick(int position, View v) {
 
     }
 

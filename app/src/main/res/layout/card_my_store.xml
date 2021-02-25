@@ -85,7 +85,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btBuyCart"
+                android:id="@+id/btEditStore"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/link_height"
@@ -99,11 +99,11 @@
                 app:icon="@drawable/ic_edit_solid"
                 app:iconTint="@color/cian_400"
                 app:iconSize="14dp"
-                app:layout_constraintStart_toEndOf="@+id/btSeeCart"
+                app:layout_constraintStart_toEndOf="@+id/btDeleteStore"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btSeeCart"
+                android:id="@+id/btDeleteStore"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/link_height"

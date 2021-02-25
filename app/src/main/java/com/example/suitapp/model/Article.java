@@ -1,5 +1,8 @@
 package com.example.suitapp.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -9,6 +12,7 @@ public class Article {
     private String name;
     private float price;
     private int image;
+    private String articleImage;
     private int colors;
 
     public Article(int id, String name, float price, int image, int colors) {
@@ -17,6 +21,14 @@ public class Article {
         this.price = price;
         this.image = image;
         this.colors = colors;
+    }
+
+    public Article(JSONObject dataItem) throws JSONException {
+        id = dataItem.getInt("articleId");
+        name = dataItem.getString("articleName");
+        price = dataItem.getInt("articlePrice");
+        if (dataItem.getString("articleImage") != null && !dataItem.getString("articleImage").equals("null"))
+            articleImage = dataItem.getString("articleImage");
     }
 
     public int getId() {
@@ -39,6 +51,10 @@ public class Article {
 
     public int getImage() {
         return image;
+    }
+
+    public String getArticleImage() {
+        return articleImage;
     }
 
     public int getColors() {

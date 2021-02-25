@@ -17,6 +17,7 @@
     <string name="menu_stores">Tiendas</string>
     <string name="menu_about">Acerca de</string>
     <string name="menu_logout">Salir</string>
+    <string name="cart_select_shipping">Seleccioná un método de entrega</string>
 
     <string name="menu_cart">Carrito</string>
     <string name="menu_articles">Artículos</string>
@@ -36,6 +37,7 @@
     <string name="bt_add_image">Agregar imagen</string>
     <string name="bt_publish">Publicar</string>
     <string name="bt_add_shipping">Agregar costo de envío</string>
+    <string name="bt_add_variant">Agregar variante</string>
 
     <!-- Mensajes -->
     <string name="select_variant">Seleccione una variante</string>
@@ -43,6 +45,10 @@
     <string name="selec_option_img">Seleccione una opción</string>
     <string name="selec_galery">Seleccionar de la galería</string>
     <string name="capture_photo">Capturar una foto</string>
+    <string name="congrats_store">¡Publicaste tu tienda!</string>
+    <string name="congrats_art">¡Publicaste tu artículo!</string>
+    <string name="congrats_det_store">Ahora podes publicar tus artículos</string>
+    <string name="congrats_det_article">Podes cargar más artículos si lo deseas</string>
 
     <!-- Errores -->
     <string name="mandatory_field">Debe completar el campo</string>
@@ -53,6 +59,7 @@
     <string name="error_complete_form">Complete el formulario para continuar</string>
     <string name="error_shipping">Debe seleccionar al menos un método de entrega</string>
     <string name="error_shipping_prov">Debe ingresar al menos un costo de envío</string>
+    <string name="error_variant">Debe ingresar al menos una variante</string>
 
     <!--Agregar tienda -->
     <string name="store_name">Indicá el nombre de la tienda</string>
@@ -66,6 +73,26 @@
     <string name="type_shipping">¿Cómo querés entregar tus productos?</string>
     <string name="shipping_price">Indique el costo del envío por correo</string>
     <string name="review_publish">Revisá y publicá</string>
+
+    <!--Agregar artículo-->
+    <string name="article_name">Indicá el nombre del artículo</string>
+    <string name="article_cat">¿Qué categoría define a tu artículo?</string>
+    <string name="article_variants">Variantes del artículo</string>
+    <string name="article_variants_det">Debe ingresar todas las variantes que tiene su producto. Una variante se compone de color y talle</string>
+    <string name="article_genre">¿A qué género está destinado?</string>
+    <string name="article_images">Imágenes del artículo</string>
+    <string name="article_price">¿Cuál es el precio del artículo?</string>
+    <string name="vaiants_tit">Indique las variantes del artículo</string>
+
+    <!--Filtros-->
+    <string name="order_relevant">Más relevante</string>
+    <string name="order_price_minus">Menor precio</string>
+    <string name="order_price_more">Mayor precio</string>
+    <string name="filter_cat">Categoría</string>
+    <string name="filter_genre">Genero</string>
+    <string name="filter_size">Talle</string>
+    <string name="filter_color">Color</string>
+    <string name="filter_price">Precio Min - Max</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

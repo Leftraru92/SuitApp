@@ -8,19 +8,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.suitapp.R;
-import com.example.suitapp.dummy.DummyContent.DummyItem;
-import com.example.suitapp.model.Category;
+import com.example.suitapp.model.Item;
 
 import java.util.List;
 
-public class CategorieRecyclerViewAdapter extends RecyclerView.Adapter<CategorieRecyclerViewAdapter.ViewHolder> {
+public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder> {
 
-    private final List<Category> mValues;
+    private List<Item> mValues;
     OnCategoryListener onCategoryListener;
 
-    public CategorieRecyclerViewAdapter(List<Category> items, OnCategoryListener onCategoryListener) {
+    public CategoriesAdapter(List<Item> items, OnCategoryListener onCategoryListener) {
         mValues = items;
         this.onCategoryListener = onCategoryListener;
+    }
+
+    public void setItems(List<Item> list) {
+        this.mValues = list;
     }
 
     @Override
@@ -39,14 +42,17 @@ public class CategorieRecyclerViewAdapter extends RecyclerView.Adapter<Categorie
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        if (mValues == null)
+            return 0;
+        else
+            return mValues.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public Category mItem;
+        public Item mItem;
         OnCategoryListener onCategoryListener;
 
         public ViewHolder(View view, OnCategoryListener onCategoryListener) {
@@ -65,7 +71,7 @@ public class CategorieRecyclerViewAdapter extends RecyclerView.Adapter<Categorie
         }
     }
 
-    public interface OnCategoryListener{
+    public interface OnCategoryListener {
         void onCategoryClick(int position);
     }
 }

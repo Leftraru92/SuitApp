@@ -20,7 +20,7 @@
         app:layout_constraintHeight_max="@dimen/card_article2_height"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/buzo" />
+        tools:src="@drawable/ic_emoji_picture" />
 
     <TextView
         android:id="@+id/tvId"

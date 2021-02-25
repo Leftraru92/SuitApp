@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_article_name">
+
+
+    <fragment
+        android:id="@+id/nav_article_name"
+        android:name="com.example.suitapp.fragment.addArticle.ArticleNameFragment"
+        android:label="@string/article_name"
+        tools:layout="@layout/fragment_article_name">
+        <argument
+            android:name="fromReview"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_nav_article_name_to_nav_article_category"
+            app:destination="@id/nav_article_category"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_nav_article_name_to_nav_article_review"
+            app:destination="@id/nav_article_review"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_article_category"
+        android:name="com.example.suitapp.fragment.addArticle.ArticleCategoryFragment"
+        android:label="@string/article_cat"
+        tools:layout="@layout/fragment_article_category">
+        <argument
+            android:name="fromReview"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_nav_article_category_to_nav_article_genre"
+            app:destination="@id/nav_article_genre"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_nav_article_category_to_nav_article_review"
+            app:destination="@id/nav_article_review"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_article_genre"
+        android:name="com.example.suitapp.fragment.addArticle.ArticleGenreFragment"
+        android:label="@string/article_genre"
+        tools:layout="@layout/fragment_article_genre">
+        <argument
+            android:name="fromReview"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_nav_article_genre_to_nav_article_variants"
+            app:destination="@id/nav_article_variants"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_nav_article_genre_to_nav_article_review"
+            app:destination="@id/nav_article_review"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_article_variants"
+        android:name="com.example.suitapp.fragment.addArticle.ArticleVariantsFragment"
+        android:label="@string/article_variants"
+        tools:layout="@layout/fragment_article_variants">
+        <argument
+            android:name="fromReview"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_nav_article_variants_to_nav_article_images"
+            app:destination="@id/nav_article_images"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_nav_article_variants_to_nav_article_review"
+            app:destination="@id/nav_article_review"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_article_images"
+        android:name="com.example.suitapp.fragment.addArticle.ArticleImageFragment"
+        android:label="@string/article_images"
+        tools:layout="@layout/fragment_article_image">
+        <argument
+            android:name="fromReview"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_nav_article_images_to_nav_article_price"
+            app:destination="@id/nav_article_price"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_nav_article_images_to_nav_article_review"
+            app:destination="@id/nav_article_review"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_nav_article_images_to_nav_view_image"
+            app:destination="@id/nav_view_image" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_article_price"
+        android:name="com.example.suitapp.fragment.addArticle.ArticlePriceFragment"
+        android:label="@string/article_price"
+        tools:layout="@layout/fragment_article_price">
+        <argument
+            android:name="fromReview"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_nav_article_price_to_nav_article_review"
+            app:destination="@id/nav_article_review"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_article_review"
+        android:name="com.example.suitapp.fragment.addArticle.ArticleReviewFragment"
+        android:label="@string/review_publish"
+        tools:layout="@layout/fragment_article_review">
+        <action
+            android:id="@+id/action_nav_article_review_to_nav_article_price"
+            app:destination="@id/nav_article_price"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" >
+            <argument
+                android:name="fromReview"
+                android:defaultValue="true" />
+        </action>
+        <action
+            android:id="@+id/action_nav_article_review_to_nav_article_images"
+            app:destination="@id/nav_article_images"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" >
+            <argument
+                android:name="fromReview"
+                android:defaultValue="true" />
+        </action>
+        <action
+            android:id="@+id/action_nav_article_review_to_nav_article_variants"
+            app:destination="@id/nav_article_variants"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" >
+            <argument
+                android:name="fromReview"
+                android:defaultValue="true" />
+        </action>
+        <action
+            android:id="@+id/action_nav_article_review_to_nav_article_genre"
+            app:destination="@id/nav_article_genre"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" >
+            <argument
+                android:name="fromReview"
+                android:defaultValue="true" />
+        </action>
+        <action
+            android:id="@+id/action_nav_article_review_to_nav_article_category"
+            app:destination="@id/nav_article_category"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" >
+            <argument
+                android:name="fromReview"
+                android:defaultValue="true" />
+        </action>
+        <action
+            android:id="@+id/action_nav_article_review_to_nav_article_name"
+            app:destination="@id/nav_article_name"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" >
+            <argument
+                android:name="fromReview"
+                android:defaultValue="true" />
+        </action>
+        <action
+            android:id="@+id/action_nav_article_review_to_nav_congrats"
+            app:destination="@id/nav_congrats"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" >
+            <argument
+                android:name="isArticle"
+                android:defaultValue="true" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_view_image"
+        android:name="com.example.suitapp.fragment.addStore.ViewImageFragment"
+        android:label="@string/store_shipping"
+        tools:layout="@layout/fragment_view_image">
+
+        <argument
+            android:name="imageView"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_congrats"
+        android:name="com.example.suitapp.fragment.addStore.CongratsFragment"
+        tools:layout="@layout/fragment_congrats">
+        <argument
+            android:name="isArticle"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
+</navigation>

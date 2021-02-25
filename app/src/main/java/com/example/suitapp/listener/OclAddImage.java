@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.view.View;
 
 import com.example.suitapp.R;
-import com.example.suitapp.fragment.addStore.AddStoreViewModel;
 import com.example.suitapp.listener.imageStrategy.CameraStrategy;
 import com.example.suitapp.listener.imageStrategy.GalleryStrategy;
 import com.example.suitapp.listener.imageStrategy.SelectImageStrategy;
@@ -18,17 +17,16 @@ public class OclAddImage implements View.OnClickListener {
 
     private SelectImageStrategy strategy;
     static Context context;
-    int requestCode, idImage;
+    int requestCode;
     public static final int MY_CAMERA_REQUEST_CODE = 100;
     boolean allowMultiple;
     CaptureImageViewModel mViewModel;
 
-    public OclAddImage(Context context, int requestCode, boolean allowMultiple, CaptureImageViewModel mViewModel, int idImage) {
+    public OclAddImage(Context context, int requestCode, boolean allowMultiple, CaptureImageViewModel mViewModel) {
         this.context = context;
         this.requestCode = requestCode;
         this.allowMultiple = allowMultiple;
         this.mViewModel = mViewModel;
-        this.idImage = idImage;
     }
 
     private void setStrategy(SelectImageStrategy strategy) {
@@ -40,7 +38,7 @@ public class OclAddImage implements View.OnClickListener {
     }
 
     public boolean processData(int requestCode, int resultCode, Intent data) {
-        return strategy.processData(requestCode, resultCode, data, mViewModel ,idImage);
+        return strategy.processData(requestCode, resultCode, data, mViewModel);
     }
 
     @Override

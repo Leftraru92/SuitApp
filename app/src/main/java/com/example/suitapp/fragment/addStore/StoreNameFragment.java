@@ -2,7 +2,6 @@ package com.example.suitapp.fragment.addStore;
 
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,11 +12,11 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
-import com.example.suitapp.AddStoreActivity;
+import com.example.suitapp.activity.AddStoreActivity;
 import com.example.suitapp.R;
+import com.example.suitapp.viewmodel.AddStoreViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -44,6 +43,7 @@ public class StoreNameFragment extends Fragment {
     }
 
     private void init() {
+        //set
         activity = ((AddStoreActivity) getActivity());
         mViewModel = new ViewModelProvider(getActivity()).get(AddStoreViewModel.class);
         fromReview = false;

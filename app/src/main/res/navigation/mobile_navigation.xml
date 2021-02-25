@@ -116,7 +116,14 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
+            app:popExitAnim="@anim/to_right" >
+            <argument
+                android:name="isOwner"
+                android:defaultValue="true" />
+        </action>
+        <action
+            android:id="@+id/action_nav_account_to_nav_store_review"
+            app:destination="@id/nav_store_review" />
     </fragment>
 
     <fragment
@@ -153,6 +160,13 @@
         <action
             android:id="@+id/action_nav_cart_to_nav_search"
             app:destination="@id/nav_search" />
+        <action
+            android:id="@+id/action_nav_cart_to_nav_select_shipping"
+            app:destination="@id/nav_select_shipping"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
 
     <fragment
@@ -173,6 +187,10 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <argument
+            android:name="isOwner"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/nav_article_detail"
@@ -212,5 +230,12 @@
         android:id="@+id/nav_login"
         android:name="com.example.suitapp.fragment.LoginFragment"
         tools:layout="@layout/fragment_login" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_select_shipping"
+        android:name="com.example.suitapp.fragment.SelectShippingFragment"
+        android:label="@string/cart_select_shipping"
+        tools:layout="@layout/fragment_select_shipping">
     </fragment>
 </navigation>

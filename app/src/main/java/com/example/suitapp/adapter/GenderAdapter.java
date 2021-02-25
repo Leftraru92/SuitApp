@@ -1,5 +1,6 @@
 package com.example.suitapp.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,32 +8,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.suitapp.R;
-import com.example.suitapp.dummy.DummyContent.DummyItem;
-import com.example.suitapp.model.Category;
-import com.example.suitapp.model.Genre;
+import com.example.suitapp.model.Gender;
+import com.example.suitapp.util.Util;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
- * TODO: Replace the implementation with code for your data type.
- */
-public class GenresRecyclerViewAdapter extends RecyclerView.Adapter<GenresRecyclerViewAdapter.ViewHolder> {
+public class GenderAdapter extends RecyclerView.Adapter<GenderAdapter.ViewHolder> {
 
-    private final List<Genre> mValues;
+    private List<Gender> mValues;
     private OnGenreListener onGenreListener;
+    private Context context;
 
-    public GenresRecyclerViewAdapter(List<Genre> items, OnGenreListener onGenreListener) {
+    public GenderAdapter(List<Gender> items, OnGenreListener onGenreListener, Context context) {
         mValues = items;
         this.onGenreListener = onGenreListener;
+        this.context = context;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_genres, parent, false);
+
+        ViewGroup.LayoutParams params =  view.getLayoutParams();
+        params.width = (parent.getMeasuredWidth() / 3) - Util.getPxByDensity(context.getResources(), 6);
+        view.setLayoutParams(params);
+
         return new ViewHolder(view, onGenreListener);
     }
 
@@ -47,14 +51,21 @@ public class GenresRecyclerViewAdapter extends RecyclerView.Adapter<GenresRecycl
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        if (mValues == null)
+            return 0;
+        else
+            return mValues.size();
+    }
+
+    public void setItems(List<Gender> genderList) {
+        mValues = genderList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
         public final TextView tvId, tvName;
         public final ImageView ivGenre;
-        public Genre mItem;
+        public Gender mItem;
         OnGenreListener onGenreListener;
 
         public ViewHolder(View view, OnGenreListener onGenreListener) {
@@ -74,7 +85,7 @@ public class GenresRecyclerViewAdapter extends RecyclerView.Adapter<GenresRecycl
         }
     }
 
-    public interface OnGenreListener{
+    public interface OnGenreListener {
         void onGenreClick(int position);
     }
 }

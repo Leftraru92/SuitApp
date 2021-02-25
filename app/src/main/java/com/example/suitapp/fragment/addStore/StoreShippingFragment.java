@@ -15,12 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.suitapp.AddStoreActivity;
+import com.example.suitapp.activity.AddStoreActivity;
 import com.example.suitapp.R;
 import com.example.suitapp.adapter.ShippingPriceAdapter;
 import com.example.suitapp.listener.OclShippingPrice;
 import com.example.suitapp.model.ProvinceList;
 import com.example.suitapp.util.Constants;
+import com.example.suitapp.viewmodel.AddStoreViewModel;
 
 public class StoreShippingFragment extends Fragment implements ShippingPriceAdapter.OnShippingPriceListener {
     private AddStoreViewModel mViewModel;
@@ -115,10 +116,10 @@ public class StoreShippingFragment extends Fragment implements ShippingPriceAdap
     }
 
     @Override
-    public void onShippingPriceClick(int position, int requestId) {
-        if (requestId == Constants.IMAGE_PORTADA)
+    public void onShippingPriceClick(int position, Constants.ACTION action) {
+        if (action == Constants.ACTION.DELETE)
             mViewModel.deleteShippingPrice(position);
-        if(requestId == Constants.IMAGE_LOGO) {
+        if(action == Constants.ACTION.UPDATE) {
             mViewModel.setEditShippingPrice(position);
             oclShippingPrice.onClick(root);
         }

@@ -25,6 +25,7 @@
     <color name="gray_900">#212121</color>
 
     <color name="gray_overlay">#AA9E9E9E</color>
+    <color name="transparent">#00000000</color>
 
     <color name="error">#F10010</color>
     <color name="error_dark">#B00020</color>

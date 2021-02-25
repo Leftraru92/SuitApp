@@ -1,22 +1,31 @@
 package com.example.suitapp.model;
 
-public class Category {
-    private int id;
-    private String name;
+import android.database.Cursor;
+
+import com.example.suitapp.database.DataDb;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class Category extends Item{
     private int visits;
 
     public Category(int id, String name, int visits) {
-        this.id = id;
-        this.name = name;
+        super(id, name);
         this.visits = visits;
     }
 
-    public int getId() {
-        return id;
+    public Category(JSONObject dataItem) throws JSONException {
+        super();
+        super.setId(dataItem.getInt("idCategory"));
+        super.setName(dataItem.getString("nameCategory"));
+        visits = dataItem.getInt("visits");
     }
 
-    public String getName() {
-        return name;
+    public Category(Cursor c) {
+        setId(Integer.parseInt(c.getString(c.getColumnIndex(DataDb.COL_ID))));
+        setName(c.getString(c.getColumnIndex(DataDb.COL_NAME)));
+        visits = Integer.parseInt(c.getString(c.getColumnIndex(DataDb.COL_VISITS)));
     }
 
     public int getVisits() {

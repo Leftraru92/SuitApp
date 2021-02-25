@@ -11,12 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.suitapp.AddStoreActivity;
+import com.example.suitapp.activity.AddStoreActivity;
 import com.example.suitapp.R;
 import com.example.suitapp.model.ProvinceList;
 import com.example.suitapp.listener.OclSelectDialog;
 import com.example.suitapp.model.Province;
 import com.example.suitapp.util.Constants;
+import com.example.suitapp.viewmodel.AddStoreViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.suitapp.R;
 import com.example.suitapp.adapter.ShippingPriceAdapter;
+import com.example.suitapp.viewmodel.AddStoreViewModel;
 import com.google.android.material.chip.Chip;
 
 public class StoreReviewFragment extends Fragment {
@@ -43,6 +44,7 @@ public class StoreReviewFragment extends Fragment {
     }
 
     private void init() {
+        //set
         mViewModel = new ViewModelProvider(getActivity()).get(AddStoreViewModel.class);
         shippingPriceAdapter = new ShippingPriceAdapter(mViewModel.getShippingPrice().getValue(), null, R.layout.card_shipping_price_mini);
         recyclerListShipping = root.findViewById(R.id.listShipping);

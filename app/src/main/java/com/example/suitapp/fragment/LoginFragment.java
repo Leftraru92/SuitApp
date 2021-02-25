@@ -150,7 +150,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
             SingletonUser.getInstance(context).setData(account);
 
-            mostrarMensaje("Bienvenido " + account.getDisplayName() + "!");
+            mostrarMensaje("Bienvenido a SuitApp!");
             account.getIdToken(true)
                     .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                         public void onComplete(@NonNull Task<GetTokenResult> task) {

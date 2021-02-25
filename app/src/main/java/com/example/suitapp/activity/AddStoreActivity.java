@@ -1,4 +1,4 @@
-package com.example.suitapp;
+package com.example.suitapp.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
+import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.example.suitapp.R;
 import com.example.suitapp.util.Constants;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
@@ -38,6 +40,9 @@ public class AddStoreActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_store);
+
+        boolean isEdit = (getIntent().getExtras() != null) ? getIntent().getExtras().getBoolean("EDIT", false) : false;
+
         AppBarLayout appBarLayout = findViewById(R.id.appBarLayout);
         toolbar = findViewById(R.id.toolbar);
         Toolbar subToolbar = findViewById(R.id.subToolbar);
@@ -53,6 +58,12 @@ public class AddStoreActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        if (isEdit) {
+            NavGraph graph = navController.getGraph();
+            graph.setStartDestination(R.id.nav_store_review);
+            navController.setGraph(graph);
+        }
+
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             appBarLayout.setExpanded(true);
             tvTitle.setText(destination.getLabel());
@@ -64,7 +75,7 @@ public class AddStoreActivity extends AppCompatActivity {
             if (destination.getId() == R.id.nav_view_image || destination.getId() == R.id.nav_congrats) {
                 toolbar.setVisibility(View.GONE);
                 subToolbar.setVisibility(View.GONE);
-            }else {
+            } else {
                 toolbar.setVisibility(View.VISIBLE);
                 subToolbar.setVisibility(View.VISIBLE);
             }

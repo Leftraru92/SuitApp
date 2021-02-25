@@ -3,13 +3,28 @@ package com.example.suitapp.util;
 public class Constants {
 
     public static final String WEB_CLIENT = "396255124955-8422d53koteuttt1n8bfi3q06upsrube.apps.googleusercontent.com";
+    public static final int DEFAULT_TIMEOUT = 30000;
+
+    public static final String WS_DOMINIO = "http://suitapp-ws-apirest.us-west-2.elasticbeanstalk.com";
+    public static final String WS_CATEGORIES = "/api/Categorias";
+    public static final String WS_GENDERS = "/api/Genders";
+    public static final String WS_ARTICLES = "/api/Articles";
+
     public static String LOG = "SuitApp";
     public static String LAST_PHOTO_URI ="";
     public static final String IMAGE_DIRECTORY = "/SUITAPP";
     public static final int IMAGE_SIZE = 512;
+    public static final String TODOS = "Todos";
 
     public static final int IMAGE_PORTADA = 1;
     public static final int IMAGE_LOGO = 2;
+    public static final int IMAGE_ARTICLE = 3;
     public static final int SELECT_PROVINCE = 1;
     public static final int SELECT_SHIPPING = 2;
+
+    public enum ACTION {CREATE, UPDATE, DELETE};
+    public enum TYPE {ARTICLE, STORE};
+    public enum JSON_TYPE {OBJECT, ARRAY};
+    public static final int JSON_OBJECT = 1;
+    public static final int JSON_ARRAY = 2;
 }

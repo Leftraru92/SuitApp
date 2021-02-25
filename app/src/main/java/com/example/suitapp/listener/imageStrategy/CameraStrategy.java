@@ -2,7 +2,6 @@ package com.example.suitapp.listener.imageStrategy;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -19,7 +18,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.suitapp.R;
-import com.example.suitapp.fragment.addStore.AddStoreViewModel;
 import com.example.suitapp.util.Constants;
 import com.example.suitapp.viewmodel.CaptureImageViewModel;
 
@@ -111,7 +109,7 @@ public class CameraStrategy implements SelectImageStrategy {
     }
 
     @Override
-    public boolean processData(int requestCode, int resultCode, Intent data, CaptureImageViewModel mViewModel, int idImage) {
+    public boolean processData(int requestCode, int resultCode, Intent data, CaptureImageViewModel mViewModel) {
         Log.d(Constants.LOG, "Ejecuto camera processData");
         if (resultCode == RESULT_CANCELED)
             return false;
@@ -144,7 +142,7 @@ public class CameraStrategy implements SelectImageStrategy {
                 e.printStackTrace();
             }
             if (bitmap != null)
-                mViewModel.setImage(bitmap, idImage);
+                mViewModel.setImage(bitmap, requestCode);
 
         } catch (IOException e) {
             e.printStackTrace();

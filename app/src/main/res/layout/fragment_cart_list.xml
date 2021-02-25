@@ -2,7 +2,7 @@
 <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
+    android:id="@+id/cartList"
     android:name="com.example.suitapp.CartFragment"
     android:background="@color/gray_200"
     android:layout_width="match_parent"

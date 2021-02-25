@@ -2,31 +2,18 @@ package com.example.suitapp.listener;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.suitapp.R;
-import com.example.suitapp.fragment.addStore.AddStoreViewModel;
+import com.example.suitapp.viewmodel.AddStoreViewModel;
 import com.example.suitapp.model.DialogSelectItemList;
-import com.example.suitapp.model.Province;
 import com.example.suitapp.model.ProvinceList;
-import com.example.suitapp.model.ShippingPrice;
 import com.example.suitapp.util.Constants;
-import com.example.suitapp.viewmodel.DialogSelectItemViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.Map;
-
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 
 public class OclShippingPrice implements View.OnClickListener {
@@ -59,7 +46,7 @@ public class OclShippingPrice implements View.OnClickListener {
         tietPrice = viewInflater.findViewById(R.id.tietPrice);
         message = viewInflater.findViewById(R.id.lbDesc);
 
-        OclSelectDialog oclSelectDialog = new OclSelectDialog(context, viewModel, (new ProvinceList()), Constants.SELECT_SHIPPING);
+        OclSelectDialog oclSelectDialog = new OclSelectDialog(context, viewModel, listItems, requestId);
         tietProvince.setOnClickListener(vi -> oclSelectDialog.onClick(vi));
         viewModel.getEditShippingPrice().observe((LifecycleOwner) context, s -> {
             if (s != null) {

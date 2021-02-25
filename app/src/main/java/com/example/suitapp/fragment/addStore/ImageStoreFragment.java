@@ -14,10 +14,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.suitapp.AddStoreActivity;
+import com.example.suitapp.activity.AddStoreActivity;
 import com.example.suitapp.R;
 import com.example.suitapp.listener.OclAddImage;
 import com.example.suitapp.util.Constants;
+import com.example.suitapp.viewmodel.AddStoreViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ImageStoreFragment extends Fragment {
@@ -53,8 +54,8 @@ public class ImageStoreFragment extends Fragment {
         //set
         activity = ((AddStoreActivity) getActivity());
         mViewModel = new ViewModelProvider(activity).get(AddStoreViewModel.class);
-        selectImageLogo = new OclAddImage(getContext(), Constants.IMAGE_LOGO, false, mViewModel, Constants.IMAGE_LOGO);
-        selectImagePortada = new OclAddImage(getContext(), Constants.IMAGE_PORTADA, false, mViewModel, Constants.IMAGE_PORTADA);
+        selectImageLogo = new OclAddImage(getContext(), Constants.IMAGE_LOGO, false, mViewModel);
+        selectImagePortada = new OclAddImage(getContext(), Constants.IMAGE_PORTADA, false, mViewModel);
         fromReview = false;
         if (getArguments() != null)
             fromReview = ImageStoreFragmentArgs.fromBundle(getArguments()).getFromReview();
@@ -71,10 +72,10 @@ public class ImageStoreFragment extends Fragment {
         Button btContinue = root.findViewById(R.id.btContinue);
 
         //listeners
-        if (mViewModel.getImage(Constants.IMAGE_PORTADA).getValue() != null)
+        if (mViewModel.getImage(Constants.IMAGE_PORTADA, 0).getValue() != null)
             ivPortada.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_image_store_to_nav_view_image, bundlePort));
-        if (mViewModel.getImage(Constants.IMAGE_LOGO).getValue() != null)
-        ivLogo.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_image_store_to_nav_view_image, bundleLogo));
+        if (mViewModel.getImage(Constants.IMAGE_LOGO, 0).getValue() != null)
+            ivLogo.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_image_store_to_nav_view_image, bundleLogo));
         btnCameraLogo.setOnClickListener(selectImageLogo);
         btnCameraPortada.setOnClickListener(selectImagePortada);
         btContinue.setOnClickListener(v -> {
@@ -96,7 +97,7 @@ public class ImageStoreFragment extends Fragment {
         if (requestCode == Constants.IMAGE_LOGO) {
             selectImageLogo.processData(requestCode, resultCode, data);
             ivLogo.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_image_store_to_nav_view_image, bundleLogo));
-        }else if (requestCode == Constants.IMAGE_PORTADA) {
+        } else if (requestCode == Constants.IMAGE_PORTADA) {
             selectImagePortada.processData(requestCode, resultCode, data);
             ivPortada.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_image_store_to_nav_view_image, bundlePort));
         }

@@ -1,27 +1,23 @@
-package com.example.suitapp;
+package com.example.suitapp.activity;
 
-import android.app.Activity;
 import android.content.Context;
-import android.media.audiofx.LoudnessEnhancer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.suitapp.fragment.LoginFragment;
+import com.example.suitapp.R;
 import com.example.suitapp.util.Constants;
 import com.example.suitapp.util.SingletonUser;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -59,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         TextInputLayout etSearch = findViewById(R.id.etSearch);
         setSupportActionBar(toolbar);
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); //oculta el teclado
+        Button btAddProduct = findViewById(R.id.btAddProduct);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -87,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
                 appBarLayout.setExpanded(true);
+                btAddProduct.setVisibility(View.GONE);
 
                 boolean isLogued = SingletonUser.getInstance(getBaseContext()).isLogued();
                 updateMenu();

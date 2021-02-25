@@ -1,41 +1,54 @@
 package com.example.suitapp.fragment.addStore;
 
-import android.annotation.SuppressLint;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ImageView;
 
 import com.example.suitapp.R;
+import com.example.suitapp.util.Constants;
+import com.example.suitapp.viewmodel.AddArticleViewModel;
+import com.example.suitapp.viewmodel.AddStoreViewModel;
+import com.example.suitapp.viewmodel.CaptureImageViewModel;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ViewImageFragment extends Fragment {
+
+    private static final String ARG_IMAGE = "imageView";
+    private static final String ARG_ID = "imageID";
+
     View root;
-    private AddStoreViewModel mViewModel;
+    private CaptureImageViewModel mViewModel;
     FloatingActionButton fabRotateL, fabRotateR;
     PhotoView photoView;
-    int image;
+    int requestId;
+    int imageArticle;
     Bitmap bitmap;
+
+    public static ViewImageFragment newInstance(int requestId, int imageArticle) {
+        ViewImageFragment fragment = new ViewImageFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_IMAGE, requestId);
+        args.putInt(ARG_ID, imageArticle);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            requestId = getArguments().getInt(ARG_IMAGE);
+            imageArticle = getArguments().getInt(ARG_ID);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,8 +61,11 @@ public class ViewImageFragment extends Fragment {
     private void init() {
 
         //set
-        mViewModel = new ViewModelProvider(getActivity()).get(AddStoreViewModel.class);
-        image = getArguments().getInt("imageView");
+        if (requestId == Constants.IMAGE_LOGO || requestId == Constants.IMAGE_PORTADA) {
+            mViewModel = new ViewModelProvider(getActivity()).get(AddStoreViewModel.class);
+            imageArticle = requestId;
+        } else
+            mViewModel = new ViewModelProvider(getActivity()).get(AddArticleViewModel.class);
 
         //bind
         photoView = root.findViewById(R.id.imageView);
@@ -58,28 +74,38 @@ public class ViewImageFragment extends Fragment {
         FloatingActionButton fabClose = root.findViewById(R.id.fabClose);
 
         //listener
-        fabRotateL.setOnClickListener(view -> photoView.setRotation(photoView.getRotation() - 90));
-        fabRotateR.setOnClickListener(view -> photoView.setRotation(photoView.getRotation() + 90));
+        fabRotateL.setOnClickListener(view -> {
+            photoView.setRotation(photoView.getRotation() - 90);
+            saveChange();
+        });
+        fabRotateR.setOnClickListener(view -> {
+            photoView.setRotation(photoView.getRotation() + 90);
+            saveChange();
+        });
         fabClose.setOnClickListener(view -> Navigation.findNavController(root).navigateUp());
 
         //viewmodel
-        mViewModel.getImage(image).observe(getViewLifecycleOwner(), bm -> {
+        mViewModel.getImage(requestId, imageArticle).observe(getViewLifecycleOwner(), bm -> {
             photoView.setImageBitmap(bm);
             bitmap = bm;
         });
 
+        //if articles
+        if (requestId == Constants.IMAGE_ARTICLE) {
+            root.findViewById(R.id.ccBackground).setBackgroundColor(getResources().getColor(R.color.white));
+            fabClose.setVisibility(View.GONE);
+        }
+
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
+    public void saveChange() {
         if (bitmap != null) {
             Matrix matrix = new Matrix();
             matrix.postRotate(photoView.getRotation());
             //Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, photoView.getWidth(), photoView.getHeight(), true);
             Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
-            mViewModel.setImage(rotatedBitmap, image);
+            mViewModel.updateImage(rotatedBitmap, imageArticle);
         }
     }
 }

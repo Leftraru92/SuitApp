@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="#FFFFFF"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -101,6 +101,29 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_main" />
+
+    <Button
+        android:id="@+id/btAddProduct"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:backgroundTint="@color/cian_400"
+        android:layout_gravity="bottom"
+        android:elevation="6dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Agregar artículo"
+        android:visibility="gone"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        app:icon="@drawable/ic_baseline_add_24"
+        app:iconGravity="textStart"
+        app:iconPadding="16dp"
+        app:iconTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btBuyNow" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -4,12 +4,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,12 +25,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.suitapp.MainActivity;
+import com.example.suitapp.activity.MainActivity;
 import com.example.suitapp.R;
-import com.example.suitapp.adapter.ArticleAdapter;
 import com.example.suitapp.adapter.ArticlesGroupAdapter;
 import com.example.suitapp.adapter.ImageAdapter;
-import com.example.suitapp.dummy.DummyArticles;
 import com.example.suitapp.dummy.DummyArticlesGroup;
 import com.example.suitapp.listener.OclQtySelector;
 import com.example.suitapp.util.SingletonUser;

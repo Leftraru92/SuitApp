@@ -77,4 +77,14 @@ public class StoresFragment extends Fragment implements StoresRecyclerViewAdapte
     public void onStoreClick(int position) {
         Toast.makeText(getContext(), "Se tocó la tienda " + DummyStores.ITEMS.get(position).getName(), Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    public void onStoreEdit(int position) {
+
+    }
+
+    @Override
+    public void onStoreDelete(int position) {
+
+    }
 }

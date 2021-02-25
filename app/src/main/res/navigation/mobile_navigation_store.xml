@@ -156,7 +156,11 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
+            app:popExitAnim="@anim/to_right" >
+            <argument
+                android:name="isArticle"
+                android:defaultValue="false" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/nav_view_image"
@@ -175,7 +179,13 @@
         android:name="com.example.suitapp.fragment.addStore.CongratsFragment"
         android:label="@string/store_shipping"
         tools:layout="@layout/fragment_congrats">
+        <argument
+            android:name="isArticle"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
+    <argument
+        android:name="fromReview" />
 
 
 </navigation>

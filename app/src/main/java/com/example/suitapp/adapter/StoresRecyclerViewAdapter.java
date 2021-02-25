@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,10 +15,6 @@ import com.example.suitapp.model.Store;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class StoresRecyclerViewAdapter extends RecyclerView.Adapter<StoresRecyclerViewAdapter.ViewHolder> {
 
     private final List<Store> mValues;
@@ -54,6 +51,7 @@ public class StoresRecyclerViewAdapter extends RecyclerView.Adapter<StoresRecycl
         public final View mView;
         public final TextView tvId, tvName;
         public ImageView ivStore;
+        public Button btEditStore, btDeleteStore;
         public Store mItem;
         OnStoreListener onStoreListener;
 
@@ -63,18 +61,40 @@ public class StoresRecyclerViewAdapter extends RecyclerView.Adapter<StoresRecycl
             tvId = (TextView) view.findViewById(R.id.tvId);
             tvName = (TextView) view.findViewById(R.id.tvName);
             ivStore = view.findViewById(R.id.ivStore);
+            btEditStore = view.findViewById(R.id.btEditStore);
+            btDeleteStore = view.findViewById(R.id.btDeleteStore);
             this.onStoreListener = onStoreListener;
 
             view.setOnClickListener(this);
+            if (btDeleteStore != null)
+                btDeleteStore.setOnClickListener(this);
+            if (btEditStore != null)
+                btEditStore.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            onStoreListener.onStoreClick(getAdapterPosition());
+            switch (v.getId()) {
+                case R.id.btEditStore:
+                    onStoreListener.onStoreEdit(getAdapterPosition());
+                    break;
+                case R.id.btDeleteStore:
+                    onStoreListener.onStoreDelete(getAdapterPosition());
+                    break;
+                default:
+                    onStoreListener.onStoreClick(getAdapterPosition());
+                    break;
+            }
+
         }
     }
 
-    public interface OnStoreListener{
+    public interface OnStoreListener {
         void onStoreClick(int position);
+
+        void onStoreEdit(int position);
+
+        void onStoreDelete(int position);
     }
+
 }

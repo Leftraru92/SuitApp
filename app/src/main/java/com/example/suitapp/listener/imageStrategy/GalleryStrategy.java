@@ -10,15 +10,10 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.suitapp.R;
-import com.example.suitapp.fragment.addStore.AddStoreViewModel;
 import com.example.suitapp.util.Constants;
 import com.example.suitapp.viewmodel.CaptureImageViewModel;
 
 import java.io.IOException;
-import java.net.URI;
-
-import androidx.lifecycle.ViewModel;
 
 import static android.app.Activity.RESULT_CANCELED;
 
@@ -50,7 +45,7 @@ public class GalleryStrategy implements SelectImageStrategy{
     }
 
     @Override
-    public boolean processData(int requestCode, int resultCode, Intent data, CaptureImageViewModel mViewModel, int idImage) {
+    public boolean processData(int requestCode, int resultCode, Intent data, CaptureImageViewModel mViewModel) {
         Log.d(Constants.LOG, "Ejecuto gallery processData");
         if (resultCode == RESULT_CANCELED) {
             return false;
@@ -70,21 +65,21 @@ public class GalleryStrategy implements SelectImageStrategy{
 
                 for (int i = 0; i < count; i++) {
                     Uri contentURI = data.getClipData().getItemAt(i).getUri();
-                    procesBitmap(contentURI, mViewModel, idImage);
+                    procesBitmap(contentURI, mViewModel);
                 }
             } else if (data.getData() != null) {
                 Uri contentURI = data.getData();
-                procesBitmap(contentURI, mViewModel, idImage);
+                procesBitmap(contentURI, mViewModel);
             }
         }
         return true;
     }
 
-    private void procesBitmap(Uri contentURI, CaptureImageViewModel mViewModel, int idImage){
+    private void procesBitmap(Uri contentURI, CaptureImageViewModel mViewModel){
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), contentURI);
             bitmap = getResizedBitmap(bitmap, Constants.IMAGE_SIZE);
-            mViewModel.setImage(bitmap, idImage);
+            mViewModel.setImage(bitmap, requestCode);
 
         } catch (IOException e) {
             e.printStackTrace();

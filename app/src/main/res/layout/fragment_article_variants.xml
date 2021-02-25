@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_200"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.addStore.StoreNameFragment">
+
+    <TextView
+        android:id="@+id/lbVariants"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/vaiants_tit"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/titulos"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lbVariantsDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/article_variants_det"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbVariants" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listVariants"
+        android:name="com.example.suitapp.CategoryFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clipToPadding="false"
+        android:paddingHorizontal="16dp"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbVariantsDesc"
+        tools:context=".fragment.CategoryFragment"
+        tools:itemCount="3"
+        tools:listitem="@layout/card_variant" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btAddVariant"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/link_height"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/bt_add_variant"
+        android:textAllCaps="false"
+        android:textColor="@color/cian_400"
+        app:icon="@drawable/ic_baseline_add_24"
+        app:iconSize="22dp"
+        app:iconTint="@color/cian_400"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listVariants" />
+
+    <Button
+        android:id="@+id/btContinue"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/bt_next"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        app:cornerRadius="10dp"
+        app:icon="@drawable/ic_chevron_right_slim"
+        app:iconGravity="end"
+        app:iconPadding="12dp"
+        app:iconSize="20dp"
+        app:iconTint="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btAddVariant" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

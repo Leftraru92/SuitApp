@@ -1,4 +1,4 @@
-package com.example.suitapp.fragment.addStore;
+package com.example.suitapp.viewmodel;
 
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -213,6 +213,11 @@ public class AddStoreViewModel extends ViewModel implements DialogSelectItemView
         }
     }
 
+    @Override
+    public void updateImage(Bitmap bitmap, int imageid) {
+        setImage(bitmap, imageid);
+    }
+
     public void addShippingPrice(int price) {
         //Si es editado primero lo elimino de la lista
         for (ShippingPrice sp : mListShippingPrice) {
@@ -247,7 +252,8 @@ public class AddStoreViewModel extends ViewModel implements DialogSelectItemView
         return mEditShippingPrice;
     }
 
-    public LiveData<Bitmap> getImage(int image) {
+    @Override
+    public LiveData<Bitmap> getImage(int image, int imageId) {
         switch (image) {
             case Constants.IMAGE_LOGO:
                 return getImageLogo();
