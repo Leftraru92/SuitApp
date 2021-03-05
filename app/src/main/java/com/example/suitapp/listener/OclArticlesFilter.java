@@ -2,7 +2,6 @@ package com.example.suitapp.listener;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -11,15 +10,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.suitapp.R;
-import com.example.suitapp.adapter.CategoriesAdapter;
-import com.example.suitapp.adapter.GenderAdapter;
 import com.example.suitapp.database.AccessDataDb;
-import com.example.suitapp.dummy.DummyColors;
+import com.example.suitapp.model.Category;
 import com.example.suitapp.model.Gender;
 import com.example.suitapp.model.Item;
+import com.example.suitapp.model.Variant;
 import com.example.suitapp.util.Constants;
 import com.example.suitapp.util.ExpandLayout;
 import com.example.suitapp.viewmodel.SearchViewModel;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
@@ -35,16 +34,17 @@ public class OclArticlesFilter implements View.OnClickListener {
     private Context context;
     View viewInflater;
     AlertDialog dialog;
+    TextInputEditText tietPriceMax, tietPriceMin;
     Button btnLimpiar, btDesplegar, btDesplegarCat, btDesplegarGenre, btDesplegarColor, btDesplegarSize, btDesplegarPrice;
     ConstraintLayout layoutExpandOrdenar, layoutExpandCat, layoutExpandGenre, layoutExpandColor, layoutExpandSize, layoutExpandPrice;
     ConstraintLayout clOrdenarPor, clFiltroCat, clFiltrarGenre, clFiltrarColor, clFiltroSize, clFiltroPrice;
     TextView lbOrdenarPorSelec, lbCatSelect, lbGenreSelect, lbColorSelec, lbSizeSelec,
             lbPriceSelect;
     RadioGroup rgOrdenarPor, rgCategory, rgGenre, rgColor, rgSize;
+    RadioButton orden1, orden2, orden3;
     ExpandLayout elOrdenar, elCategory, elGenre, elColor, elSize, elPrice;
 
-    List<Item> categoryList;
-    List<Item> genderList;
+    List<Item> categoryList, genderList, colorList, sizeList;
 
     public OclArticlesFilter(Context context) {
         this.context = context;
@@ -67,6 +67,8 @@ public class OclArticlesFilter implements View.OnClickListener {
         lbColorSelec = viewInflater.findViewById(R.id.lbColorSelec);
         lbSizeSelec = viewInflater.findViewById(R.id.lbSizeSelec);
         lbPriceSelect = viewInflater.findViewById(R.id.lbPriceSelect);
+        tietPriceMin = viewInflater.findViewById(R.id.tietPriceMin);
+        tietPriceMax = viewInflater.findViewById(R.id.tietPriceMax);
 
         //Radiogroup
         rgOrdenarPor = viewInflater.findViewById(R.id.rgOrdenarPor);
@@ -74,6 +76,9 @@ public class OclArticlesFilter implements View.OnClickListener {
         rgGenre = viewInflater.findViewById(R.id.rgGenre);
         rgColor = viewInflater.findViewById(R.id.rgColor);
         rgSize = viewInflater.findViewById(R.id.rgSize);
+        orden1 = viewInflater.findViewById(R.id.orden1);
+        orden2 = viewInflater.findViewById(R.id.orden2);
+        orden3 = viewInflater.findViewById(R.id.orden3);
 
         //Botones
         btnLimpiar = viewInflater.findViewById(R.id.btnLimpiar);
@@ -113,64 +118,93 @@ public class OclArticlesFilter implements View.OnClickListener {
 
         rgOrdenarPor.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton checkedRadioButton = group.findViewById(checkedId);
+            elOrdenar.closeCard();
             boolean isChecked = checkedRadioButton.isChecked();
             if (isChecked) {
-                setTextSelected(lbOrdenarPorSelec, checkedRadioButton.getText());
+                setTextSelected(lbOrdenarPorSelec, checkedRadioButton.getText(), checkedRadioButton.getTag().toString(), rgOrdenarPor);
+                searchViewModel.setOrder(Integer.valueOf(checkedRadioButton.getTag().toString()));
             }
         });
 
         rgCategory.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton checkedRadioButton = group.findViewById(checkedId);
-            elCategory.onClickContraint();
+            elCategory.closeCard();
             boolean isChecked = checkedRadioButton.isChecked();
             if (isChecked) {
-                setTextSelected(lbCatSelect, checkedRadioButton.getText());
+                setTextSelected(lbCatSelect, checkedRadioButton.getText(), checkedRadioButton.getText().toString(), rgCategory);
+                if (checkedRadioButton.getText().equals(Constants.TODOS))
+                    searchViewModel.setCategoryTemp(null);
+                else
+                    searchViewModel.setCategoryTemp(new Category(checkedRadioButton.getId(), checkedRadioButton.getText().toString(), 0));
             }
         });
 
         rgGenre.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton checkedRadioButton = group.findViewById(checkedId);
-            elGenre.onClickContraint();
+            elGenre.closeCard();
             boolean isChecked = checkedRadioButton.isChecked();
             if (isChecked) {
-                setTextSelected(lbGenreSelect, checkedRadioButton.getText());
+                setTextSelected(lbGenreSelect, checkedRadioButton.getText(), checkedRadioButton.getText().toString(), rgGenre);
+                if (checkedRadioButton.getText().equals(Constants.TODOS))
+                    searchViewModel.setGenreTemp(null);
+                else
+                    searchViewModel.setGenreTemp(new Gender(checkedRadioButton.getId(), checkedRadioButton.getText().toString(), 0));
             }
         });
 
         rgColor.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton checkedRadioButton = group.findViewById(checkedId);
-            elColor.onClickContraint();
+            elColor.closeCard();
             boolean isChecked = checkedRadioButton.isChecked();
             if (isChecked) {
-                setTextSelected(lbColorSelec, checkedRadioButton.getText());
+                setTextSelected(lbColorSelec, checkedRadioButton.getText(), checkedRadioButton.getText().toString(), rgColor);
+                if (checkedRadioButton.getText().equals(Constants.TODOS))
+                    searchViewModel.setColorTemp(null);
+                else
+                    searchViewModel.setColorTemp(new Variant.Color(checkedRadioButton.getId(), checkedRadioButton.getText().toString(), ""));
             }
         });
 
         rgSize.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton checkedRadioButton = group.findViewById(checkedId);
+            elSize.closeCard();
             boolean isChecked = checkedRadioButton.isChecked();
             if (isChecked) {
-                setTextSelected(lbSizeSelec, checkedRadioButton.getText());
+                setTextSelected(lbSizeSelec, checkedRadioButton.getText(), checkedRadioButton.getText().toString(), rgSize);
+                if (checkedRadioButton.getText().equals(Constants.TODOS))
+                    searchViewModel.setSizeTemp(null);
+                else
+                    searchViewModel.setSizeTemp(new Variant.Size(checkedRadioButton.getId(), checkedRadioButton.getText().toString()));
             }
         });
 
         //viewmodel
-        searchViewModel.getCategory().observe((LifecycleOwner) context, s -> {
-            if (s != null) {
-                setTextSelected(lbCatSelect, s.getName());
-            }
+        searchViewModel.getCategoryTemp().observe((LifecycleOwner) context, s -> {
+            if (s == null)
+                setTextSelected(lbCatSelect, Constants.TODOS, Constants.TODOS, rgCategory);
+            else
+                setTextSelected(lbCatSelect, s.getName(), s.getName(), rgCategory);
         });
 
-        searchViewModel.getGenre().observe((LifecycleOwner) context, s -> {
-            if (s != null) {
-                setTextSelected(lbGenreSelect, s.getName());
-            }
+        searchViewModel.getGenreTemp().observe((LifecycleOwner) context, s -> {
+            if (s == null)
+                setTextSelected(lbGenreSelect, Constants.TODOS, Constants.TODOS, rgGenre);
+            else
+                setTextSelected(lbGenreSelect, s.getName(), s.getName(), rgGenre);
         });
 
-        searchViewModel.getColor().observe((LifecycleOwner) context, s -> {
-            if (s != null) {
-                setTextSelected(lbColorSelec, s.getName());
-            }
+        searchViewModel.getColorTemp().observe((LifecycleOwner) context, s -> {
+            if (s == null)
+                setTextSelected(lbColorSelec, Constants.TODOS, Constants.TODOS, rgColor);
+            else
+                setTextSelected(lbColorSelec, s.getName(), s.getName(), rgColor);
+        });
+
+        searchViewModel.getSizeTemp().observe((LifecycleOwner) context, s -> {
+            if (s == null)
+                setTextSelected(lbSizeSelec, Constants.TODOS, Constants.TODOS, rgSize);
+            else
+                setTextSelected(lbSizeSelec, s.getName(), s.getName(), rgSize);
         });
 
     }
@@ -178,35 +212,17 @@ public class OclArticlesFilter implements View.OnClickListener {
     private void getData() {
         AccessDataDb accessDataDba = AccessDataDb.getInstance(context);
 
-        genderList = accessDataDba.getGenders(true);
+        genderList = accessDataDba.getGendersItems();
         categoryList = accessDataDba.getCategories();
-
+        colorList = accessDataDba.getColorsItems();
+        sizeList = accessDataDba.getSizes();
     }
 
     @Override
     public void onClick(View view) {
 
-/*
-        if (rgOrdenarPor.findViewWithTag(ordenSelected) != null)
-            ((RadioButton) rgOrdenarPor.findViewWithTag(ordenSelected)).setChecked(true);
-        if (numosSelected != null) {
-            tvFiltroNumOs.setText(numosSelected);
-            lbNumOs.setText(numosSelected);
-            lbNumOs.setVisibility(View.VISIBLE);
-        }
-        if (catSelected != null && rgCategoria.findViewWithTag(catSelected) != null) {
-            ((RadioButton) rgCategoria.findViewWithTag(catSelected)).setChecked(true);
-        }
-        if (estadoSelected != null && rgEstado.findViewWithTag(estadoSelected) != null) {
-            ((RadioButton) rgEstado.findViewWithTag(estadoSelected)).setChecked(true);
-        }
-        if (fechaSelected != null) {
-            lbFechaSelec.setText(fechaSelected);
-            lbFechaSelec.setVisibility(View.VISIBLE);
-        }
-*/
-
-
+        setFilterSelected();
+        searchViewModel.setFilterTemp();
 
         // Genero el dialogo
 
@@ -215,77 +231,68 @@ public class OclArticlesFilter implements View.OnClickListener {
 
             builder.setView(viewInflater)
                     .setTitle("Filtrar")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // processFilter();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, null);
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> processFilter())
+                    .setNegativeButton(android.R.string.no, (dialog, which) -> searchViewModel.cleanTemp());
             dialog = builder.create();
         }
         dialog.show();
     }
-/*
-    private void processFilter() {
-        Map<String, String> map = new HashMap<>();
-        if (!lbOrdenarPorSelec.getText().toString().equals(""))
-            map.put(Constantes.FILTRO_ORDENAR, lbOrdenarPorSelec.getText().toString());
-        if (!tvFiltroNumOs.getText().toString().equals(""))
-            map.put(Constantes.FILTRO_NUMOS, tvFiltroNumOs.getText().toString());
-        if (!lbCategoriaSelec.getText().toString().equals(""))
-            map.put(Constantes.FILTRO_CAT, lbCategoriaSelec.getText().toString());
-        if (!lbEstadoSelec.getText().toString().equals(""))
-            map.put(Constantes.FILTRO_ESTADO, lbEstadoSelec.getText().toString());
-        if (!lbFechaSelec.getText().toString().equals(""))
-            map.put(Constantes.FILTRO_FECHA, lbFechaSelec.getText().toString());
-        dmof.setMapFiltro(map);
 
+    private void processFilter() {
+        searchViewModel.setMaxPriceTemp(tietPriceMax.getText().toString());
+        searchViewModel.setMinPriceTemp(tietPriceMin.getText().toString());
+        searchViewModel.setFilter();
     }
-*/
+
+    private void setFilterSelected() {
+        lbOrdenarPorSelec.setText(searchViewModel.getOrderString());
+        switch (searchViewModel.getOrder().getValue()){
+            case 1:
+                orden1.setChecked(true);
+                break;
+            case 2:
+                orden3.setChecked(true);
+                break;
+            case 3:
+                orden2.setChecked(true);
+                break;
+        }
+    }
 
     private void limpiarFiltros() {
-        setTextSelected(lbCatSelect, Constants.TODOS);
-        setTextSelected(lbGenreSelect, Constants.TODOS);
-        setTextSelected(lbColorSelec, Constants.TODOS);
-
+        setTextSelected(lbCatSelect, Constants.TODOS, Constants.TODOS, rgCategory);
+        setTextSelected(lbGenreSelect, Constants.TODOS, Constants.TODOS, rgGenre);
+        setTextSelected(lbColorSelec, Constants.TODOS, Constants.TODOS, rgColor);
+        setTextSelected(lbSizeSelec, Constants.TODOS, Constants.TODOS, rgSize);
+        tietPriceMin.setText("");
+        tietPriceMax.setText("");
         lbPriceSelect.setText("");
-/*
-        if (layoutExpandNumOs.getVisibility() == View.VISIBLE)
-            elNumOs.onClickContraint();
+        searchViewModel.clean();
 
-        if (layoutExpandCategoria.getVisibility() == View.VISIBLE)
-            elCategorias.onClickContraint();
-
-        if (layoutExpandEstado.getVisibility() == View.VISIBLE)
-            elEstados.onClickContraint();
-*/
+        elCategory.closeCard();
+        elGenre.closeCard();
+        elColor.closeCard();
+        elSize.closeCard();
+        elPrice.closeCard();
     }
 
-    /*
-        private void onClickExpandNumOs(ExpandLayout el) {
-
-            if (!el.getExpandState()) {
-                lbNumOs.setText(tvFiltroNumOs.getText());
-                lbNumOs.setVisibility((tvFiltroNumOs.getText().length() == 0) ? View.GONE : View.VISIBLE);
-            } else {
-                lbNumOs.setVisibility(View.GONE);
-            }
-        }
-    */
-    private void setTextSelected(TextView tv, CharSequence valor) {
-        if (valor.equals("Todos")) {
+    private void setTextSelected(TextView tv, CharSequence valor, String tag, RadioGroup radioGroup) {
+        if (valor.equals(Constants.TODOS)) {
             tv.setVisibility(View.GONE);
             tv.setText("");
+            ((RadioButton)radioGroup.findViewWithTag(Constants.TODOS)).setChecked(true);
         } else {
             tv.setVisibility(View.VISIBLE);
             tv.setText(valor);
+            ((RadioButton)radioGroup.findViewWithTag(tag)).setChecked(true);
         }
     }
 
     private void generateRadioGroups() {
         generateOptions(categoryList, rgCategory);
         generateOptions(genderList, rgGenre);
-        generateOptions(new DummyColors().getItems(), rgColor);
+        generateOptions(colorList, rgColor);
+        generateOptions(sizeList, rgSize);
     }
 
     private void generateOptions(List<Item> lista, RadioGroup radioGroup) {
@@ -303,7 +310,7 @@ public class OclArticlesFilter implements View.OnClickListener {
             index++;
             rdbtn.setId(index);
             rdbtn.setText(item.getName());
-            rdbtn.setTag(item.getId());
+            rdbtn.setTag(item.getName());
             rdbtn.setLayoutParams(lp);
             radioGroup.addView(rdbtn);
         }
@@ -316,8 +323,6 @@ public class OclArticlesFilter implements View.OnClickListener {
         rdbtn.setLayoutParams(lp);
         rdbtn.setChecked(true);
         radioGroup.addView(rdbtn, 0);
-
-
     }
 
 }

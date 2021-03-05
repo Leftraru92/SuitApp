@@ -32,13 +32,14 @@
                 android:id="@+id/ivArticle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:scaleType="fitCenter"
                 android:background="@android:color/white"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHeight_max="@dimen/card_article_max_height"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/pantalon" />
+                tools:src="@drawable/pantalongris" />
 
             <TextView
                 android:id="@+id/tvId"
@@ -63,7 +64,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivArticle"
-                tools:text="Camisa entallada" />
+                tools:text="Pantalones Hombre Cargo Gabardina Bolsillos Casuales Jogger" />
 
             <TextView
                 android:id="@+id/tvPrice"
@@ -71,7 +72,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="sans-serif-light"
                 android:includeFontPadding="false"
@@ -79,10 +79,22 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/tvColor"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvName"
                 tools:text="$ 1.100" />
+
+            <TextView
+                android:id="@+id/tvPriceDecimal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="monospace"
+                android:text="00"
+                android:textColor="@color/gray_900"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/tvPrice"
+                app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
             <TextView
                 android:id="@+id/tvColor"

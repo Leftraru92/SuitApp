@@ -5,9 +5,15 @@ import android.util.Log;
 
 import com.example.suitapp.model.Province;
 import com.example.suitapp.model.ShippingPrice;
+import com.example.suitapp.model.Variant;
 import com.example.suitapp.util.Constants;
+import com.example.suitapp.util.Util;
 import com.example.suitapp.viewmodel.CaptureImageViewModel;
 import com.example.suitapp.viewmodel.DialogSelectItemViewModel;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -79,6 +85,10 @@ public class AddStoreViewModel extends ViewModel implements DialogSelectItemView
 
     public LiveData<String> getProvince() {
         return mProvince;
+    }
+
+    public LiveData<Integer> getProvinceId() {
+        return mProvinceId;
     }
 
     public void setProvince(String province) {
@@ -220,10 +230,12 @@ public class AddStoreViewModel extends ViewModel implements DialogSelectItemView
 
     public void addShippingPrice(int price) {
         //Si es editado primero lo elimino de la lista
+        ArrayList<ShippingPrice> editedListSP = mListShippingPrice;
         for (ShippingPrice sp : mListShippingPrice) {
             if (sp.getProvince().getId() == mEditShippingPrice.getValue().getProvince().getId())
-                mListShippingPrice.remove(sp);
+                editedListSP.remove(sp);
         }
+        mListShippingPrice = editedListSP;
         //Lo guardo en la lista
         mEditShippingPrice.getValue().setPrice(price);
         mListShippingPrice.add(mEditShippingPrice.getValue());
@@ -261,6 +273,44 @@ public class AddStoreViewModel extends ViewModel implements DialogSelectItemView
                 return getImagePortada();
             default:
                 return null;
+        }
+    }
+
+    public JSONObject toJSON(String hash){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("email", hash);
+            jsonObject.put("storeName", getName().getValue());
+            jsonObject.put("description", getDesc().getValue());
+
+            JSONObject jsonAddress= new JSONObject();
+            jsonAddress.put("province_id", getProvinceId().getValue());
+            jsonAddress.put("city", getCity().getValue());
+            jsonAddress.put("street", getStreet().getValue());
+            jsonAddress.put("street_number", getNumber().getValue());
+            jsonAddress.put("floor", getFloor().getValue());
+            jsonAddress.put("apartment", getApartment().getValue());
+            jsonObject.put("address", jsonAddress);
+
+            jsonObject.put("storeLogo", Util.bitmapToBase64(getImageLogo().getValue()));
+            jsonObject.put("storeCoverPhoto", Util.bitmapToBase64(getImagePortada().getValue()));
+            jsonObject.put("physical_store", getPersonalShipping().getValue());
+            jsonObject.put("mailShipping", getMailShipping().getValue());
+
+            JSONArray jsonShipping= new JSONArray();
+            for (ShippingPrice sp: getShippingPrice().getValue()) {
+                JSONObject jsonPrice= new JSONObject();
+                jsonPrice.put("idProvince", sp.getProvince().getId());
+                jsonPrice.put("price", sp.getPrice());
+                jsonShipping.put(jsonPrice);
+            }
+            jsonObject.put("shippingPrice", jsonShipping);
+
+            return  jsonObject;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

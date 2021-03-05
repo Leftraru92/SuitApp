@@ -158,7 +158,7 @@ public class WebService {
                                     break;
                                 default:
                                     try {
-                                        description = descriptionjson.getJSONObject("Message").getString("description");
+                                        description = descriptionjson.getString("Message");
                                     } catch (Exception e) {
                                         try {
                                             description = descriptionjson.getString("ExceptionMessage");

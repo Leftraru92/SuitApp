@@ -20,6 +20,8 @@ import com.example.suitapp.adapter.VariantsAdapter;
 import com.example.suitapp.util.Constants;
 import com.example.suitapp.viewmodel.AddArticleViewModel;
 
+import org.json.JSONObject;
+
 public class ArticleReviewFragment extends Fragment implements VariantsAdapter.OnVariantListener, AddArticleImagesAdapter.OnImageListener {
     View root;
     AddArticleViewModel mViewModel;
@@ -72,7 +74,7 @@ public class ArticleReviewFragment extends Fragment implements VariantsAdapter.O
         cardVariants.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_article_review_to_nav_article_variants));
         cardImages.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_article_review_to_nav_article_images));
         cardPrice.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_article_review_to_nav_article_price));
-        btContinue.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_article_review_to_nav_congrats));
+        btContinue.setOnClickListener(v -> next());
 
 
         //viewmodel
@@ -86,6 +88,13 @@ public class ArticleReviewFragment extends Fragment implements VariantsAdapter.O
         mViewModel.getCategory().observe(getViewLifecycleOwner(), s -> tvCategory.setText(s.getName()));
         mViewModel.getGenre().observe(getViewLifecycleOwner(), s -> tvGenre.setText(s.getName()));
         mViewModel.getPrice().observe(getViewLifecycleOwner(), s -> tvPrice.setText(String.valueOf(s)));
+    }
+
+    private void next() {
+        JSONObject jsonStore = mViewModel.toJSON();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isArticle", true);
+        Navigation.findNavController(root).navigate(R.id.action_nav_article_review_to_nav_congrats, bundle);
     }
 
     @Override

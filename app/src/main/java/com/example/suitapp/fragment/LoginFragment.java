@@ -1,27 +1,27 @@
 package com.example.suitapp.fragment;
 
-import android.annotation.SuppressLint;
-
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.example.suitapp.R;
+import com.example.suitapp.activity.MainActivity;
+import com.example.suitapp.api.CallWebService;
+import com.example.suitapp.api.WebService;
 import com.example.suitapp.util.Constants;
+import com.example.suitapp.util.SHA1;
 import com.example.suitapp.util.SingletonUser;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -30,34 +30,36 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.util.concurrent.Executor;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
-public class LoginFragment extends Fragment implements View.OnClickListener {
+public class LoginFragment extends Fragment implements View.OnClickListener, CallWebService {
     private static FirebaseAuth mAuth;
     View root;
     static Context context;
     static RelativeLayout loadingPanel;
     static SignInButton signInButton;
     private static GoogleSignInClient mGoogleSignInClient;
-    private static final int RC_SIGN_IN = 9001;
+    private static final int RC_SIGN_IN = 1, RC_LOGIN = 2;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -81,6 +83,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
         mAuth = FirebaseAuth.getInstance();
+
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(task.isComplete()){
+                String fbToken = task.getResult();
+                Log.d(Constants.LOG, "Token device " + fbToken);
+                SingletonUser.getInstance(context).setTokenDevice(fbToken);
+            }
+        }});
 
         loadingPanel = root.findViewById(R.id.loadingPanel);
 
@@ -150,7 +162,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
             SingletonUser.getInstance(context).setData(account);
 
-            mostrarMensaje("Bienvenido a SuitApp!");
             account.getIdToken(true)
                     .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                         public void onComplete(@NonNull Task<GetTokenResult> task) {
@@ -167,14 +178,45 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                         }
                     });
-            Navigation.findNavController(root).navigateUp();
+            callWs();
 
         } else {
-            //if (!context.getSharedPreferences("_", MODE_PRIVATE).getString("EMAIL", "").equals(""))
-            //    signOut(null);
             signInButton.setVisibility(View.VISIBLE);
             loadingPanel.setVisibility(View.GONE);
             Log.i(Constants.LOG, "La cuenta es null");
+        }
+    }
+
+    private void callWs() {
+        WebService webService = new WebService(getContext(), RC_LOGIN);
+
+        JSONObject body = getLoginBody();
+
+        webService.callService(this, Constants.WS_DOMINIO + Constants.WS_LOGIN, null, Request.Method.POST, Constants.JSON_TYPE.OBJECT, body);
+    }
+
+    private JSONObject getLoginBody() {
+        SingletonUser mUser = SingletonUser.getInstance(context);
+        try {
+            String hash = SHA1.toSHA1(mUser.getEmail());
+            mUser.setHash(hash);
+        }catch (UnsupportedEncodingException ex){
+
+        }catch (NoSuchAlgorithmException ex){
+
+        }
+
+        try {
+            JSONObject body = new JSONObject();
+            body.put("email", mUser.getEmail());
+            body.put("device_id", mUser.getDeviceId());
+            body.put("project_id", Constants.SERVICE_ID);
+            body.put("nombre", mUser.getName());
+
+            return body;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -199,5 +241,25 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 .setBackgroundTint(context.getResources().getColor(R.color.white))
                 .setTextColor(context.getResources().getColor(R.color.black))
                 .show();
+    }
+
+    @Override
+    public void onResult(int requestCode, JSONObject response) {
+        mostrarMensaje("Bienvenido a SuitApp!");
+        Navigation.findNavController(root).navigateUp();
+
+    }
+
+    @Override
+    public void onResult(int requestCode, JSONArray response) {
+
+    }
+
+    @Override
+    public void onError(int requestCode, String message) {
+        mostrarMensaje("Error: " + message);
+        signInButton.setVisibility(View.VISIBLE);
+        loadingPanel.setVisibility(View.GONE);
+       //((MainActivity)context).signOut(false);
     }
 }

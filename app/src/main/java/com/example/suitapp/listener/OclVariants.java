@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.suitapp.R;
+import com.example.suitapp.model.DialogSelect;
 import com.example.suitapp.model.DialogSelectItemList;
 import com.example.suitapp.model.ProvinceList;
 import com.example.suitapp.util.Constants;
@@ -21,7 +22,7 @@ public class OclVariants implements View.OnClickListener {
 
     private Context context;
     private AddArticleViewModel viewModel;
-    private DialogSelectItemList listItems;
+    private DialogSelectItemList colors, sizes;
 
     private View viewInflater, message;
     private LayoutInflater inflater;
@@ -29,10 +30,11 @@ public class OclVariants implements View.OnClickListener {
     TextInputEditText tietColor, tietSize, tietQty;
 
 
-    public OclVariants(Context context, AddArticleViewModel viewModel, DialogSelectItemList listItems) {
+    public OclVariants(Context context, AddArticleViewModel viewModel, DialogSelectItemList colors, DialogSelectItemList sizes) {
         this.context = context;
         this.viewModel = viewModel;
-        this.listItems = listItems;
+        this.colors = colors;
+        this.sizes = sizes;
 
         inflater = ((Activity) context).getLayoutInflater();
         viewInflater = inflater.inflate(R.layout.dialog_variants, null);
@@ -46,13 +48,18 @@ public class OclVariants implements View.OnClickListener {
         tietQty = viewInflater.findViewById(R.id.tietQty);
         message = viewInflater.findViewById(R.id.lbDesc);
 
-        OclSelectDialog oclSelectDialog = new OclSelectDialog(context, viewModel, listItems, 0);
-        tietColor.setOnClickListener(vi -> oclSelectDialog.onClick(vi));
+        OclSelectDialog oclSelectColors = new OclSelectDialog(context, viewModel, colors, 0);
+        OclSelectDialog oclSelectSizes = new OclSelectDialog(context, viewModel, sizes, 1);
+
+        tietColor.setOnClickListener(vi -> oclSelectColors.onClick(vi));
+        tietSize.setOnClickListener(vi -> oclSelectSizes.onClick(vi));
+
         viewModel.getEditVariant().observe((LifecycleOwner) context, s -> {
             if (s != null) {
-                tietColor.setText(s.getColor().getName());
+                if (s.getColor() != null)
+                    tietColor.setText(s.getColor().getName());
                 if (s.getSize() != null)
-                    tietSize.setText(String.valueOf(s.getSize()));
+                    tietSize.setText(s.getSize().getName());
                 tietQty.setText(String.valueOf(s.getStock()));
             } else {
                 tietColor.setText("");
@@ -60,6 +67,7 @@ public class OclVariants implements View.OnClickListener {
                 tietQty.setText("");
             }
         });
+
         openDialog();
     }
 
@@ -69,8 +77,10 @@ public class OclVariants implements View.OnClickListener {
 
             builder.setTitle("Variante de artículo")
                     .setView(viewInflater)
-                    .setNegativeButton(android.R.string.no, (dialog, which) -> {})
-                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {});
+                    .setNegativeButton(android.R.string.no, (dialog, which) -> {
+                    })
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    });
             dialog = builder.create();
         }
 
@@ -96,9 +106,8 @@ public class OclVariants implements View.OnClickListener {
 
     private void saveVariant() {
         if (validate()) {
-            String size = tietSize.getText().toString();
             int qty = Integer.valueOf(tietQty.getText().toString());
-            viewModel.addVariant(size, qty);
+            viewModel.addVariant(qty);
             tietSize.setText("");
             tietQty.setText("");
             message.setVisibility(View.GONE);

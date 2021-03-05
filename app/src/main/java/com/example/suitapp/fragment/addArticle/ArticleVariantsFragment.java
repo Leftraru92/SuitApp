@@ -15,10 +15,15 @@ import android.widget.Button;
 import com.example.suitapp.activity.AddArticleActivity;
 import com.example.suitapp.R;
 import com.example.suitapp.adapter.VariantsAdapter;
-import com.example.suitapp.dummy.DummyColors;
+import com.example.suitapp.database.AccessDataDb;
 import com.example.suitapp.listener.OclVariants;
+import com.example.suitapp.model.DialogSelect;
+import com.example.suitapp.model.Item;
+import com.example.suitapp.model.Variant;
 import com.example.suitapp.util.Constants;
 import com.example.suitapp.viewmodel.AddArticleViewModel;
+
+import java.util.List;
 
 public class ArticleVariantsFragment extends Fragment implements VariantsAdapter.OnVariantListener {
     View root;
@@ -48,6 +53,9 @@ public class ArticleVariantsFragment extends Fragment implements VariantsAdapter
         listVariants = root.findViewById(R.id.listVariants);
         variantsAdapter = new VariantsAdapter(mViewModel.getVariants().getValue(), this, R.layout.card_variant);
         listVariants.setAdapter(variantsAdapter);
+        AccessDataDb accessDataDba = AccessDataDb.getInstance(getContext());
+        List<Item> colors = accessDataDba.getColorsItems();
+        List<Item> sizes = accessDataDba.getSizes();
         fromReview = false;
         if (getArguments() != null)
             fromReview = ArticleNameFragmentArgs.fromBundle(getArguments()).getFromReview();
@@ -58,11 +66,18 @@ public class ArticleVariantsFragment extends Fragment implements VariantsAdapter
 
         //Listener
         btContinue.setOnClickListener(v -> next());
-        oclVariants = new OclVariants(getContext(), mViewModel, new DummyColors());
+        oclVariants = new OclVariants(getContext(), mViewModel, new DialogSelect(colors), new DialogSelect(sizes));
         btAddVariant.setOnClickListener(v -> oclVariants.onClick(v));
 
         //viewmodel
-        mViewModel.getVariants().observe(getViewLifecycleOwner(), s -> variantsAdapter.notifyDataSetChanged());
+        mViewModel.getVariants().observe(getViewLifecycleOwner(), s -> {
+            if( mViewModel.getVariants().getValue().size() > 0) {
+                Variant variant = mViewModel.getVariants().getValue().get(mViewModel.getVariants().getValue().size() - 1);
+                mViewModel.getVariants().getValue().get(mViewModel.getVariants().getValue().size() - 1).getColor().setHex(accessDataDba.getColorHexById(variant.getColor().getId()));
+
+                variantsAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void next() {

@@ -1,12 +1,16 @@
 package com.example.suitapp.adapter;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.suitapp.MobileNavigationDirections;
 import com.example.suitapp.R;
+import com.example.suitapp.fragment.ArticleDetailFragmentDirections;
+import com.example.suitapp.fragment.ArticleFragmentDirections;
 import com.example.suitapp.model.ArticleGroup;
 
 import java.util.List;
@@ -59,8 +63,10 @@ public class ArticlesGroupAdapter extends RecyclerView.Adapter<ArticlesGroupAdap
     }
 
     @Override
-    public void onArticleClick(int position) {
-        Navigation.findNavController(root).navigate(R.id.action_move_to_article);
+    public void onArticleClick(int articleId) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("articleId", articleId);
+        Navigation.findNavController(root).navigate(R.id.action_move_to_article, bundle);
 
     }
 

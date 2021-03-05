@@ -88,7 +88,6 @@ public class CategoryFragment extends Fragment implements GenderAdapter.OnGenreL
     public void onGenreClick(int position) {
         searchViewModel.clean();
         searchViewModel.setGenre(genderList.get(position));
-        searchViewModel.setStore(false);
         Navigation.findNavController(root).navigate(R.id.action_nav_categories_to_nav_article);
     }
 
@@ -96,7 +95,6 @@ public class CategoryFragment extends Fragment implements GenderAdapter.OnGenreL
     public void onCategoryClick(int position) {
         searchViewModel.clean();
         searchViewModel.setCategory((Category) categoryList.get(position));
-        searchViewModel.setStore(false);
         Navigation.findNavController(root).navigate(R.id.action_nav_categories_to_nav_article);
     }
 

@@ -13,9 +13,8 @@ public class Gender extends Item{
     private int image;
     private int visits;
 
-    public Gender(int id, String name, int image, int visits) {
+    public Gender(int id, String name, int visits) {
         super(id, name);
-        this.image = image;
         this.visits = visits;
     }
 

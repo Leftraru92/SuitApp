@@ -17,8 +17,11 @@ import android.widget.TextView;
 
 import com.example.suitapp.R;
 import com.example.suitapp.adapter.ShippingPriceAdapter;
+import com.example.suitapp.util.SingletonUser;
 import com.example.suitapp.viewmodel.AddStoreViewModel;
 import com.google.android.material.chip.Chip;
+
+import org.json.JSONObject;
 
 public class StoreReviewFragment extends Fragment {
     View root;
@@ -71,7 +74,7 @@ public class StoreReviewFragment extends Fragment {
         cardAddress.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_store_review_to_nav_address_store));
         cardImages.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_store_review_to_nav_image_store));
         cardShipping.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_store_review_to_nav_shipping_store));
-        btContinue.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_store_review_to_nav_congrats));
+        btContinue.setOnClickListener(v -> next());
 
         //viewmodel
         mViewModel.getName().observe(getViewLifecycleOwner(), s -> tvName.setText(s));
@@ -93,5 +96,11 @@ public class StoreReviewFragment extends Fragment {
         mViewModel.getShippingPrice().observe(getViewLifecycleOwner(), shippingPrices -> {
 
         });
+    }
+
+    private void next() {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isArticle", false);
+        Navigation.findNavController(root).navigate(R.id.action_nav_store_review_to_nav_congrats);
     }
 }

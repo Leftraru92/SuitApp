@@ -1,6 +1,9 @@
 package com.example.suitapp.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.suitapp.R;
 import com.example.suitapp.model.PremiumStore;
+import com.example.suitapp.model.Store;
 
 import java.util.List;
 
@@ -20,11 +24,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 public class PremiumStoreAdapter extends RecyclerView.Adapter<PremiumStoreAdapter.ViewHolder>{
-    private List<PremiumStore> premiumStores;
+    private List<Store> premiumStores;
     private LayoutInflater mInflater;
     OnPremiumStoreListener onPremiumStoreListener;
 
-    public PremiumStoreAdapter(List<PremiumStore> premiumStores, OnPremiumStoreListener onPremiumStoreListener) {
+    public PremiumStoreAdapter(List<Store> premiumStores, OnPremiumStoreListener onPremiumStoreListener) {
         this.premiumStores = premiumStores;
         this.onPremiumStoreListener = onPremiumStoreListener;
     }
@@ -39,9 +43,14 @@ public class PremiumStoreAdapter extends RecyclerView.Adapter<PremiumStoreAdapte
 
     @Override
     public void onBindViewHolder(@NonNull PremiumStoreAdapter.ViewHolder holder, int position) {
-        holder.myimage.setImageResource(premiumStores.get(position).image_url);
+        holder.tvName.setText(premiumStores.get(position).getName());
+
+        if(premiumStores.get(position).getStoreCoverPhoto() != null && !premiumStores.get(position).getStoreCoverPhoto().equals("")) {
+            byte[] decodedString = Base64.decode(premiumStores.get(position).getStoreCoverPhoto(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            holder.myimage.setImageBitmap(decodedByte);
+        }
         holder.myimage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        holder.tvName.setText(premiumStores.get(position).getTitle());
     }
 
     @Override
@@ -67,7 +76,7 @@ public class PremiumStoreAdapter extends RecyclerView.Adapter<PremiumStoreAdapte
 
         @Override
         public void onClick(View v) {
-            onPremiumStoreListener.onPremiumStoreClick(getAdapterPosition());
+            onPremiumStoreListener.onPremiumStoreClick(premiumStores.get(getAdapterPosition()).getId());
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.suitapp.util;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,10 @@ import android.widget.Toast;
 import com.example.suitapp.R;
 import com.example.suitapp.adapter.PremiumStoreAdapter;
 import com.example.suitapp.dummy.DummyPremiumStores;
+import com.example.suitapp.model.Store;
 import com.example.suitapp.viewmodel.SearchViewModel;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,42 +29,39 @@ public class CarouselPremiumStore implements PremiumStoreAdapter.OnPremiumStoreL
     ViewPager2 viewPager;
     LinearLayout llIndicator;
     private static int currentPage = 0;
-    int size = DummyPremiumStores.ITEMS.size();
+    int size = 0;
     SearchViewModel searchViewModel;
 
-    public CarouselPremiumStore(View root, SearchViewModel searchViewModel){
+    public CarouselPremiumStore(View root, SearchViewModel searchViewModel, List<Store> storeList, boolean setCallback) {
         this.root = root;
         this.searchViewModel = searchViewModel;
         this.context = root.getContext();
         viewPager = root.findViewById(R.id.viewPager);
-        viewPager.setAdapter(new PremiumStoreAdapter(DummyPremiumStores.ITEMS, this));
+        viewPager.setAdapter(new PremiumStoreAdapter(storeList, this));
         llIndicator = (LinearLayout) root.findViewById(R.id.llIndicator);
+        llIndicator.removeAllViews();
+        size = storeList.size();
 
         setupIndicator();
         setupCurrentIndicator(0);
+        viewPager.registerOnPageChangeCallback(new PageChangeCallback());
 
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                setupCurrentIndicator(position);
-            }
-        });
-
-        final Handler handler = new Handler();
-        final Runnable Update = () -> {
-            if (currentPage == size) {
-                currentPage = 0;
-            }
-            viewPager.setCurrentItem(currentPage++, true);
-        };
-        Timer swipeTimer = new Timer();
-        swipeTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(Update);
-            }
-        }, 0, 3000);
+        if(setCallback) {
+            final Handler handler = new Handler();
+            final Runnable Update = () -> {
+                if (currentPage == size) {
+                    currentPage = 0;
+                }
+                viewPager.setCurrentItem(currentPage++, true);
+            };
+            Timer swipeTimer = new Timer();
+            swipeTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    handler.post(Update);
+                }
+            }, 0, 3000);
+        }
     }
 
     private void setupIndicator() {
@@ -91,10 +91,18 @@ public class CarouselPremiumStore implements PremiumStoreAdapter.OnPremiumStoreL
     }
 
     @Override
-    public void onPremiumStoreClick(int position) {
-        searchViewModel.setStore(true);
-        searchViewModel.setStoreName(DummyPremiumStores.ITEMS.get(position).getTitle());
-        Navigation.findNavController(root).navigate(R.id.action_nav_home_to_nav_article);
-        Toast.makeText(root.getContext(), "Se tocó la tienda " + DummyPremiumStores.ITEMS.get(position).getTitle(), Toast.LENGTH_LONG).show();
+    public void onPremiumStoreClick(int storeId) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("storeId", storeId);
+        Navigation.findNavController(root).navigate(R.id.action_move_to_articles, bundle);
+    }
+
+    private class PageChangeCallback extends ViewPager2.OnPageChangeCallback {
+        @Override
+        public void onPageSelected(int position) {
+            super.onPageSelected(position);
+            setupCurrentIndicator(position);
+        }
+
     }
 }

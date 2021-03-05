@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavGraph;
@@ -23,25 +24,36 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.example.suitapp.R;
+import com.example.suitapp.api.CallWebService;
+import com.example.suitapp.api.WebService;
+import com.example.suitapp.model.Store;
 import com.example.suitapp.util.Constants;
+import com.example.suitapp.util.Util;
+import com.example.suitapp.viewmodel.AddStoreViewModel;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class AddStoreActivity extends AppCompatActivity {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class AddStoreActivity extends AppCompatActivity implements CallWebService {
     private AppBarConfiguration mAppBarConfiguration;
     InputMethodManager imm;
     Toolbar toolbar;
+    final int RC_STORES = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_store);
 
-        boolean isEdit = (getIntent().getExtras() != null) ? getIntent().getExtras().getBoolean("EDIT", false) : false;
+        int storeId = getIntent().getExtras().getInt("STOREID", 0) ;
 
         AppBarLayout appBarLayout = findViewById(R.id.appBarLayout);
         toolbar = findViewById(R.id.toolbar);
@@ -58,10 +70,13 @@ public class AddStoreActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        if (isEdit) {
+        if (storeId > 0) {
             NavGraph graph = navController.getGraph();
             graph.setStartDestination(R.id.nav_store_review);
             navController.setGraph(graph);
+
+            WebService webService = new WebService(this, RC_STORES);
+            webService.callService(this, Constants.WS_DOMINIO + Constants.WS_STORES, "/" + storeId, Request.Method.GET, Constants.JSON_TYPE.OBJECT, null);
         }
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
@@ -138,4 +153,37 @@ public class AddStoreActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onResult(int requestCode, JSONObject response) {
+        switch (requestCode) {
+            case RC_STORES:
+                try {
+                    Store mStore = new Store(response);
+                    setDataStore(mStore);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                }
+                break;
+        }
+    }
+
+    private void setDataStore(Store mStore) {
+        AddStoreViewModel mViewModel = new ViewModelProvider(this).get(AddStoreViewModel.class);
+        mViewModel.setName(mStore.getName());
+        mViewModel.setDesc(mStore.getDescription());
+        mViewModel.setProvince(mStore.getAddress());
+        mViewModel.setImageLogo(Util.base64ToBitmap(mStore.getStoreLogo()));
+        mViewModel.setmImagePortada(Util.base64ToBitmap(mStore.getStoreCoverPhoto()));
+    }
+
+    @Override
+    public void onResult(int requestCode, JSONArray response) {
+
+    }
+
+    @Override
+    public void onError(int requestCode, String message) {
+
+    }
 }

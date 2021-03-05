@@ -2,10 +2,14 @@ package com.example.suitapp.viewmodel;
 
 import android.graphics.Bitmap;
 
-import com.example.suitapp.dummy.DummyColors;
 import com.example.suitapp.model.Category;
 import com.example.suitapp.model.Gender;
 import com.example.suitapp.model.Variant;
+import com.example.suitapp.util.Util;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -131,31 +135,48 @@ public class AddArticleViewModel extends ViewModel implements CaptureImageViewMo
 
     @Override
     public void selectValue(int id, String value, int requestId) {
-        mEditVariant.setValue(new Variant(DummyColors.getColor(id), null, 0));
+
+        if (requestId == 0)
+            if (mEditVariant.getValue() == null)
+                mEditVariant.setValue(new Variant(new Variant.Color(id, value), null, 0));
+            else
+                mEditVariant.setValue(new Variant(new Variant.Color(id, value), mEditVariant.getValue().getSize(), 0));
+        else if (requestId == 1)
+            if (mEditVariant.getValue() == null)
+                mEditVariant.setValue(new Variant(null, new Variant.Size(id, value), 0));
+            else
+                mEditVariant.setValue(new Variant(mEditVariant.getValue().getColor(), new Variant.Size(id, value), 0));
     }
 
     @Override
     public int getSelectValue(int requestId) {
-        if (mEditVariant.getValue() != null)
-            return mEditVariant.getValue().getColor().getId();
-        else
-            return 0;
+        if (requestId == 0)
+            if (mEditVariant.getValue() != null && mEditVariant.getValue().getColor() != null)
+                return mEditVariant.getValue().getColor().getId();
+            else
+                return 0;
+        else if (requestId == 1)
+            if (mEditVariant.getValue() != null && mEditVariant.getValue().getSize() != null)
+                return mEditVariant.getValue().getSize().getId();
+            else
+                return 0;
+        else return 0;
     }
 
     public LiveData<Variant> getEditVariant() {
         return mEditVariant;
     }
 
-    public void addVariant(String size, int qty) {
+    public void addVariant(int qty) {
         //Si es editado primero lo elimino de la lista
         ArrayList<Variant> editedListVariants = listVariants;
         for (Variant var : listVariants) {
-            if ((var.getColor().getId() == mEditVariant.getValue().getColor().getId()) && var.getSize().equals(size))
+            if ((var.getColor().getId() == mEditVariant.getValue().getColor().getId()) && var.getSize().getId() == mEditVariant.getValue().getSize().getId())
                 editedListVariants.remove(var);
         }
         listVariants = editedListVariants;
         //Lo guardo en la lista
-        mEditVariant.getValue().setSize(size);
+        //mEditVariant.getValue().setSize(size);
         mEditVariant.getValue().setStock(qty);
         listVariants.add(mEditVariant.getValue());
         mVariants.setValue(listVariants);
@@ -173,5 +194,38 @@ public class AddArticleViewModel extends ViewModel implements CaptureImageViewMo
             mEditVariant.setValue(null);
         else
             mEditVariant.setValue(listVariants.get(position));
+    }
+
+    public JSONObject toJSON() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("articleName", getName().getValue());
+            jsonObject.put("articleDesc", getDesc().getValue());
+            jsonObject.put("categoryId", getCategory().getValue().getId());
+            jsonObject.put("genderId", getGenre().getValue().getId());
+            jsonObject.put("articlePrice", getPrice().getValue());
+
+            JSONArray jsonVariant = new JSONArray();
+            for (Variant variant : getVariants().getValue()) {
+                JSONObject jsonvar = new JSONObject();
+                jsonvar.put("colorId", variant.getColor().getId());
+                jsonvar.put("sizeId", variant.getSize());
+                jsonvar.put("stock", variant.getStock());
+                jsonVariant.put(jsonvar);
+            }
+            jsonObject.put("variants", jsonVariant);
+
+            JSONArray jsonImages = new JSONArray();
+            for (Bitmap bitmap : getImages().getValue()) {
+                jsonImages.put(Util.bitmapToBase64(bitmap));
+            }
+            jsonObject.put("images", jsonImages);
+
+            return jsonObject;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

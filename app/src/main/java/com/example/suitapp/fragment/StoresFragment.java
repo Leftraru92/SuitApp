@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,71 +13,63 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.example.suitapp.R;
-import com.example.suitapp.adapter.StoresRecyclerViewAdapter;
-import com.example.suitapp.dummy.DummyContent;
+import com.example.suitapp.adapter.StoresAdapter;
+import com.example.suitapp.api.CallWebService;
+import com.example.suitapp.api.WebService;
 import com.example.suitapp.dummy.DummyStores;
+import com.example.suitapp.model.Store;
+import com.example.suitapp.util.CarouselPremiumStore;
+import com.example.suitapp.util.Constants;
+import com.example.suitapp.viewmodel.SearchViewModel;
 
-/**
- * A fragment representing a list of Items.
- */
-public class StoresFragment extends Fragment implements StoresRecyclerViewAdapter.OnStoreListener {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 2;
+import java.util.ArrayList;
+import java.util.List;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public StoresFragment() {
-    }
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static StoresFragment newInstance(int columnCount) {
-        StoresFragment fragment = new StoresFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
-    }
+public class StoresFragment extends Fragment implements StoresAdapter.OnStoreListener, CallWebService {
+    View root;
+    StoresAdapter storesAdapter;
+    ProgressBar pbStores;
+    final int RC_STORES = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_store_list, container, false);
+        root = inflater.inflate(R.layout.fragment_store_list, container, false);
+        init();
+        callWs();
+        return root;
+    }
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new StoresRecyclerViewAdapter(DummyStores.ITEMS, R.layout.card_stores, this));
-        }
-        return view;
+    private void init() {
+        RecyclerView storeList = root.findViewById(R.id.storeList);
+        pbStores = root.findViewById(R.id.pbStores);
+
+        storesAdapter = new StoresAdapter(null, R.layout.card_stores, this);
+        storeList.setAdapter(storesAdapter);
+    }
+
+    private void callWs() {
+        WebService webService = new WebService(getContext(), RC_STORES);
+        webService.callService(this, Constants.WS_DOMINIO + Constants.WS_STORES, null, Request.Method.GET, Constants.JSON_TYPE.ARRAY, null);
     }
 
     @Override
-    public void onStoreClick(int position) {
-        Toast.makeText(getContext(), "Se tocó la tienda " + DummyStores.ITEMS.get(position).getName(), Toast.LENGTH_LONG).show();
+    public void onStoreClick(int storeId) {
+        SearchViewModel searchViewModel = new ViewModelProvider(getActivity()).get(SearchViewModel.class);
+        searchViewModel.clean();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("storeId", storeId);
+        Navigation.findNavController(root).navigate(R.id.action_nav_stores_to_nav_article, bundle);
     }
 
     @Override
@@ -85,6 +79,37 @@ public class StoresFragment extends Fragment implements StoresRecyclerViewAdapte
 
     @Override
     public void onStoreDelete(int position) {
+
+    }
+
+    @Override
+    public void onResult(int requestCode, JSONObject response) {
+
+    }
+
+    @Override
+    public void onResult(int requestCode, JSONArray response) {
+        switch (requestCode){
+            case RC_STORES:
+                try {
+                    List<Store> storeList = new ArrayList<>();
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject dataItem = response.getJSONObject(i);
+                        storeList.add(new Store(dataItem));
+                    }
+                    storesAdapter.setItems(storeList);
+                    storesAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }finally {
+                    pbStores.setVisibility(View.GONE);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onError(int requestCode, String message) {
 
     }
 }

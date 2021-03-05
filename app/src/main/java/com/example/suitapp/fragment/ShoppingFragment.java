@@ -17,20 +17,11 @@ import com.example.suitapp.viewmodel.ShoppingViewModel;
 
 public class ShoppingFragment extends Fragment {
 
-    private ShoppingViewModel slideshowViewModel;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                new ViewModelProvider(this).get(ShoppingViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_shopping, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
         return root;
     }
 }

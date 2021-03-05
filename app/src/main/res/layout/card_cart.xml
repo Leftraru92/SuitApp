@@ -71,8 +71,23 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvPriceDecimal"
             app:layout_constraintTop_toBottomOf="@+id/tvArticleVariant" />
+
+        <TextView
+            android:id="@+id/tvPriceDecimal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="monospace"
+            android:text="00"
+            android:textColor="@color/gray_900"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
         <View
             android:layout_width="match_parent"

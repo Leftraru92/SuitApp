@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:focusable="false"
-                    android:text="@string/search_hint"
+                    android:hint="@string/search_hint"
                     android:inputType="text"
                     android:textColor="@color/bluegray_200"
                     android:textSize="16sp" />
@@ -71,7 +71,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="100 Resultados"
                     android:textColor="@android:color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

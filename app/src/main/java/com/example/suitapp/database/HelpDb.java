@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class HelpDb extends SQLiteOpenHelper {
 
     private static HelpDb helpDb;
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "SuitApp.db";
 
 
@@ -20,12 +20,18 @@ public class HelpDb extends SQLiteOpenHelper {
 
         db.execSQL(DataDb.SQL_CREATE_TABLE_GENDERS);
         db.execSQL(DataDb.SQL_CREATE_TABLE_CATEGORIES);
+        db.execSQL(DataDb.SQL_CREATE_TABLE_COLOR);
+        db.execSQL(DataDb.SQL_CREATE_TABLE_SIZE);
+        db.execSQL(DataDb.SQL_CREATE_TABLE_SEARCH);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL(DataDb.SQL_DELETE_ENTRIES_GENDERS);
-        db.execSQL(DataDb.SQL_CREATE_TABLE_CATEGORIES);
+        db.execSQL(DataDb.SQL_DELETE_ENTRIES_CATEGORIES);
+        db.execSQL(DataDb.SQL_DELETE_ENTRIES_COLOR);
+        db.execSQL(DataDb.SQL_DELETE_ENTRIES_SIZE);
+        db.execSQL(DataDb.SQL_DELETE_ENTRIES_SEARCH);
         onCreate(db);
     }
 

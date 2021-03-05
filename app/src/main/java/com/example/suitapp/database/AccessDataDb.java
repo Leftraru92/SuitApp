@@ -6,7 +6,7 @@ import android.database.Cursor;
 import com.example.suitapp.model.Category;
 import com.example.suitapp.model.Gender;
 import com.example.suitapp.model.Item;
-import com.example.suitapp.util.Constants;
+import com.example.suitapp.model.Variant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class AccessDataDb {
         }
     }
 
-    public List<Item> getGenders(boolean itemList) {
+    public List<Item> getGendersItems() {
         List<Item> gendersItem = new ArrayList<>();
         Cursor c = QueryDbGet.getGenders(context);
 
@@ -70,6 +70,80 @@ public class AccessDataDb {
         } finally {
             c.close();
             return categories;
+        }
+    }
+
+    public List<Variant.Color> getColors() {
+        List<Variant.Color> colors = new ArrayList<>();
+        Cursor c = QueryDbGet.getColors(context);
+
+        //Genero la lista de géneros
+        try {
+            while (c.moveToNext()) {
+                Variant.Color color = new Variant.Color(c);
+                colors.add(color);
+            }
+        } finally {
+            c.close();
+            return colors;
+        }
+    }
+
+    public List<Item> getColorsItems() {
+        List<Item> colors = new ArrayList<>();
+        Cursor c = QueryDbGet.getColors(context);
+
+        //Genero la lista de géneros
+        try {
+            while (c.moveToNext()) {
+                Variant.Color color = new Variant.Color(c);
+                colors.add(color);
+            }
+        } finally {
+            c.close();
+            return colors;
+        }
+    }
+
+    public String getColorHexById(int id) {
+        String hex = "";
+        Cursor c = QueryDbGet.getColorHexById(context, id);
+
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            hex = c.getString(c.getColumnIndex(DataDb.COL_HEX));
+        }
+        return hex;
+    }
+
+    public List<Item> getSizes() {
+        List<Item> sizes = new ArrayList<>();
+        Cursor c = QueryDbGet.getSizes(context);
+
+        //Genero la lista de géneros
+        try {
+            while (c.moveToNext()) {
+                Variant.Size size = new Variant.Size(c);
+                sizes.add(size);
+            }
+        } finally {
+            c.close();
+            return sizes;
+        }
+    }
+
+    public List<String> getPreviusSearch() {
+        List<String> searchList = new ArrayList<>();
+        Cursor c = QueryDbGet.getPreviusSearch(context);
+
+        //Genero la lista de géneros
+        try {
+            while (c.moveToNext()) {
+                searchList.add(c.getString(c.getColumnIndex(DataDb.COL_NAME)));
+            }
+        } finally {
+            c.close();
+            return searchList;
         }
     }
 }

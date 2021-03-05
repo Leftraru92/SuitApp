@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -21,25 +20,23 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.example.suitapp.R;
 import com.example.suitapp.adapter.ArticlesGroupAdapter;
 import com.example.suitapp.adapter.GenderAdapter;
-import com.example.suitapp.adapter.StoresRecyclerViewAdapter;
+import com.example.suitapp.adapter.StoreGroupAdapter;
 import com.example.suitapp.api.CallWebService;
 import com.example.suitapp.api.WebService;
 import com.example.suitapp.database.AccessDataDb;
-import com.example.suitapp.database.QueryDbInsert;
-import com.example.suitapp.dummy.DummyArticlesGroup;
-import com.example.suitapp.dummy.DummyStores;
 import com.example.suitapp.model.ArticleGroup;
-import com.example.suitapp.model.Category;
 import com.example.suitapp.model.Gender;
+import com.example.suitapp.model.Store;
+import com.example.suitapp.model.StoreGroup;
+import com.example.suitapp.model.Variant;
 import com.example.suitapp.util.CarouselPremiumStore;
 import com.example.suitapp.util.Constants;
-import com.example.suitapp.viewmodel.HomeViewModel;
 import com.example.suitapp.viewmodel.SearchViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -52,20 +49,21 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class HomeFragment extends Fragment implements CallWebService, GenderAdapter.OnGenreListener, ArticlesGroupAdapter.OnGroupListener, StoresRecyclerViewAdapter.OnStoreListener {
+public class HomeFragment extends Fragment implements CallWebService, GenderAdapter.OnGenreListener, ArticlesGroupAdapter.OnGroupListener{
 
     View root;
-    private HomeViewModel homeViewModel;
     private SearchViewModel searchViewModel;
-    ViewPager2 viewPager;
-    LinearLayout llIndicator;
     CardView cardLogin;
     List<Gender> genderList;
+    List<ArticleGroup> artcilegroups;
+    List<StoreGroup> storeGroups;
     GenderAdapter genderAdapter;
     ArticlesGroupAdapter articlesGroupAdapter;
-    private final int RC_GROUPS = 1;
-    List<ArticleGroup> artcilegroups;
-    ProgressBar pbGroups;
+    StoreGroupAdapter storeGroupAdapter;
+    private final int RC_GROUPS = 1, RC_STORES = 2, RC_STORES_PREMIUM = 3;
+    ProgressBar pbGroups, pbGroupStores, pbPremiumStores;
+    SwipeRefreshLayout swipeRefresh;
+    boolean isBannerLoad = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -79,15 +77,13 @@ public class HomeFragment extends Fragment implements CallWebService, GenderAdap
 
     private void init() {
         //Set
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
         searchViewModel = new ViewModelProvider(getActivity()).get(SearchViewModel.class);
-        //Defino el carousel de tiendas premium
-        CarouselPremiumStore cps = new CarouselPremiumStore(root, searchViewModel);
         setHasOptionsMenu(true);
         artcilegroups = new ArrayList<>();
+        storeGroups = new ArrayList<>();
 
         //Bind
+        swipeRefresh = root.findViewById(R.id.swipeRefresh);
         cardLogin = root.findViewById(R.id.cardLogin);
         RecyclerView recyclerGenres = root.findViewById(R.id.genres_list);
         RecyclerView recyclerGroups = root.findViewById(R.id.article_groups_list);
@@ -96,19 +92,27 @@ public class HomeFragment extends Fragment implements CallWebService, GenderAdap
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         TextInputEditText tiet = toolbar.findViewById(R.id.tietSearch);
         pbGroups = root.findViewById(R.id.pbGroups);
+        pbGroupStores = root.findViewById(R.id.pbGroupStores);
+        pbPremiumStores = root.findViewById(R.id.pbPremiumStores);
 
         //Listener
         btLogin.setOnClickListener(v -> {
             Navigation.findNavController(root).navigate(R.id.action_nav_home_to_nav_login);
         });
         tiet.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_home_to_nav_search));
+        tiet.setText(getResources().getString(R.string.search_hint));
+        swipeRefresh.setOnRefreshListener(() -> callWs());
 
         //Set post bind
         genderAdapter = new GenderAdapter(null, this, getContext());
-        recyclerGenres.setAdapter(genderAdapter);
         articlesGroupAdapter = new ArticlesGroupAdapter(null, this, root, R.layout.card_article_group);
+        storeGroupAdapter = new StoreGroupAdapter(null, root);
+        swipeRefresh.setColorSchemeColors(getResources().getColor(R.color.cian_400), getResources().getColor(R.color.cian_200));
+
+        recyclerGenres.setAdapter(genderAdapter);
         recyclerGroups.setAdapter(articlesGroupAdapter);
-        recyclerViewStores.setAdapter(new StoresRecyclerViewAdapter(DummyStores.ITEMS, R.layout.card_store_circle, this));
+        recyclerViewStores.setAdapter(storeGroupAdapter);
+
         toolbar.setPadding(0, 0, 0, 0);
         toolbar.setContentInsetsAbsolute(0, 0);
     }
@@ -126,6 +130,16 @@ public class HomeFragment extends Fragment implements CallWebService, GenderAdap
         WebService webService = new WebService(getContext(), RC_GROUPS);
         String params = "?groupQty=2&artQty=4&idArticle=null";
         webService.callService(this, Constants.WS_DOMINIO + Constants.WS_ARTICLES, params, Request.Method.GET, Constants.JSON_TYPE.ARRAY, null);
+
+        WebService webService2 = new WebService(getContext(), RC_STORES);
+        String params2 = "?groupQty=1&storeQty=4";
+        webService2.callService(this, Constants.WS_DOMINIO + Constants.WS_STORES, params2, Request.Method.GET, Constants.JSON_TYPE.ARRAY, null);
+
+        WebService webService3 = new WebService(getContext(), RC_STORES_PREMIUM);
+        String params3 = "?storeQty=3";
+        webService3.callService(this, Constants.WS_DOMINIO + Constants.WS_STORES, params3, Request.Method.GET, Constants.JSON_TYPE.ARRAY, null);
+
+        swipeRefresh.setRefreshing(false);
     }
 
 
@@ -148,33 +162,13 @@ public class HomeFragment extends Fragment implements CallWebService, GenderAdap
     @Override
     public void onGenreClick(int position) {
         searchViewModel.setGenre(genderList.get(position));
-        searchViewModel.setStore(false);
         Navigation.findNavController(root).navigate(R.id.action_nav_home_to_nav_article);
     }
 
     @Override
     public void onGroupClick(int position) {
-        Toast.makeText(getContext(), "Toco el grupo  " + DummyArticlesGroup.ITEMS.get(position).getTitle(), Toast.LENGTH_SHORT).show();
-        searchViewModel.setStore(false);
+        //Toast.makeText(getContext(), "Toco el grupo  " + artcilegroups.get(position).getTitle(), Toast.LENGTH_SHORT).show();
         Navigation.findNavController(root).navigate(R.id.action_nav_home_to_nav_article);
-    }
-
-    @Override
-    public void onStoreClick(int position) {
-        searchViewModel.setStoreName(DummyStores.ITEMS.get(position).getName());
-        searchViewModel.setStore(true);
-        Navigation.findNavController(root).navigate(R.id.action_nav_home_to_nav_article);
-        Toast.makeText(getContext(), "Se tocó la tienda " + DummyStores.ITEMS.get(position).getName(), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onStoreEdit(int position) {
-
-    }
-
-    @Override
-    public void onStoreDelete(int position) {
-
     }
 
     private void updateUI() {
@@ -201,6 +195,7 @@ public class HomeFragment extends Fragment implements CallWebService, GenderAdap
         switch (requestCode) {
             case RC_GROUPS:
                 try {
+                    artcilegroups.clear();
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject dataItem = response.getJSONObject(i);
                         artcilegroups.add(new ArticleGroup(dataItem));
@@ -211,6 +206,37 @@ public class HomeFragment extends Fragment implements CallWebService, GenderAdap
                     e.printStackTrace();
                 }finally {
                     pbGroups.setVisibility(View.GONE);
+                }
+                break;
+            case RC_STORES:
+                try {
+                    storeGroups.clear();
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject dataItem = response.getJSONObject(i);
+                        storeGroups.add(new StoreGroup(dataItem));
+                    }
+                    storeGroupAdapter.setItems(storeGroups);
+                    storeGroupAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }finally {
+                    pbGroupStores.setVisibility(View.GONE);
+                }
+                break;
+            case RC_STORES_PREMIUM:
+                try {
+                    List<Store> storeList = new ArrayList<>();
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject dataItem = response.getJSONObject(i);
+                        storeList.add(new Store(dataItem));
+                    }
+                    //Defino el carousel de tiendas premium
+                    new CarouselPremiumStore(root, searchViewModel, storeList, !isBannerLoad);
+                    isBannerLoad = true;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }finally {
+                    pbPremiumStores.setVisibility(View.GONE);
                 }
                 break;
         }

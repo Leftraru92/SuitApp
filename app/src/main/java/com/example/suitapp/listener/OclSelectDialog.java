@@ -103,12 +103,7 @@ public class OclSelectDialog implements View.OnClickListener {
                 rgProvinces.addView(rdbtn);
             }
 
-            rgProvinces.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    saveItemSelected(rgProvinces);
-                }
-            });
+            rgProvinces.setOnCheckedChangeListener((group, checkedId) -> saveItemSelected(rgProvinces));
         }
     }
 

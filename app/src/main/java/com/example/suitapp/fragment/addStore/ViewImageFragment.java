@@ -15,6 +15,7 @@ import com.example.suitapp.R;
 import com.example.suitapp.util.Constants;
 import com.example.suitapp.viewmodel.AddArticleViewModel;
 import com.example.suitapp.viewmodel.AddStoreViewModel;
+import com.example.suitapp.viewmodel.ArticleDetailViewModel;
 import com.example.suitapp.viewmodel.CaptureImageViewModel;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -31,6 +32,7 @@ public class ViewImageFragment extends Fragment {
     int requestId;
     int imageArticle;
     Bitmap bitmap;
+    boolean editMode;
 
     public static ViewImageFragment newInstance(int requestId, int imageArticle) {
         ViewImageFragment fragment = new ViewImageFragment();
@@ -61,11 +63,22 @@ public class ViewImageFragment extends Fragment {
     private void init() {
 
         //set
-        if (requestId == Constants.IMAGE_LOGO || requestId == Constants.IMAGE_PORTADA) {
-            mViewModel = new ViewModelProvider(getActivity()).get(AddStoreViewModel.class);
-            imageArticle = requestId;
-        } else
-            mViewModel = new ViewModelProvider(getActivity()).get(AddArticleViewModel.class);
+        switch (requestId) {
+            case Constants.IMAGE_LOGO:
+            case Constants.IMAGE_PORTADA:
+                mViewModel = new ViewModelProvider(getActivity()).get(AddStoreViewModel.class);
+                imageArticle = requestId;
+                editMode = true;
+                break;
+            case Constants.IMAGE_ARTICLE:
+                mViewModel = new ViewModelProvider(getActivity()).get(AddArticleViewModel.class);
+                editMode = true;
+                break;
+            case Constants.IMAGE_ARTICLE_DETAIL:
+                mViewModel = new ViewModelProvider(getActivity()).get(ArticleDetailViewModel.class);
+                editMode = false;
+                break;
+        }
 
         //bind
         photoView = root.findViewById(R.id.imageView);
@@ -95,6 +108,9 @@ public class ViewImageFragment extends Fragment {
             root.findViewById(R.id.ccBackground).setBackgroundColor(getResources().getColor(R.color.white));
             fabClose.setVisibility(View.GONE);
         }
+
+        fabRotateL.setVisibility((editMode) ? View.VISIBLE : View.GONE);
+        fabRotateR.setVisibility((editMode) ? View.VISIBLE : View.GONE);
 
     }
 

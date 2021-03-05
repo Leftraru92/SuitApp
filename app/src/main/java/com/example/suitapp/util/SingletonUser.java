@@ -12,6 +12,8 @@ public class SingletonUser {
     private String email;
     private String name;
     private String uri;
+    private String deviceId;
+    private String hash;
 
     private SingletonUser(Context context) {
         this.context = context;
@@ -47,6 +49,18 @@ public class SingletonUser {
         return uri;
     }
 
+    public String getDeviceId() {
+        if (deviceId == null  )
+            deviceId = context.getSharedPreferences("_", MODE_PRIVATE).getString("DEVICE_ID", "");
+        return deviceId;
+    }
+
+    public String getHash() {
+        if (hash == null)
+            hash = context.getSharedPreferences("_", MODE_PRIVATE).getString("HASH", "");
+        return hash;
+    }
+
     public void setData(FirebaseUser account) {
         this.name = account.getDisplayName();
         this.email = account.getEmail();
@@ -57,13 +71,26 @@ public class SingletonUser {
         context.getSharedPreferences("_", MODE_PRIVATE).edit().putString("USER_PHOTO", uri).apply();
     }
 
+    public void setTokenDevice(String fbToken) {
+        this.deviceId = fbToken;
+        context.getSharedPreferences("_", MODE_PRIVATE).edit().putString("DEVICE_ID", deviceId).apply();
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+        context.getSharedPreferences("_", MODE_PRIVATE).edit().putString("HASH", hash).apply();
+    }
+
     public void clearData() {
         this.name = "";
         this.email = "";
         this.uri = "";
+        this.deviceId = "";
 
         context.getSharedPreferences("_", MODE_PRIVATE).edit().putString("USER_NAME", "").apply();
         context.getSharedPreferences("_", MODE_PRIVATE).edit().putString("USER_EMAIL", "").apply();
         context.getSharedPreferences("_", MODE_PRIVATE).edit().putString("USER_PHOTO", "").apply();
+        context.getSharedPreferences("_", MODE_PRIVATE).edit().putString("DEVICE_ID", "").apply();
+        context.getSharedPreferences("_", MODE_PRIVATE).edit().putString("HASH", "").apply();
     }
 }

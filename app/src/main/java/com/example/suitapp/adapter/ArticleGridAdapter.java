@@ -35,7 +35,7 @@ public class ArticleGridAdapter extends RecyclerView.Adapter<ArticleGridAdapter.
         holder.mItem = mValues.get(position);
         holder.tvId.setText(String.valueOf(mValues.get(position).getId()));
         holder.tvName.setText(mValues.get(position).getName());
-        holder.tvPrice.setText("$ " + mValues.get(position).getPrice());
+        holder.tvPrice.setText(mValues.get(position).getPriceFormated());
         holder.ivArticle.setImageResource(mValues.get(position).getImage());
         holder.ivArticle.setClipToOutline(true);
 

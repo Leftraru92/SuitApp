@@ -18,14 +18,22 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.suitapp.adapter.SearchAdapter;
+import com.example.suitapp.database.AccessDataDb;
+import com.example.suitapp.database.QueryDbGet;
+import com.example.suitapp.database.QueryDbInsert;
 import com.example.suitapp.util.Constants;
 import com.example.suitapp.R;
 import com.example.suitapp.viewmodel.SearchViewModel;
 
-public class SearchFragment extends Fragment {
+import java.util.List;
+
+public class SearchFragment extends Fragment implements SearchAdapter.OnSeachListener {
 
     private SearchViewModel searchViewModel;
+    SearchAdapter searchAdapter;
     private View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -33,15 +41,11 @@ public class SearchFragment extends Fragment {
         searchViewModel =
                 new ViewModelProvider(getActivity()).get(SearchViewModel.class);
         root = inflater.inflate(R.layout.fragment_search, container, false);
-        final TextView textView = root.findViewById(R.id.text_gallery);
-        searchViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-
+        searchAdapter = new SearchAdapter(null, this);
+        RecyclerView listPrevSearch = root.findViewById(R.id.listPrevSearch);
+        listPrevSearch.setAdapter(searchAdapter);
         setHasOptionsMenu(true);
+        getDataFromDb();
         return root;
     }
 
@@ -67,7 +71,7 @@ public class SearchFragment extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 Log.d(Constants.LOG, "onQueryTextSubmit " + query);
                 searchViewModel.setSearchText(query);
-                searchViewModel.setStore(false);
+                saveSearchOnDb(query);
                 Navigation.findNavController(root).navigate(R.id.action_nav_search_to_nav_article);
                 return false;
             }
@@ -83,5 +87,21 @@ public class SearchFragment extends Fragment {
         searchViewModel.getSearchText().observe(getViewLifecycleOwner(), s -> {
             searchView.setQuery(s, false);
         });
+    }
+
+    private void getDataFromDb() {
+        AccessDataDb accessDataDba = AccessDataDb.getInstance(getContext());
+        List<String> previusSearch = accessDataDba.getPreviusSearch();
+        searchAdapter.setItems(previusSearch);
+    }
+
+    private void saveSearchOnDb(String query) {
+        QueryDbInsert.insertSearch(getContext(), query);
+    }
+
+    @Override
+    public void onSearchClick(String value) {
+        searchViewModel.setSearchText(value);
+        Navigation.findNavController(root).navigate(R.id.action_nav_search_to_nav_article);
     }
 }

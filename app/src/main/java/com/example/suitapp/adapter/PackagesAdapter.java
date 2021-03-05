@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.suitapp.R;
 import com.example.suitapp.model.Package;
 import com.example.suitapp.util.Util;
+import com.example.suitapp.viewmodel.ShoppingViewModel;
 
 import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,9 +21,11 @@ public class PackagesAdapter extends RecyclerView.Adapter<PackagesAdapter.ViewHo
     private List<Package> packages;
     LayoutInflater inflater;
     int pxWidth, pxMargin;
+    ShoppingViewModel shoppingViewModel;
 
-    public PackagesAdapter(List<Package> packages) {
+    public PackagesAdapter(List<Package> packages, ShoppingViewModel shoppingViewModel) {
         this.packages = packages;
+        this.shoppingViewModel = shoppingViewModel;
     }
 
     @Override
@@ -57,6 +60,15 @@ public class PackagesAdapter extends RecyclerView.Adapter<PackagesAdapter.ViewHo
         btnS2.setTag("Por Correo - $ 300");
         btnS2.setText("Por Correo - $ 300");
         holder.tgShipment.addView(btnS2, params);
+
+        holder.tgShipment.setOnSelectListener((ThemedButton btn) -> {
+            if (((ThemedToggleButtonGroup) btn.getParent()).getSelectedButtons().size() > 0) {
+                shoppingViewModel.getPackages().getValue().get(position).setSelectedShiping(btn.getTag().toString());
+            } else {
+                shoppingViewModel.getPackages().getValue().get(position).setSelectedShiping(null);
+            }
+            return kotlin.Unit.INSTANCE;
+        });
 
         holder.listArticles.setAdapter(new ArticleAdapter(packages.get(position).getArticleList(), this, R.layout.card_cart_package));
     }

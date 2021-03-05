@@ -12,7 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.example.suitapp.R;
+import com.example.suitapp.api.CallWebService;
+import com.example.suitapp.api.WebService;
 import com.example.suitapp.util.Constants;
 import com.example.suitapp.util.SingletonUser;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -24,6 +27,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.lang.reflect.Method;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,13 +45,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CallWebService {
 
     private AppBarConfiguration mAppBarConfiguration;
     InputMethodManager imm;
     MenuItem logoutItem;
     Toolbar toolbar;
     NavigationView navigationView;
+    final int RC_LOGOUT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,47 +89,44 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-            @Override
-            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                appBarLayout.setExpanded(true);
-                btAddProduct.setVisibility(View.GONE);
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            appBarLayout.setExpanded(true);
+            btAddProduct.setVisibility(View.GONE);
 
-                boolean isLogued = SingletonUser.getInstance(getBaseContext()).isLogued();
-                updateMenu();
+            boolean isLogued = SingletonUser.getInstance(getBaseContext()).isLogued();
+            updateMenu();
 
-                //Si no está logueado no dejo que entre a algunas pantallas
-                if (!isLogued && (destination.getId() == R.id.nav_cart || destination.getId() == R.id.nav_account ||
-                        destination.getId() == R.id.nav_favs || destination.getId() == R.id.nav_shopping)) {
-                    controller.navigateUp();
-                    destination = controller.getCurrentDestination();
-                    mostrarMensaje();
-                    Log.d(Constants.LOG, "No está loguado");
-                }
-
-                //muestro oculto toolbar
-                if (destination.getId() == R.id.nav_login)
-                    toolbar.setVisibility(View.GONE);
-                else
-                    toolbar.setVisibility(View.VISIBLE);
-
-                //muestro oculto searchview
-                if (destination.getId() == R.id.nav_home || destination.getId() == R.id.nav_article)
-                    toolbar.findViewById(R.id.etSearch).setVisibility(View.VISIBLE);
-                else
-                    toolbar.findViewById(R.id.etSearch).setVisibility(View.GONE);
-
-                //Muestro oculto subtoolbar
-                if (destination.getId() == R.id.nav_article)
-                    subToolbar.setVisibility(View.VISIBLE);
-                else
-                    subToolbar.setVisibility(View.GONE);
-
-                //si el teclado esta visible se oculta al cambiar de pantalla
-                if (getCurrentFocus() != null)
-                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-
+            //Si no está logueado no dejo que entre a algunas pantallas
+            if (!isLogued && (destination.getId() == R.id.nav_cart || destination.getId() == R.id.nav_account ||
+                    destination.getId() == R.id.nav_favs || destination.getId() == R.id.nav_shopping)) {
+                controller.navigateUp();
+                destination = controller.getCurrentDestination();
+                mostrarMensaje();
+                Log.d(Constants.LOG, "No está loguado");
             }
+
+            //muestro oculto toolbar
+            if (destination.getId() == R.id.nav_login || destination.getId() == R.id.nav_view_image)
+                toolbar.setVisibility(View.GONE);
+            else
+                toolbar.setVisibility(View.VISIBLE);
+
+            //muestro oculto searchview
+            if (destination.getId() == R.id.nav_home || destination.getId() == R.id.nav_article)
+                toolbar.findViewById(R.id.etSearch).setVisibility(View.VISIBLE);
+            else
+                toolbar.findViewById(R.id.etSearch).setVisibility(View.GONE);
+
+            //Muestro oculto subtoolbar
+            if (destination.getId() == R.id.nav_article)
+                subToolbar.setVisibility(View.VISIBLE);
+            else
+                subToolbar.setVisibility(View.GONE);
+
+            //si el teclado esta visible se oculta al cambiar de pantalla
+            if (getCurrentFocus() != null)
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
         });
     }
 
@@ -138,11 +144,14 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private void signOut() {
+    public void signOut() {
+        signOut(true);
+    }
+
+    public void signOut(boolean showMessage) {
         Log.i(Constants.LOG, "Log Out");
 
-        SingletonUser.getInstance(this).clearData();
-
+        SingletonUser singletonUser = SingletonUser.getInstance(this);
         FirebaseAuth.getInstance().signOut();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -153,8 +162,15 @@ public class MainActivity extends AppCompatActivity {
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         if (mGoogleSignInClient != null)
             mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                    task -> Toast.makeText(getBaseContext(), "Se ha deslogueado", Toast.LENGTH_LONG).show());
-        //throw new RuntimeException("Test Crash"); // Force a crash
+                    task -> {
+                        if (showMessage)
+                            Toast.makeText(getBaseContext(), "Se ha deslogueado", Toast.LENGTH_LONG).show();
+                    });
+
+        WebService ws = new WebService(getBaseContext(), RC_LOGOUT);
+        String params = "?email="+ singletonUser.getHash() + "&device_id=" + singletonUser.getDeviceId();
+        ws.callService(this, Constants.WS_DOMINIO + Constants.WS_LOGIN, params, Request.Method.PUT, Constants.JSON_TYPE.OBJECT, null);
+        singletonUser.clearData();
     }
 
     private void updateMenu() {
@@ -193,5 +209,20 @@ public class MainActivity extends AppCompatActivity {
                         Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment)
                                 .navigate(R.id.action_move_to_login))
                 .show();
+    }
+
+    @Override
+    public void onResult(int requestCode, JSONObject response) {
+        Log.d(Constants.LOG, response.toString());
+    }
+
+    @Override
+    public void onResult(int requestCode, JSONArray response) {
+
+    }
+
+    @Override
+    public void onError(int requestCode, String message) {
+        Log.d(Constants.LOG, message);
     }
 }

@@ -24,6 +24,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     OnArticleListener onArticleListener;
     private int card;
     private boolean isOwner;
+    OnBottomReachedListener onBottomReachedListener;
 
     public ArticleAdapter(List<Article> items, OnArticleListener onArticleListener, int card) {
         mValues = items;
@@ -39,6 +40,14 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         this.isOwner = isOwner;
     }
 
+    public ArticleAdapter(List<Article> items, OnArticleListener onArticleListener, int card, boolean isOwner, OnBottomReachedListener onBottomReachedListener) {
+        mValues = items;
+        this.onArticleListener = onArticleListener;
+        this.card = card;
+        this.isOwner = isOwner;
+        this.onBottomReachedListener = onBottomReachedListener;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -51,33 +60,44 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         holder.mItem = mValues.get(position);
         //holder.tvId.setText(String.valueOf(mValues.get(position).getId()));
         holder.tvName.setText(mValues.get(position).getName());
-        holder.tvPrice.setText("$ " + mValues.get(position).getPrice());
+        holder.tvPrice.setText(mValues.get(position).getPriceFormated());
+        holder.tvPriceDecimal.setText(mValues.get(position).getPriceDecimal());
 
         if (holder.tvColor != null) {
-            if (mValues.get(position).getColors() > 0) {
-                holder.tvColor.setText(mValues.get(position).getColors() + " colores");
+            if (mValues.get(position).getColorsQty() > 1) {
+                holder.tvColor.setText(mValues.get(position).getColorsQty() + " colores");
                 holder.tvColor.setVisibility(View.VISIBLE);
             } else
                 holder.tvColor.setVisibility(View.GONE);
         }
-        if(mValues.get(position).getArticleImage() != null) {
+        if (mValues.get(position).getArticleImage() != null) {
             byte[] decodedString = Base64.decode(mValues.get(position).getArticleImage(), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.ivArticle.setImageBitmap(decodedByte);
-        }else
+        } else
             holder.ivArticle.setImageResource(R.drawable.ic_emoji_picture);
         holder.ivArticle.setClipToOutline(true);
+
+        if (position == mValues.size() - 1 && onBottomReachedListener != null)
+            onBottomReachedListener.onBottomReached(position);
 
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        if (mValues == null)
+            return 0;
+        else
+            return mValues.size();
+    }
+
+    public void setItems(List<Article> articleList) {
+        this.mValues = articleList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
-        public final TextView tvId, tvName, tvPrice, tvColor;
+        public final TextView tvId, tvName, tvPrice, tvColor, tvPriceDecimal;
         public final ImageView ivArticle;
         public final Button ibOpciones;
         public Article mItem;
@@ -90,6 +110,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             this.tvName = (TextView) view.findViewById(R.id.tvName);
             this.tvPrice = (TextView) view.findViewById(R.id.tvPrice);
             this.tvColor = (TextView) view.findViewById(R.id.tvColor);
+            this.tvPriceDecimal = view.findViewById(R.id.tvPriceDecimal);
             this.ivArticle = view.findViewById(R.id.ivArticle);
             this.ibOpciones = view.findViewById(R.id.ibOpciones);
             this.onArticleListener = onArticleListener;
@@ -107,12 +128,18 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             if (ibOpciones != null && v.getId() == ibOpciones.getId())
                 onArticleListener.onArticleEditClick(getAdapterPosition(), v);
             else
-                onArticleListener.onArticleClick(getAdapterPosition());
+                onArticleListener.onArticleClick(mValues.get(getAdapterPosition()).getId());
         }
     }
 
     public interface OnArticleListener {
         void onArticleClick(int position);
+
         void onArticleEditClick(int position, View v);
+    }
+
+    public interface OnBottomReachedListener {
+        void onBottomReached(int position);
+
     }
 }

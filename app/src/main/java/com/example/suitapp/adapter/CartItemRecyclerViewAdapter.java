@@ -38,7 +38,7 @@ public class CartItemRecyclerViewAdapter extends RecyclerView.Adapter<CartItemRe
         holder.mItem = mValues.get(position);
         holder.tvArticleVariant.setText("Color: Negro, Talle: M");
         holder.tvArticleName.setText(mValues.get(position).getName());
-        holder.tvPrice.setText("$ " + mValues.get(position).getPrice());
+        holder.tvPrice.setText(mValues.get(position).getPriceFormated());
         holder.tvQuantity.setText("1");
         holder.ivArticle.setImageResource(mValues.get(position).getImage());
     }

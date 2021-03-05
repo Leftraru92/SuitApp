@@ -37,8 +37,9 @@ public class VariantsAdapter extends RecyclerView.Adapter<VariantsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.tvSize.setText(String.valueOf(mValues.get(position).getSize()));
+        holder.tvSize.setText(mValues.get(position).getSize().getName());
         holder.tvColor.setText(mValues.get(position).getColor().getName());
+        if(mValues.get(position).getColor().getHex() != null && !mValues.get(position).getColor().getHex().equals(""))
         holder.ivColor.setColorFilter(Color.parseColor(mValues.get(position).getColor().getHex()));
         holder.tvStock.setText(String.valueOf(mValues.get(position).getStock()));
     }

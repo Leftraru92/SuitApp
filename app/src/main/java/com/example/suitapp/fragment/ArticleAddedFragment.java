@@ -2,8 +2,8 @@ package com.example.suitapp.fragment;
 
 import android.os.Bundle;
 
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,51 +11,106 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.example.suitapp.R;
-import com.example.suitapp.adapter.ArticleAdapter;
 import com.example.suitapp.adapter.ArticlesGroupAdapter;
-import com.example.suitapp.dummy.DummyArticles;
-import com.example.suitapp.dummy.DummyArticlesGroup;
+import com.example.suitapp.api.CallWebService;
+import com.example.suitapp.api.WebService;
+import com.example.suitapp.model.ArticleGroup;
+import com.example.suitapp.util.Constants;
+import com.example.suitapp.viewmodel.ArticleDetailViewModel;
 
-public class ArticleAddedFragment extends Fragment implements ArticlesGroupAdapter.OnGroupListener {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 
-    public ArticleAddedFragment() {
-        // Required empty public constructor
-    }
-
-    public static ArticleAddedFragment newInstance(String param1, String param2) {
-        ArticleAddedFragment fragment = new ArticleAddedFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
-    }
+public class ArticleAddedFragment extends Fragment implements ArticlesGroupAdapter.OnGroupListener, CallWebService {
+    View root;
+    ArticlesGroupAdapter articlesGroupAdapter;
+    ArticleDetailViewModel adViewModel;
+    List<ArticleGroup> artcilegroups;
+    ProgressBar pbGroups;
+    private final int RC_GROUPS = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_article_added, container, false);
-
-        RecyclerView recyclerGroups = root.findViewById(R.id.article_groups_list);
-        recyclerGroups.setAdapter(new ArticlesGroupAdapter(DummyArticlesGroup.ITEMS, this, root, R.layout.card_article_group_horizontal_scroll));
-
-        Button btSeeCart = root.findViewById(R.id.btSeeCart);
-        btSeeCart.setOnClickListener(v -> {
-            Navigation.findNavController(root).navigate(R.id.action_nav_article_added_to_nav_cart);
-        });
+        root = inflater.inflate(R.layout.fragment_article_added, container, false);
+        init();
+        callWs();
         return root;
+    }
+
+    private void init() {
+        //set
+        adViewModel = new ViewModelProvider(getActivity()).get(ArticleDetailViewModel.class);
+        artcilegroups = new ArrayList<>();
+        articlesGroupAdapter = new ArticlesGroupAdapter(null, this, root, R.layout.card_article_group_horizontal_scroll);
+
+        //bind
+        pbGroups = root.findViewById(R.id.pbGroups);
+        TextView tvArticleName = root.findViewById(R.id.tvArticleName);
+        TextView tvVariant = root.findViewById(R.id.tvVariant);
+        RecyclerView recyclerGroups = root.findViewById(R.id.article_groups_list);
+        recyclerGroups.setAdapter(articlesGroupAdapter);
+        Button btSeeCart = root.findViewById(R.id.btSeeCart);
+        Button btBuyCart = root.findViewById(R.id.btBuyCart);
+
+        //listener
+        btSeeCart.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_article_added_to_nav_cart));
+        btBuyCart.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_article_added_to_nav_select_shipping));
+
+        //viewmodel
+        tvArticleName.setText(adViewModel.getName().getValue());
+        String variant = "Talle: " + adViewModel.getSize().getValue() + " Color: " + adViewModel.getColor().getValue();
+        tvVariant.setText(variant);
+    }
+
+    private void callWs() {
+        WebService webService = new WebService(getContext(), RC_GROUPS);
+        String params = "?groupQty=2&artQty=6&idArticle=null";
+        webService.callService(this, Constants.WS_DOMINIO + Constants.WS_ARTICLES, params, Request.Method.GET, Constants.JSON_TYPE.ARRAY, null);
     }
 
     @Override
     public void onGroupClick(int position) {
+
+    }
+
+    @Override
+    public void onResult(int requestCode, JSONObject response) {
+
+    }
+
+    @Override
+    public void onResult(int requestCode, JSONArray response) {
+        switch (requestCode) {
+            case RC_GROUPS:
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject dataItem = response.getJSONObject(i);
+                        artcilegroups.add(new ArticleGroup(dataItem));
+                    }
+                    articlesGroupAdapter.setItems(artcilegroups);
+                    articlesGroupAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }finally {
+                    pbGroups.setVisibility(View.GONE);
+                }
+                break;
+        }
+
+    }
+
+    @Override
+    public void onError(int requestCode, String message) {
 
     }
 }

@@ -41,14 +41,15 @@
         app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tilColor">
+        app:layout_constraintTop_toBottomOf="@+id/tilColor"
+        app:startIconDrawable="@drawable/ic_caret_down_solid">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tietSize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Talle"
-            android:inputType="text" />
+            android:focusable="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -80,7 +81,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:visibility="gone"
-        android:text="* Debe completar ambos campos para continuar"
+        android:text="* Debe completar todos los campos para continuar"
         android:textColor="@color/error_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

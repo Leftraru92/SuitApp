@@ -14,6 +14,9 @@
     <action android:id="@+id/action_move_to_article"
         app:destination="@id/nav_article_detail"/>
 
+    <action android:id="@+id/action_move_to_articles"
+        app:destination="@id/nav_article"/>
+
     <fragment
         android:id="@+id/nav_home"
         android:name="com.example.suitapp.fragment.HomeFragment"
@@ -144,7 +147,15 @@
         android:id="@+id/nav_stores"
         android:name="com.example.suitapp.fragment.StoresFragment"
         android:label="@string/menu_stores"
-        tools:layout="@layout/fragment_store_list" />
+        tools:layout="@layout/fragment_store_list" >
+        <action
+            android:id="@+id/action_nav_stores_to_nav_article"
+            app:destination="@id/nav_article"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_about"
@@ -191,6 +202,24 @@
             android:name="isOwner"
             app:argType="boolean"
             android:defaultValue="false" />
+        <action
+            android:id="@+id/action_nav_article_self"
+            app:destination="@id/nav_article"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <argument
+            android:name="storeId"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <action
+            android:id="@+id/action_nav_article_to_nav_store_detail"
+            app:destination="@id/nav_store_detail"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/nav_article_detail"
@@ -210,6 +239,24 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <argument
+            android:name="articleId"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <action
+            android:id="@+id/action_nav_article_detail_to_nav_select_shipping"
+            app:destination="@id/nav_select_shipping"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_nav_article_detail_to_nav_view_image"
+            app:destination="@id/nav_view_image"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
 
     <fragment
@@ -222,6 +269,13 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:launchSingleTop="true"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_nav_article_added_to_nav_select_shipping"
+            app:destination="@id/nav_select_shipping"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
     </fragment>
@@ -237,5 +291,55 @@
         android:name="com.example.suitapp.fragment.SelectShippingFragment"
         android:label="@string/cart_select_shipping"
         tools:layout="@layout/fragment_select_shipping">
+        <action
+            android:id="@+id/action_nav_select_shipping_to_nav_card_credit"
+            app:destination="@id/nav_card_credit"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_card_credit"
+        android:name="com.example.suitapp.fragment.CreditCardFragment"
+        android:label="@string/cart_credit_card"
+        tools:layout="@layout/fragment_credit_card">
+        <action
+            android:id="@+id/action_nav_card_credit_to_nav_shop_confirm"
+            app:destination="@id/nav_shop_confirm"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_shop_confirm"
+        android:name="com.example.suitapp.fragment.ShopConfirmFragment"
+        android:label=""
+        tools:layout="@layout/fragment_shop_confirm">
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_store_detail"
+        android:name="com.example.suitapp.fragment.StoreDetailFragment"
+        android:label=""
+        tools:layout="@layout/fragment_store_detail">
+        <argument
+            android:name="store"
+            app:argType="com.example.suitapp.model.Store" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_view_image"
+        android:name="com.example.suitapp.fragment.addStore.ViewImageFragment"
+        android:label="@string/store_shipping"
+        tools:layout="@layout/fragment_view_image">
+
+        <argument
+            android:name="imageView"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
 </navigation>

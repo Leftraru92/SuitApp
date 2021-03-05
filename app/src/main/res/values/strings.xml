@@ -1,4 +1,6 @@
 <resources>
+    <string name="google_maps_key">AIzaSyCfv0XKWG8ZNaBz2P8zMiZk7IZyHaUHcp0</string>
+
     <string name="app_name">SuitApp</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -12,12 +14,15 @@
     <string name="menu_notifications">Notificaciones</string>
     <string name="menu_shopping">Compras</string>
     <string name="menu_favs">Favoritos</string>
-    <string name="menu_account">Cuenta</string>
+    <string name="menu_account">Mi Cuenta</string>
     <string name="menu_categories">Categorías</string>
     <string name="menu_stores">Tiendas</string>
     <string name="menu_about">Acerca de</string>
     <string name="menu_logout">Salir</string>
     <string name="cart_select_shipping">Seleccioná un método de entrega</string>
+    <string name="cart_select_card">Seleccione una tarjeta</string>
+    <string name="cart_credit_card">Ingrese los datos de su tarjeta</string>
+    <string name="cart_shop_confirm">Confirmá tu compra</string>
 
     <string name="menu_cart">Carrito</string>
     <string name="menu_articles">Artículos</string>
@@ -93,6 +98,11 @@
     <string name="filter_size">Talle</string>
     <string name="filter_color">Color</string>
     <string name="filter_price">Precio Min - Max</string>
+
+    <string name="card_number_hint">NÚMERO DE LA TARJETA</string>
+    //Default value: "ENTER CARD NUMBER"
+    <string name="card_name_hint">APELLIDO Y NOMBRE</string>
+    //Default value: "ENTER CARD NAME"
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

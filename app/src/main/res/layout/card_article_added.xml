@@ -46,18 +46,28 @@
         <TextView
             android:id="@+id/tvArticleName"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="32dp"
             android:fontFamily="sans-serif-medium"
             android:text="@string/msg_article_added"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivArticle"
             app:layout_constraintTop_toBottomOf="@+id/lbMensaje" />
+
+        <TextView
+            android:id="@+id/tvVariant"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="sans-serif-medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivArticle"
+            app:layout_constraintTop_toBottomOf="@+id/tvArticleName" />
 
         <View
             android:layout_width="match_parent"

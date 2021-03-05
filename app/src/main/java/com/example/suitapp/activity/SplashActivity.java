@@ -12,6 +12,7 @@ import com.example.suitapp.api.WebService;
 import com.example.suitapp.database.QueryDbInsert;
 import com.example.suitapp.model.Category;
 import com.example.suitapp.model.Gender;
+import com.example.suitapp.model.Variant;
 import com.example.suitapp.util.Constants;
 
 import org.json.JSONArray;
@@ -22,9 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SplashActivity extends AppCompatActivity implements CallWebService {
-    final int RC_CATEGORIES = 1, RC_GENDERS = 2;
+    final int RC_CATEGORIES = 1, RC_GENDERS = 2, RC_COLORS = 3, RC_SIZES = 4;
     private List<Category> categoryList;
     private List<Gender> genderList;
+    List<Variant.Color> colorList;
+    List<Variant.Size> sizeList;
+    boolean gotCat, gotGender, gotColor, gotSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,8 @@ public class SplashActivity extends AppCompatActivity implements CallWebService 
 
         categoryList = new ArrayList<>();
         genderList = new ArrayList<>();
+        colorList = new ArrayList<>();
+        sizeList = new ArrayList<>();
         callWs();
     }
 
@@ -42,6 +48,12 @@ public class SplashActivity extends AppCompatActivity implements CallWebService 
 
         WebService webServiceG = new WebService(this, RC_GENDERS);
         webServiceG.callService(this, Constants.WS_DOMINIO + Constants.WS_GENDERS, null, Request.Method.GET, Constants.JSON_TYPE.ARRAY, null);
+
+        WebService webServiceC = new WebService(this, RC_COLORS);
+        webServiceC.callService(this, Constants.WS_DOMINIO + Constants.WS_COLORS, null, Request.Method.GET, Constants.JSON_TYPE.ARRAY, null);
+
+        WebService webServiceS = new WebService(this, RC_SIZES);
+        webServiceS.callService(this, Constants.WS_DOMINIO + Constants.WS_SIZES, null, Request.Method.GET, Constants.JSON_TYPE.ARRAY, null);
 
     }
 
@@ -61,8 +73,11 @@ public class SplashActivity extends AppCompatActivity implements CallWebService 
                     }
                     //Inserto en la base local
                     QueryDbInsert.insertCategories(this, categoryList);
+                    gotCat = true;
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } finally {
+                    runApp();
                 }
                 break;
             case RC_GENDERS:
@@ -73,10 +88,43 @@ public class SplashActivity extends AppCompatActivity implements CallWebService 
                     }
                     //Inserto en la base local
                     QueryDbInsert.insertGender(this, genderList);
+                    gotGender = true;
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } finally {
+                    runApp();
                 }
-                runApp();
+                break;
+            case RC_COLORS:
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject dataItem = response.getJSONObject(i);
+                        colorList.add(new Variant.Color(dataItem));
+                    }
+                    //Inserto en la base local
+                    QueryDbInsert.insertColor(this, colorList);
+                    gotColor = true;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    runApp();
+                }
+                break;
+            case RC_SIZES:
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject dataItem = response.getJSONObject(i);
+                        sizeList.add(new Variant.Size(dataItem) {
+                        });
+                    }
+                    //Inserto en la base local
+                    QueryDbInsert.insertSize(this, sizeList);
+                    gotSize = true;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    runApp();
+                }
                 break;
         }
     }
@@ -87,8 +135,10 @@ public class SplashActivity extends AppCompatActivity implements CallWebService 
     }
 
     private void runApp(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        this.finish();
+        if(gotColor && gotGender && gotCat && gotSize) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            this.finish();
+        }
     }
 }

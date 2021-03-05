@@ -53,7 +53,16 @@ public class OclQtySelector implements View.OnClickListener, OnQtyListener {
         clQty5.setOnClickListener(v -> onClickQty(5));
         clQty6.setOnClickListener(v -> onClickQty(6));
 
-        setColors(1);
+        if(qty<2)
+            clQty2.setVisibility(View.GONE);
+        if(qty<3)
+            clQty3.setVisibility(View.GONE);
+        if(qty<4)
+            clQty4.setVisibility(View.GONE);
+        if(qty<5)
+            clQty5.setVisibility(View.GONE);
+        if(qty<6)
+            clQty6.setVisibility(View.GONE);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -66,7 +75,7 @@ public class OclQtySelector implements View.OnClickListener, OnQtyListener {
 
     @Override
     public void onClick(View view) {
-
+        //setColors(adViewModel.getQty().getValue());
         dialog.show();
     }
 

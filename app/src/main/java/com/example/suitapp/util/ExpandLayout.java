@@ -78,26 +78,11 @@ public class ExpandLayout {
     }
 
     public void onClickContraint() {
-        View view;
 
-        if (clExpandir != null) {
-            view = clExpandir;
-        }else{
-            view = btDesplegar;
-        }
-
-        if (layoutExpand.getVisibility() == View.VISIBLE) {
-            //TransitionManager.beginDelayedTransition((ViewGroup) view, new AutoTransition());
-            createRotateAnimator(btDesplegar, 180f, 0f).start();
-            expandState.put(btDesplegar.getId(), false);
-            layoutExpand.setVisibility(View.GONE);
-
-        } else {
-            TransitionManager.beginDelayedTransition((ViewGroup) view.getParent(), new AutoTransition());
-            createRotateAnimator(btDesplegar, 0f, 180f).start();
-            layoutExpand.setVisibility(View.VISIBLE);
-            expandState.put(btDesplegar.getId(), true);
-        }
+        if (layoutExpand.getVisibility() == View.VISIBLE)
+            closeCard();
+        else
+            openCard();
 
         if (callBackExpand != null) {
             try {
@@ -106,6 +91,25 @@ public class ExpandLayout {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void openCard() {
+        View view;
+        if (clExpandir != null)
+            view = clExpandir;
+        else
+            view = btDesplegar;
+
+        TransitionManager.beginDelayedTransition((ViewGroup) view.getParent(), new AutoTransition());
+        createRotateAnimator(btDesplegar, 0f, 180f).start();
+        layoutExpand.setVisibility(View.VISIBLE);
+        expandState.put(btDesplegar.getId(), true);
+    }
+
+    public void closeCard() {
+        createRotateAnimator(btDesplegar, 180f, 0f).start();
+        expandState.put(btDesplegar.getId(), false);
+        layoutExpand.setVisibility(View.GONE);
     }
 
     public static ObjectAnimator createRotateAnimator(final View target, final float from, final float to) {
