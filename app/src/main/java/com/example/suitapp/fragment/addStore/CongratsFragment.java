@@ -104,6 +104,12 @@ public class CongratsFragment extends Fragment implements CallWebService {
     }
 
     private void sendPostArticle() {
+        mViewModelArt = new ViewModelProvider(getActivity()).get(AddArticleViewModel.class);
+        SingletonUser sUsuario = SingletonUser.getInstance(getContext());
+        JSONObject jsonStore = mViewModelArt.toJSON(sUsuario.getHash());
+
+        WebService ws = new WebService(getContext(), RC_ARTICLE);
+        ws.callService(this, Constants.WS_DOMINIO + Constants.WS_ARTICLES, null, Request.Method.POST, Constants.JSON_TYPE.OBJECT, jsonStore);
     }
 
     private void sendPostStore() {
@@ -131,6 +137,9 @@ public class CongratsFragment extends Fragment implements CallWebService {
             case RC_STORE:
                 setResult(true);
                 break;
+            case RC_ARTICLE:
+                setResult(true);
+                break;
         }
 
     }
@@ -144,6 +153,9 @@ public class CongratsFragment extends Fragment implements CallWebService {
     public void onError(int requestCode, String message) {
         switch (requestCode) {
             case RC_STORE:
+                setResult(false);
+                break;
+            case RC_ARTICLE:
                 setResult(false);
                 break;
         }

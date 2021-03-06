@@ -50,7 +50,7 @@ public class StoreDetailFragment extends Fragment implements OnMapReadyCallback 
     private void init() {
         //set
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        //mapFragment.getMapAsync(this);
 
         //bind
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);

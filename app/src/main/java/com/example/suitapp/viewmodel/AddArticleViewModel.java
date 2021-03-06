@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModel;
 
 public class AddArticleViewModel extends ViewModel implements CaptureImageViewModel, DialogSelectItemViewModel {
 
+    private MutableLiveData<Integer> mStoreId;
     private MutableLiveData<String> mName;
     private MutableLiveData<String> mDesc;
     private MutableLiveData<Category> mCategory;
@@ -33,6 +34,7 @@ public class AddArticleViewModel extends ViewModel implements CaptureImageViewMo
     private ArrayList<Variant> listVariants;
 
     public AddArticleViewModel() {
+        mStoreId = new MutableLiveData<>();
         mName = new MutableLiveData<>();
         mDesc = new MutableLiveData<>();
         mCategory = new MutableLiveData<>();
@@ -43,10 +45,19 @@ public class AddArticleViewModel extends ViewModel implements CaptureImageViewMo
         mVariants = new MutableLiveData<>();
         mEditVariant = new MutableLiveData<>();
 
+        mStoreId.setValue(0);
         listImages = new ArrayList<>();
         listVariants = new ArrayList<>();
         mImages.setValue(listImages);
         mVariants.setValue(listVariants);
+    }
+
+    public LiveData<Integer> getStoreId() {
+        return mStoreId;
+    }
+
+    public void setStoreId(int storeId) {
+        this.mStoreId.setValue(storeId);
     }
 
     public LiveData<String> getName() {
@@ -169,12 +180,12 @@ public class AddArticleViewModel extends ViewModel implements CaptureImageViewMo
 
     public void addVariant(int qty) {
         //Si es editado primero lo elimino de la lista
-        ArrayList<Variant> editedListVariants = listVariants;
+        ArrayList<Variant> editedListVariants = new ArrayList<>();
         for (Variant var : listVariants) {
             if ((var.getColor().getId() == mEditVariant.getValue().getColor().getId()) && var.getSize().getId() == mEditVariant.getValue().getSize().getId())
-                editedListVariants.remove(var);
+                editedListVariants.add(var);
         }
-        listVariants = editedListVariants;
+        listVariants.removeAll(editedListVariants);
         //Lo guardo en la lista
         //mEditVariant.getValue().setSize(size);
         mEditVariant.getValue().setStock(qty);
@@ -196,9 +207,11 @@ public class AddArticleViewModel extends ViewModel implements CaptureImageViewMo
             mEditVariant.setValue(listVariants.get(position));
     }
 
-    public JSONObject toJSON() {
+    public JSONObject toJSON(String hash) {
         JSONObject jsonObject = new JSONObject();
         try {
+            jsonObject.put("email", hash);
+            jsonObject.put("storeId", getStoreId().getValue());
             jsonObject.put("articleName", getName().getValue());
             jsonObject.put("articleDesc", getDesc().getValue());
             jsonObject.put("categoryId", getCategory().getValue().getId());
@@ -209,7 +222,7 @@ public class AddArticleViewModel extends ViewModel implements CaptureImageViewMo
             for (Variant variant : getVariants().getValue()) {
                 JSONObject jsonvar = new JSONObject();
                 jsonvar.put("colorId", variant.getColor().getId());
-                jsonvar.put("sizeId", variant.getSize());
+                jsonvar.put("sizeId", variant.getSize().getId());
                 jsonvar.put("stock", variant.getStock());
                 jsonVariant.put(jsonvar);
             }

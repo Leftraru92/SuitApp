@@ -91,7 +91,6 @@ public class ArticleReviewFragment extends Fragment implements VariantsAdapter.O
     }
 
     private void next() {
-        JSONObject jsonStore = mViewModel.toJSON();
         Bundle bundle = new Bundle();
         bundle.putBoolean("isArticle", true);
         Navigation.findNavController(root).navigate(R.id.action_nav_article_review_to_nav_congrats, bundle);

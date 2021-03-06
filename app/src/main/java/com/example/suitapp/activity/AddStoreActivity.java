@@ -53,7 +53,7 @@ public class AddStoreActivity extends AppCompatActivity implements CallWebServic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_store);
 
-        int storeId = getIntent().getExtras().getInt("STOREID", 0) ;
+        int storeId = (getIntent().getExtras() != null) ?getIntent().getExtras().getInt("STOREID", 0)  : 0;
 
         AppBarLayout appBarLayout = findViewById(R.id.appBarLayout);
         toolbar = findViewById(R.id.toolbar);

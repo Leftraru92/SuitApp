@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
@@ -20,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.example.suitapp.R;
+import com.example.suitapp.viewmodel.AddArticleViewModel;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,6 +39,7 @@ public class AddArticleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_article);
 
         boolean isEdit = (getIntent().getExtras() != null) ? getIntent().getExtras().getBoolean("EDIT", false) : false;
+        int storeId = getIntent().getExtras().getInt("STOREID", 0);
 
         AppBarLayout appBarLayout = findViewById(R.id.appBarLayout);
         toolbar = findViewById(R.id.toolbar);
@@ -46,6 +49,9 @@ public class AddArticleActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); //oculta el teclado
+        //guardo el id de tienda en el view model
+        AddArticleViewModel mViewModel = new ViewModelProvider(this).get(AddArticleViewModel.class);
+        mViewModel.setStoreId(storeId);
 
         mAppBarConfiguration = new AppBarConfiguration.Builder().build();
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -70,7 +76,7 @@ public class AddArticleActivity extends AppCompatActivity {
             if (destination.getId() == R.id.nav_congrats) {
                 toolbar.setVisibility(View.GONE);
                 subToolbar.setVisibility(View.GONE);
-            }else {
+            } else {
                 toolbar.setVisibility(View.VISIBLE);
                 subToolbar.setVisibility(View.VISIBLE);
             }

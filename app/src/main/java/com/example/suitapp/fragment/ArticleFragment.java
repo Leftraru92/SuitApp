@@ -100,7 +100,6 @@ public class ArticleFragment extends Fragment implements CallWebService, StoresA
         root = inflater.inflate(R.layout.fragment_articles, container, false);
         setHasOptionsMenu(true);
         init();
-        //callWs(); //Se llama desde init al iniciar el viewmodel
         return root;
     }
 
@@ -154,16 +153,6 @@ public class ArticleFragment extends Fragment implements CallWebService, StoresA
             storesAdapter = new StoresAdapter(null, R.layout.card_store_circle, this);
             recyclerViewStores.setAdapter(storesAdapter);
             ccListStores.setVisibility(View.VISIBLE);
-        }
-
-        //muestro boton add article
-        if (isOwner) {
-            View btAddProduct = getActivity().findViewById(R.id.btAddProduct);
-            btAddProduct.setVisibility(View.VISIBLE);
-            btAddProduct.setOnClickListener(v -> {
-                Intent intent = new Intent(getContext(), AddArticleActivity.class);
-                getContext().startActivity(intent);
-            });
         }
 
         RecyclerView recyclerView = root.findViewById(R.id.list);
@@ -314,6 +303,17 @@ public class ArticleFragment extends Fragment implements CallWebService, StoresA
         Bundle bundle = new Bundle();
         bundle.putParcelable("store", mStore);
         btMore.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_article_to_nav_store_detail, bundle));
+
+        //muestro boton add article
+        if (isOwner) {
+            View btAddProduct = getActivity().findViewById(R.id.btAddProduct);
+            btAddProduct.setVisibility(View.VISIBLE);
+            btAddProduct.setOnClickListener(v -> {
+                Intent intent = new Intent(getContext(), AddArticleActivity.class);
+                intent.putExtra("STOREID", mStore.getId());
+                getContext().startActivity(intent);
+            });
+        }
     }
 
     @Override
@@ -388,5 +388,11 @@ public class ArticleFragment extends Fragment implements CallWebService, StoresA
     @Override
     public void onError(int requestCode, String message) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();
     }
 }

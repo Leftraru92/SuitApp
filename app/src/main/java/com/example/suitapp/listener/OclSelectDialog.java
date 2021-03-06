@@ -68,7 +68,7 @@ public class OclSelectDialog implements View.OnClickListener {
     }
 
     private void openDialog() {
-        if(dialog==null) {
+        if (dialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
             builder.setTitle("Seleccione una opción")
@@ -112,7 +112,8 @@ public class OclSelectDialog implements View.OnClickListener {
 
         if (selectedItemId > 0) {
             viewModel.selectValue(selectedItemId, listItems.getList().get(selectedItemId), requestId);
-            dialog.dismiss();
+            if (dialog != null)
+                dialog.dismiss();
         }
     }
 

@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.suitapp.adapter.NotificationRecyclerViewAdapter;
+import com.example.suitapp.adapter.NotificationAdapter;
 import com.example.suitapp.R;
 import com.example.suitapp.dummy.DummyContent;
 
@@ -66,7 +66,7 @@ public class NotificationFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new NotificationRecyclerViewAdapter(DummyContent.ITEMS));
+            recyclerView.setAdapter(new NotificationAdapter(DummyContent.ITEMS));
         }
         return view;
     }

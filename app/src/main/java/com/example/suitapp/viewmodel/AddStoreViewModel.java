@@ -233,9 +233,9 @@ public class AddStoreViewModel extends ViewModel implements DialogSelectItemView
         ArrayList<ShippingPrice> editedListSP = mListShippingPrice;
         for (ShippingPrice sp : mListShippingPrice) {
             if (sp.getProvince().getId() == mEditShippingPrice.getValue().getProvince().getId())
-                editedListSP.remove(sp);
+                editedListSP.add(sp);
         }
-        mListShippingPrice = editedListSP;
+        mListShippingPrice.removeAll(editedListSP);
         //Lo guardo en la lista
         mEditShippingPrice.getValue().setPrice(price);
         mListShippingPrice.add(mEditShippingPrice.getValue());
