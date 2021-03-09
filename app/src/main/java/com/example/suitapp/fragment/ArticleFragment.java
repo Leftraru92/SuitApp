@@ -45,6 +45,7 @@ import com.example.suitapp.adapter.ArticleAdapter;
 import com.example.suitapp.R;
 import com.example.suitapp.adapter.StoresAdapter;
 import com.example.suitapp.listener.OclArticlesFilter;
+import com.example.suitapp.util.SingletonUser;
 import com.example.suitapp.viewmodel.SearchViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -63,7 +64,7 @@ public class ArticleFragment extends Fragment implements CallWebService, StoresA
     RecyclerView recyclerViewStores;
     boolean isOwner;
     final int RC_ARTICLE = 1, RC_STORE_DETAIL = 2, RC_STORE = 3;
-    final int QTY_ART = 10, QTY_STORE = 6;
+    final int QTY_ART = 10, QTY_STORE = 6, RC_ART_DEL = 7;
     ArticleAdapter articleAdapter;
     StoresAdapter storesAdapter;
     List<Article> articleList;
@@ -267,7 +268,7 @@ public class ArticleFragment extends Fragment implements CallWebService, StoresA
     }
 
     @Override
-    public void onArticleEditClick(int position, View v) {
+    public void onArticleEditClick(int articleId, View v) {
         PopupMenu popup = new PopupMenu(getContext(), v);
         popup.getMenuInflater().inflate(R.menu.menu_article_item, popup.getMenu());
 
@@ -275,10 +276,11 @@ public class ArticleFragment extends Fragment implements CallWebService, StoresA
 
             switch (item.getItemId()) {
                 case R.id.action_delete:
+                    onDeleteArticle(articleId);
                     return true;
                 case R.id.action_edit:
                     Intent intent = new Intent(getContext(), AddArticleActivity.class);
-                    intent.putExtra("EDIT", true);
+                    intent.putExtra("ARTICLEID", articleId);
                     getContext().startActivity(intent);
                     return true;
                 default:
@@ -286,6 +288,13 @@ public class ArticleFragment extends Fragment implements CallWebService, StoresA
             }
         });
         popup.show();
+    }
+
+    private void onDeleteArticle(int articleId) {
+        String param = "?email=" + SingletonUser.getInstance(getContext()).getHash() + "&articleId=" + articleId;
+        WebService webService = new WebService(getContext(), RC_ART_DEL);
+        webService.callService(this, Constants.WS_DOMINIO + Constants.WS_ARTICLES, param, Request.Method.DELETE, Constants.JSON_TYPE.OBJECT, null);
+
     }
 
     private void setDataStore(Store mStore) {
@@ -328,6 +337,9 @@ public class ArticleFragment extends Fragment implements CallWebService, StoresA
                 } finally {
                     root.findViewById(R.id.pbStore).setVisibility(View.GONE);
                 }
+                break;
+            case RC_ART_DEL:
+                callWs();
                 break;
         }
     }
@@ -393,6 +405,7 @@ public class ArticleFragment extends Fragment implements CallWebService, StoresA
     @Override
     public void onResume() {
         super.onResume();
-        init();
+        if (isOwner)
+            init();
     }
 }

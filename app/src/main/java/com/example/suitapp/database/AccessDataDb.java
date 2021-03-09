@@ -107,13 +107,46 @@ public class AccessDataDb {
 
     public String getColorHexById(int id) {
         String hex = "";
-        Cursor c = QueryDbGet.getColorHexById(context, id);
+        Cursor c = QueryDbGet.getColorById(context, id);
 
         if (c.getCount() > 0) {
             c.moveToFirst();
             hex = c.getString(c.getColumnIndex(DataDb.COL_HEX));
         }
         return hex;
+    }
+
+    public int getColorId(String value) {
+        int id = 0;
+        Cursor c = QueryDbGet.getColorId(context, value);
+
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            id = c.getInt(c.getColumnIndex(DataDb.COL_ID));
+        }
+        return id;
+    }
+
+    public String getColor(int colorId) {
+        String value = "";
+        Cursor c = QueryDbGet.getColorById(context, colorId);
+
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            value = c.getString(c.getColumnIndex(DataDb.COL_NAME));
+        }
+        return value;
+    }
+
+    public int getSizeId(String value) {
+        int id = 0;
+        Cursor c = QueryDbGet.getSizeId(context, value);
+
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            id = c.getInt(c.getColumnIndex(DataDb.COL_ID));
+        }
+        return id;
     }
 
     public List<Item> getSizes() {
@@ -145,5 +178,16 @@ public class AccessDataDb {
             c.close();
             return searchList;
         }
+    }
+
+    public String getSize(int sizeId) {
+        String value = "";
+        Cursor c = QueryDbGet.getSizeById(context, sizeId);
+
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            value = c.getString(c.getColumnIndex(DataDb.COL_NAME));
+        }
+        return value;
     }
 }

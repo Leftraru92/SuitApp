@@ -36,6 +36,7 @@ import com.example.suitapp.adapter.ArticlesGroupAdapter;
 import com.example.suitapp.adapter.ImageAdapter;
 import com.example.suitapp.api.CallWebService;
 import com.example.suitapp.api.WebService;
+import com.example.suitapp.database.AccessDataDb;
 import com.example.suitapp.listener.OclQtySelector;
 import com.example.suitapp.model.Article;
 import com.example.suitapp.model.ArticleGroup;
@@ -44,6 +45,7 @@ import com.example.suitapp.util.Constants;
 import com.example.suitapp.util.SingletonUser;
 import com.example.suitapp.util.Util;
 import com.example.suitapp.viewmodel.ArticleDetailViewModel;
+import com.example.suitapp.viewmodel.SearchViewModel;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -59,10 +61,11 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
     ArticleDetailViewModel adViewModel;
     View root;
     LayoutInflater inflater;
-    boolean fav;
+    MenuItem btFav;
+    boolean favStatus;
     TextView tvSize, tvColor, tvStock, tvQuantity;
     int articleId;
-    final int RC_ARTICLE = 1, RC_GROUPS = 2, RC_IMAGES = 3;
+    final int RC_ARTICLE = 1, RC_GROUPS = 2, RC_IMAGES = 3, RC_FAV = 4, RC_FAV_ACT = 5, RC_CART = 6;
     RelativeLayout.LayoutParams params, params2;
     ThemedToggleButtonGroup tbgSize, tbgColor;
     ConstraintLayout ccProgressArt;
@@ -72,6 +75,8 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
     ViewPager2 viewPager;
     CardView cardPgrogessImage, cardNotImage, btQuantity;
     Article mArticle;
+    WebService webServiceFavs;
+    JSONObject bodyFav;
 
     public static ArticleDetailFragment newInstance() {
         return new ArticleDetailFragment();
@@ -102,6 +107,7 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
         params.setMargins(pxMargin, pxMargin, pxMargin, pxMargin);
         artcilegroups = new ArrayList<>();
         articlesGroupAdapter = new ArticlesGroupAdapter(null, this, root, R.layout.card_article_group_horizontal_scroll);
+        webServiceFavs = new WebService(getContext(), RC_FAV_ACT);
 
         //bind
         ccProgressArt = root.findViewById(R.id.ccProgressArt);
@@ -157,9 +163,9 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
             return kotlin.Unit.INSTANCE;
         });
 
-        if(adViewModel != null && adViewModel.getArticleId().getValue() == articleId){
+        if (adViewModel != null && adViewModel.getArticleId().getValue() == articleId) {
             loadFromViewMdel();
-        }else{
+        } else {
             loadFormSerer();
         }
     }
@@ -167,6 +173,7 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
     private void loadFormSerer() {
         adViewModel = new ViewModelProvider(getActivity()).get(ArticleDetailViewModel.class);
         adViewModel.setArticleId(articleId);
+        adViewModel.setQty(1);
         setOptionsFromViewModel();
         callWs();
     }
@@ -206,9 +213,23 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
         webService3.callService(this, Constants.WS_DOMINIO + Constants.WS_IMAGES, params3, Request.Method.GET, Constants.JSON_TYPE.OBJECT, null);
 
         callRelatedArticles();
+
+        if (!SingletonUser.getInstance(getContext()).getHash().equals("")) {
+            WebService webService4 = new WebService(getContext(), RC_FAV);
+            String params4 = "?hashFavoritos=" + SingletonUser.getInstance(getContext()).getHash();
+            webService4.callService(this, Constants.WS_DOMINIO + Constants.WS_FAV, params4, Request.Method.GET, Constants.JSON_TYPE.ARRAY, null);
+
+            try {
+                bodyFav = new JSONObject();
+                bodyFav.put("email", SingletonUser.getInstance(getContext()).getHash());
+                bodyFav.put("articleId", articleId);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    private void callRelatedArticles(){
+    private void callRelatedArticles() {
         WebService webService2 = new WebService(getContext(), RC_GROUPS);
         String params2 = "?groupQty=2&artQty=6&idArticle=" + articleId;
         webService2.callService(this, Constants.WS_DOMINIO + Constants.WS_ARTICLES, params2, Request.Method.GET, Constants.JSON_TYPE.ARRAY, null);
@@ -217,7 +238,7 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_article_detail, menu);
-        fav = false;
+        btFav = menu.getItem(0);
     }
 
     @Override
@@ -230,24 +251,51 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
                 Navigation.findNavController(root).navigate(R.id.action_nav_article_detail_to_nav_search);
                 return true;
             case R.id.action_fav:
-                if (fav)
-                    item.setIcon(R.drawable.ic_heart_regular);
-                else {
-                    Toast.makeText(getContext(), "Se agregó a favoritos", Toast.LENGTH_LONG).show();
-                    item.setIcon(R.drawable.ic_heart_solid);
+                try {
+                    onFavClick();
+                } catch (JSONException ex) {
+                    Log.d(Constants.LOG, ex.getMessage());
                 }
-                fav = !fav;
                 return true;
             default:
                 return NavigationUI.onNavDestinationSelected(item, Navigation.findNavController(root));
         }
     }
 
+    private void onFavClick() throws JSONException {
+        favStatus = !favStatus;
+        if (favStatus)
+            webServiceFavs.callService(this, Constants.WS_DOMINIO + Constants.WS_FAV, null, Request.Method.POST, Constants.JSON_TYPE.OBJECT, bodyFav);
+        else
+            webServiceFavs.callService(this, Constants.WS_DOMINIO + Constants.WS_FAV, null, Request.Method.PUT, Constants.JSON_TYPE.OBJECT, bodyFav);
+    }
+
+    private void setIconFav() {
+        if (favStatus)
+            btFav.setIcon(R.drawable.ic_heart_solid);
+        else
+            btFav.setIcon(R.drawable.ic_heart_regular);
+    }
+
     private void onAddToCart() {
         if (SingletonUser.getInstance(getContext()).isLogued()) {
-            if (validateVariants())
-                Navigation.findNavController(root).navigate(R.id.action_nav_article_detail_to_nav_article_added);
-            else
+            if (validateVariants()) {
+                try {
+                    AccessDataDb accessDataDb = AccessDataDb.getInstance(getContext());
+                    WebService webService = new WebService(getContext(), RC_CART);
+                    JSONObject body = new JSONObject();
+                    body.put("email", SingletonUser.getInstance(getContext()).getHash());
+                    body.put("articleId", articleId);
+                    body.put("colorId", accessDataDb.getColorId(adViewModel.getColor().getValue()));
+                    body.put("sizeId", accessDataDb.getSizeId(adViewModel.getSize().getValue()));
+                    body.put("quantity", adViewModel.getQty().getValue());
+                    webService.callService(this, Constants.WS_DOMINIO + Constants.WS_CART, null, Request.Method.POST, Constants.JSON_TYPE.OBJECT, body);
+                    Navigation.findNavController(root).navigate(R.id.action_nav_article_detail_to_nav_article_added);
+                } catch (JSONException ex) {
+                    Log.d(Constants.LOG, ex.getMessage());
+                }
+
+            } else
                 Snackbar.make(tvColor, getResources().getString(R.string.error_select_variant), BaseTransientBottomBar.LENGTH_LONG).show();
         } else {
             ((MainActivity) getActivity()).mostrarMensaje();
@@ -256,8 +304,16 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
 
     private void onBuyNow() {
         if (SingletonUser.getInstance(getContext()).isLogued()) {
-            if (validateVariants())
-                Navigation.findNavController(root).navigate(R.id.action_nav_article_detail_to_nav_select_shipping);
+            if (validateVariants()) {
+                AccessDataDb accessDataDb = AccessDataDb.getInstance(getContext());
+                Bundle bundle = new Bundle();
+                mArticle.setQuantity(adViewModel.getQty().getValue());
+                mArticle.setColorId(accessDataDb.getColorId(adViewModel.getColor().getValue()));
+                mArticle.setSizeId(accessDataDb.getSizeId(adViewModel.getSize().getValue()));
+                Article[] articles = {mArticle};
+                bundle.putParcelableArray("articles", articles);
+                Navigation.findNavController(root).navigate(R.id.action_nav_article_detail_to_nav_select_shipping, bundle);
+            }
             else
                 Snackbar.make(tvColor, getResources().getString(R.string.error_select_variant), BaseTransientBottomBar.LENGTH_LONG).show();
         } else {
@@ -305,6 +361,15 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
         generateSizes(article.getDistinctSizes());
         generateColors(article.getDistinctColors());
         updateStock();
+
+        Button btVisitStore = root.findViewById(R.id.btVisitStore);
+        btVisitStore.setOnClickListener(v -> {
+            SearchViewModel searchViewModel = new ViewModelProvider(getActivity()).get(SearchViewModel.class);
+            searchViewModel.clean();
+            Bundle bundle = new Bundle();
+            bundle.putInt("storeId", article.getStoreId());
+            Navigation.findNavController(root).navigate(R.id.action_nav_article_detail_to_nav_article, bundle);
+        });
     }
 
     private void generateSizes(List<String> sizeList) {
@@ -395,6 +460,13 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
                     cardPgrogessImage.setVisibility(View.GONE);
                 }
                 break;
+            case RC_FAV_ACT:
+                setIconFav();
+                if (favStatus)
+                    Snackbar.make(root, "Se agregó a favoritos", BaseTransientBottomBar.LENGTH_LONG).show();
+                else
+                    Snackbar.make(root, "Se quitó de favoritos", BaseTransientBottomBar.LENGTH_LONG).show();
+
         }
     }
 
@@ -415,6 +487,21 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
                     progressBarGroup.setVisibility(View.GONE);
                 }
                 break;
+            case RC_FAV:
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject dataItem = response.getJSONObject(i);
+                        Article favs = new Article(dataItem);
+                        if (favs.getId() == articleId) {
+                            favStatus = true;
+                            setIconFav();
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    progressBarGroup.setVisibility(View.GONE);
+                }
         }
     }
 

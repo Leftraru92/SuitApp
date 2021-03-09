@@ -46,14 +46,16 @@ public class StoresAdapter extends RecyclerView.Adapter<StoresAdapter.ViewHolder
             byte[] decodedString = Base64.decode(mValues.get(position).getStoreLogo(), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.ivStore.setImageBitmap(decodedByte);
-        }
+        }else
+            holder.ivStore.setImageResource(R.drawable.ic_emoji_picture_borderless);
 
         if(holder.ivBanner != null){
             if (mValues.get(position).getStoreCoverPhoto() != null && !mValues.get(position).getStoreCoverPhoto().equals("")) {
                 byte[] decodedString = Base64.decode(mValues.get(position).getStoreCoverPhoto(), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 holder.ivBanner.setImageBitmap(decodedByte);
-            }
+            }else
+                holder.ivBanner.setImageResource(R.drawable.ic_emoji_picture_borderless);
         }
     }
 

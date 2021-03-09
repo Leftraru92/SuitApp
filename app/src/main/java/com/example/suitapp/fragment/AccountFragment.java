@@ -1,7 +1,9 @@
 package com.example.suitapp.fragment;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -43,7 +45,7 @@ public class AccountFragment extends Fragment implements StoresAdapter.OnStoreLi
     View root;
     List<Store> myStores;
     StoresAdapter storesAdapter;
-    final int RC_STORES = 1;
+    final int RC_STORES = 1, RC_STORE_DEL = 2;
     ProgressBar pbStores;
 
     public static AccountFragment newInstance() {
@@ -61,11 +63,15 @@ public class AccountFragment extends Fragment implements StoresAdapter.OnStoreLi
 
     private void init() {
         Button btAddStore = root.findViewById(R.id.btAddStore);
+        Button btAddress = root.findViewById(R.id.btAddress);
         pbStores = root.findViewById(R.id.pbStores);
+
+        //listener
         btAddStore.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), AddStoreActivity.class);
             getContext().startActivity(intent);
         });
+        btAddress.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_account_to_nav_address));
 
         searchViewModel = new ViewModelProvider(getActivity()).get(SearchViewModel.class);
 
@@ -103,12 +109,35 @@ public class AccountFragment extends Fragment implements StoresAdapter.OnStoreLi
 
     @Override
     public void onStoreDelete(int position) {
+        AlertDialog dialogo = new AlertDialog
+                .Builder(getContext()) // NombreDeTuActividad.this, o getActivity() si es dentro de un fragmento
+                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteStore(position);
+                    }
+                })
+                .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
+                .setTitle("Confirmar") // El título
+                .setMessage("¿Deseas eliminar la tienda?\n" +
+                        "Se eliminarán los artículos asociados") // El mensaje
+                .create();
+        dialogo.show();
+    }
 
+    private void deleteStore(int position) {
+        String param = "?email="+ SingletonUser.getInstance(getContext()).getHash() + "&storeId=" + position;
+        WebService webService = new WebService(getContext(), RC_STORE_DEL);
+        webService.callService(this, Constants.WS_DOMINIO + Constants.WS_STORES, param, Request.Method.DELETE, Constants.JSON_TYPE.OBJECT, null);
     }
 
     @Override
     public void onResult(int requestCode, JSONObject response) {
-
+        switch (requestCode) {
+            case RC_STORE_DEL:
+                callWs();
+                break;
+        }
     }
 
     @Override
@@ -135,5 +164,11 @@ public class AccountFragment extends Fragment implements StoresAdapter.OnStoreLi
     @Override
     public void onError(int requestCode, String message) {
         pbStores.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        callWs();
     }
 }

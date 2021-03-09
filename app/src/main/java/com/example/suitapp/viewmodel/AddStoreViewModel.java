@@ -290,10 +290,10 @@ public class AddStoreViewModel extends ViewModel implements DialogSelectItemView
             jsonAddress.put("street_number", getNumber().getValue());
             jsonAddress.put("floor", getFloor().getValue());
             jsonAddress.put("apartment", getApartment().getValue());
-            jsonObject.put("address", jsonAddress);
+            jsonObject.put("addressAdd", jsonAddress);
 
-            jsonObject.put("storeLogo", Util.bitmapToBase64(getImageLogo().getValue()));
-            jsonObject.put("storeCoverPhoto", Util.bitmapToBase64(getImagePortada().getValue()));
+            jsonObject.put("storeLogo", (getImageLogo().getValue()==null) ? "" : Util.bitmapToBase64(getImageLogo().getValue()));
+            jsonObject.put("storeCoverPhoto", (getImagePortada().getValue()== null) ? "" : Util.bitmapToBase64(getImagePortada().getValue()));
             jsonObject.put("physical_store", getPersonalShipping().getValue());
             jsonObject.put("mailShipping", getMailShipping().getValue());
 

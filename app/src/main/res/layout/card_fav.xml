@@ -50,7 +50,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btAddToCart"
+        android:id="@+id/btDelete"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/link_height"
@@ -60,10 +60,10 @@
         android:fontFamily="sans-serif-medium"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        android:text="@string/bt_add_to_cart"
+        android:text="@string/bt_delete"
         android:textAllCaps="false"
         android:textColor="@color/cian_400"
-        app:icon="@drawable/ic_cart_slim"
+        app:icon="@drawable/ic_trash_alt_solid"
         app:iconSize="16dp"
         app:iconTint="@color/cian_400"
         app:layout_constraintBottom_toBottomOf="parent"

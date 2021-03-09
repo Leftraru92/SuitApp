@@ -38,6 +38,7 @@
     <string name="bt_more_from_store">Más productos del vendedor</string>
     <string name="bt_edit">Editar</string>
     <string name="bt_add_store">Agregar Tienda</string>
+    <string name="bt_add_address">Agregar Dirección</string>
     <string name="bt_next">Continuar</string>
     <string name="bt_add_image">Agregar imagen</string>
     <string name="bt_publish">Publicar</string>
@@ -78,6 +79,8 @@
     <string name="type_shipping">¿Cómo querés entregar tus productos?</string>
     <string name="shipping_price">Indique el costo del envío por correo</string>
     <string name="review_publish">Revisá y publicá</string>
+    <string name="user_address">Mis Direcciones</string>
+    <string name="user_new_address">Ingrese su dirección</string>
 
     <!--Agregar artículo-->
     <string name="article_name">Indicá el nombre del artículo</string>

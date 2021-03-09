@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.suitapp.R;
+import com.example.suitapp.adapter.ShippingPriceAdapter;
 import com.example.suitapp.model.Store;
 import com.example.suitapp.util.Constants;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,12 +26,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.chip.Chip;
 
 public class StoreDetailFragment extends Fragment implements OnMapReadyCallback {
     View root;
     protected static GoogleMap mMap;
     SupportMapFragment mapFragment;
     Store mStore;
+    RecyclerView recyclerListShipping;
+    ShippingPriceAdapter shippingPriceAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +64,8 @@ public class StoreDetailFragment extends Fragment implements OnMapReadyCallback 
         ImageView ivBanner = root.findViewById(R.id.ivBanner);
         ImageView ivLogo = root.findViewById(R.id.ivLogo);
         TextView tvDesc = root.findViewById(R.id.tvDesc);
+        Chip chipMail = root.findViewById(R.id.chipMail);
+        Chip chipPersonal = root.findViewById(R.id.chipPersonal);
 
         //set
         toolbar.setTitle(mStore.getName());
@@ -76,6 +83,16 @@ public class StoreDetailFragment extends Fragment implements OnMapReadyCallback 
             byte[] decodedString = Base64.decode(mStore.getStoreLogo(), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             ivLogo.setImageBitmap(decodedByte);
+        }
+
+        chipPersonal.setVisibility((mStore.isPhysical_store()) ? View.VISIBLE : View.GONE);
+        chipMail.setVisibility((mStore.isMailShipping()) ? View.VISIBLE : View.GONE);
+
+        if(mStore.isMailShipping()) {
+            (root.findViewById(R.id.ccShippingPrice)).setVisibility(View.VISIBLE);
+            shippingPriceAdapter = new ShippingPriceAdapter(mStore.getShippingPrice(), null, R.layout.card_shipping_price_mini);
+            recyclerListShipping = root.findViewById(R.id.listShipping);
+            recyclerListShipping.setAdapter(shippingPriceAdapter);
         }
     }
 

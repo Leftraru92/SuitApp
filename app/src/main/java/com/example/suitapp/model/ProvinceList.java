@@ -13,6 +13,11 @@ public class ProvinceList implements DialogSelectItemList {
         addItems();
     }
 
+    public static List<Province> getProvinces(){
+        addItems();
+        return ITEMS;
+    }
+
     private static void addItems() {
         int i = 1;
         ITEMS.add(new Province(i++, "Buenos Aires"));

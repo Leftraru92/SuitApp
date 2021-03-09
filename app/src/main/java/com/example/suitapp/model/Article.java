@@ -1,5 +1,8 @@
 package com.example.suitapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,8 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Article {
+public class Article implements Parcelable {
     private int id;
+    private int storeId;
     private String name;
     private float price;
     private String description;
@@ -20,6 +24,10 @@ public class Article {
     private List<Variant> variantList;
     private float ranking;
     private int commentsQty;
+    private int quantity;
+    private int colorId;
+    private int sizeId;
+    private String buyDate, arriveDate;
 
     public Article(int id, String name, float price, int image, int colors) {
         this.id = id;
@@ -56,7 +64,52 @@ public class Article {
         if (dataItem.has("articleCountColours") && dataItem.getString("articleCountColours") != null && !dataItem.getString("articleCountColours").equals("null"))
             colorsQty = dataItem.getInt("articleCountColours");
 
+        if (dataItem.has("quantity") && dataItem.getString("quantity") != null && !dataItem.getString("quantity").equals("null"))
+            quantity = dataItem.getInt("quantity");
+
+        if (dataItem.has("colorId") && dataItem.getString("colorId") != null && !dataItem.getString("colorId").equals("null"))
+            colorId = dataItem.getInt("colorId");
+
+        if (dataItem.has("sizeId") && dataItem.getString("sizeId") != null && !dataItem.getString("sizeId").equals("null"))
+            sizeId = dataItem.getInt("sizeId");
+
+        if (dataItem.has("storeId") && dataItem.getString("storeId") != null && !dataItem.getString("storeId").equals("null"))
+            storeId = dataItem.getInt("storeId");
+
+        if (dataItem.has("buyDate") && dataItem.getString("buyDate") != null && !dataItem.getString("buyDate").equals("null"))
+            buyDate = dataItem.getString("buyDate");
+
+        if (dataItem.has("arriveDate") && dataItem.getString("arriveDate") != null && !dataItem.getString("arriveDate").equals("null"))
+            arriveDate = dataItem.getString("arriveDate");
     }
+
+    protected Article(Parcel in) {
+        id = in.readInt();
+        storeId = in.readInt();
+        name = in.readString();
+        price = in.readFloat();
+        description = in.readString();
+        image = in.readInt();
+        articleImage = in.readString();
+        colorsQty = in.readInt();
+        ranking = in.readFloat();
+        commentsQty = in.readInt();
+        quantity = in.readInt();
+        colorId = in.readInt();
+        sizeId = in.readInt();
+    }
+
+    public static final Creator<Article> CREATOR = new Creator<Article>() {
+        @Override
+        public Article createFromParcel(Parcel in) {
+            return new Article(in);
+        }
+
+        @Override
+        public Article[] newArray(int size) {
+            return new Article[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -64,6 +117,10 @@ public class Article {
 
     public String getName() {
         return name;
+    }
+
+    public float getPrice(){
+        return price;
     }
 
     public String getPriceEnter() {
@@ -79,6 +136,12 @@ public class Article {
     }
 
     public String getPriceFormated() {
+        DecimalFormat formatea = new DecimalFormat("$ ###,###", DecimalFormatSymbols.getInstance(Locale.ITALY));
+        return formatea.format(price);
+    }
+
+    public String getPriceFormated(int qty) {
+        price = price * qty;
         DecimalFormat formatea = new DecimalFormat("$ ###,###", DecimalFormatSymbols.getInstance(Locale.ITALY));
         return formatea.format(price);
     }
@@ -188,5 +251,67 @@ public class Article {
 
     public int getCommentsQty() {
         return commentsQty;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(int colorId) {
+        this.colorId = colorId;
+    }
+
+    public int getSizeId() {
+        return sizeId;
+    }
+
+    public void setSizeId(int sizeId) {
+        this.sizeId = sizeId;
+    }
+
+    public int getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(int storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getBuyDate() {
+        return buyDate;
+    }
+
+    public String getArriveDate() {
+        return arriveDate;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(storeId);
+        dest.writeString(name);
+        dest.writeFloat(price);
+        dest.writeString(description);
+        dest.writeInt(image);
+        dest.writeString(articleImage);
+        dest.writeInt(colorsQty);
+        dest.writeFloat(ranking);
+        dest.writeInt(commentsQty);
+        dest.writeInt(quantity);
+        dest.writeInt(colorId);
+        dest.writeInt(sizeId);
     }
 }

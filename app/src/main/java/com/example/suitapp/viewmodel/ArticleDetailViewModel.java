@@ -6,8 +6,11 @@ import android.util.Base64;
 
 import com.example.suitapp.model.Article;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.SSLSession;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -44,9 +44,7 @@ public class ArticlesGroupAdapter extends RecyclerView.Adapter<ArticlesGroupAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-//        holder.tvId.setText(String.valueOf(articleGroups.get(position).getId()));
         holder.tvTitle.setText(articleGroups.get(position).getTitle());
-
         holder.recyclerArticle.setAdapter(new ArticleAdapter(articleGroups.get(position).getArticleList(), this, cardArticle));
     }
 

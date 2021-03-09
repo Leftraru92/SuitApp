@@ -6,6 +6,9 @@ import android.os.Parcelable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Store implements Parcelable {
 
     private int id;
@@ -16,7 +19,10 @@ public class Store implements Parcelable {
     private String description;
     private boolean premium;
     private boolean physical_store;
-    private String address;
+    private String address;;
+    private boolean mailShipping;
+    private List<ShippingPrice> shippingPrice;
+
 
     public Store(int id, String name, int image, int visits) {
         this.id = id;
@@ -43,6 +49,16 @@ public class Store implements Parcelable {
             physical_store = dataItem.getBoolean("physical_store");
         if (dataItem.has("address") && dataItem.getString("address") != null && !dataItem.getString("address").equals("null"))
             address = dataItem.getString("address");
+
+        if (dataItem.has("mailShipping") && dataItem.getString("mailShipping") != null && !dataItem.getString("mailShipping").equals("null"))
+            mailShipping = dataItem.getBoolean("mailShipping");
+
+        shippingPrice = new ArrayList<>();
+        if (dataItem.has("shippingPrice") && !dataItem.getString("shippingPrice").equals("null") && dataItem.getJSONArray("shippingPrice").length() > 0)
+            for (int i = 0; i < dataItem.getJSONArray("shippingPrice").length(); i++) {
+                JSONObject sp = dataItem.getJSONArray("shippingPrice").getJSONObject(i);
+                shippingPrice.add(new ShippingPrice(sp, i));
+            }
     }
 
     protected Store(Parcel in) {
@@ -54,7 +70,9 @@ public class Store implements Parcelable {
         description = in.readString();
         premium = in.readByte() != 0;
         physical_store = in.readByte() != 0;
+        mailShipping = in.readByte() != 0;
         address = in.readString();
+        shippingPrice = in.createTypedArrayList(ShippingPrice.CREATOR);
     }
 
     public static final Creator<Store> CREATOR = new Creator<Store>() {
@@ -90,7 +108,10 @@ public class Store implements Parcelable {
     }
 
     public String getDescription() {
-        return description;
+        if (description == null || description.equals(""))
+            return "No se incluyó una descripción de la tienda";
+        else
+            return description;
     }
 
     public boolean isPremium() {
@@ -103,6 +124,14 @@ public class Store implements Parcelable {
 
     public String getAddress() {
         return address;
+    }
+
+    public boolean isMailShipping() {
+        return mailShipping;
+    }
+
+    public List<ShippingPrice> getShippingPrice() {
+        return shippingPrice;
     }
 
     @Override
@@ -120,6 +149,8 @@ public class Store implements Parcelable {
         dest.writeString(description);
         dest.writeByte((byte) (premium ? 1 : 0));
         dest.writeByte((byte) (physical_store ? 1 : 0));
+        dest.writeByte((byte) (mailShipping ? 1 : 0));
         dest.writeString(address);
+        dest.writeTypedList(shippingPrice);
     }
 }

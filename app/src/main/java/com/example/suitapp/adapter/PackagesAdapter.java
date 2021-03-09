@@ -1,5 +1,6 @@
 package com.example.suitapp.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,12 @@ import android.widget.TextView;
 
 import com.example.suitapp.R;
 import com.example.suitapp.model.Package;
+import com.example.suitapp.model.ShippingPrice;
 import com.example.suitapp.util.Util;
 import com.example.suitapp.viewmodel.ShoppingViewModel;
 
 import java.util.List;
+
 import androidx.recyclerview.widget.RecyclerView;
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton;
 import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup;
@@ -21,11 +24,13 @@ public class PackagesAdapter extends RecyclerView.Adapter<PackagesAdapter.ViewHo
     private List<Package> packages;
     LayoutInflater inflater;
     int pxWidth, pxMargin;
+    Context context;
     ShoppingViewModel shoppingViewModel;
 
-    public PackagesAdapter(List<Package> packages, ShoppingViewModel shoppingViewModel) {
+    public PackagesAdapter(List<Package> packages, ShoppingViewModel shoppingViewModel, Context context ) {
         this.packages = packages;
         this.shoppingViewModel = shoppingViewModel;
+        this.context = context;
     }
 
     @Override
@@ -43,8 +48,9 @@ public class PackagesAdapter extends RecyclerView.Adapter<PackagesAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-//        holder.tvId.setText(String.valueOf(articleGroups.get(position).getId()));
-        holder.tvPackage.setText("Paquete " + String.valueOf(position +1));
+        int provinceId = shoppingViewModel.getProvinceId().getValue();
+        int selectId = -1;
+        holder.tvPackage.setText("Paquete " + String.valueOf(position + 1));
 
         ThemedButton btnS1 = (ThemedButton) inflater.inflate(R.layout.component_size_toggle, null);
         ThemedButton btnS2 = (ThemedButton) inflater.inflate(R.layout.component_size_toggle, null);
@@ -53,24 +59,44 @@ public class PackagesAdapter extends RecyclerView.Adapter<PackagesAdapter.ViewHo
                 RelativeLayout.LayoutParams.WRAP_CONTENT, pxWidth);
         params.setMargins(pxMargin, pxMargin, pxMargin, pxMargin);
 
-        btnS1.setTag("En Persona - $ 0");
-        btnS1.setText("En Persona - $ 0");
-        holder.tgShipment.addView(btnS1, params);
+        if (packages.get(position).getStore().isPhysical_store()) {
+            btnS1.setId(0);
+            btnS1.setTag(0);
+            btnS1.setText("En Persona - $ 0");
+            holder.tgShipment.addView(btnS1, params);
+        }
+        if (packages.get(position).getStore().isMailShipping()) {
+            for (int i = 0; i < packages.get(position).getStore().getShippingPrice().size() ; i++) {
+                if(provinceId == packages.get(position).getStore().getShippingPrice().get(i).getProvince().getId()) {
+                    selectId = i;
+                    break;
+                }
+            }
+            if(selectId != -1) {
+                int price = packages.get(position).getStore().getShippingPrice().get(selectId).getPrice();
+                btnS2.setId(1);
+                btnS2.setTag(price);
+                btnS2.setText("Por Correo - $ " + price);
+                holder.tgShipment.addView(btnS2, params);
+            }
+        }
 
-        btnS2.setTag("Por Correo - $ 300");
-        btnS2.setText("Por Correo - $ 300");
-        holder.tgShipment.addView(btnS2, params);
-
-        holder.tgShipment.setOnSelectListener((ThemedButton btn) -> {
+        holder.tgShipment.setOnSelectListener((
+                ThemedButton btn) ->
+        {
             if (((ThemedToggleButtonGroup) btn.getParent()).getSelectedButtons().size() > 0) {
-                shoppingViewModel.getPackages().getValue().get(position).setSelectedShiping(btn.getTag().toString());
+                shoppingViewModel.getPackages().getValue().get(position).setPriceShipping(Integer.parseInt(btn.getTag().toString()));
+                shoppingViewModel.getPackages().getValue().get(position).setSelectedShiping(btn.getText());
+                shoppingViewModel.getPackages().getValue().get(position).setMailing((btn.getId()==1) ? true : false);
+                shoppingViewModel.refreshShippingPrice();
             } else {
                 shoppingViewModel.getPackages().getValue().get(position).setSelectedShiping(null);
             }
             return kotlin.Unit.INSTANCE;
         });
 
-        holder.listArticles.setAdapter(new ArticleAdapter(packages.get(position).getArticleList(), this, R.layout.card_cart_package));
+        holder.listArticles.setAdapter(new
+                CartAdapter(packages.get(position).getArticleList(), context, null));
     }
 
     @Override

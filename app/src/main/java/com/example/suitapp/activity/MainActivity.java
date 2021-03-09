@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements CallWebService {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_shopping, R.id.nav_notifications, R.id.nav_favs,
+                R.id.nav_home, R.id.nav_shopping, R.id.nav_notifications, R.id.nav_favs, R.id.nav_cart,
                 R.id.nav_account, R.id.nav_categories, R.id.nav_stores, R.id.nav_article, R.id.nav_article_detail)
                 .setDrawerLayout(drawer)
                 .build();
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements CallWebService {
             }
 
             //muestro oculto toolbar
-            if (destination.getId() == R.id.nav_login || destination.getId() == R.id.nav_view_image)
+            if (destination.getId() == R.id.nav_login || destination.getId() == R.id.nav_view_image || destination.getId() == R.id.nav_congrats_shop)
                 toolbar.setVisibility(View.GONE);
             else
                 toolbar.setVisibility(View.VISIBLE);

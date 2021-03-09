@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp">
+    android:layout_marginTop="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ccTop"
@@ -89,12 +89,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/bluegray_100"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ccQty"
             android:layout_width="wrap_content"
@@ -105,6 +99,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivArticle"
             app:layout_constraintTop_toBottomOf="@+id/tvArticleVariant">
+
 
             <TextView
                 android:id="@+id/tvQuantity"
@@ -132,13 +127,21 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/bluegray_100"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ccBottom"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingHorizontal="16dp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ccTop">
@@ -153,7 +156,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btBuyCart"
+                android:id="@+id/btMore"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/link_height"
@@ -164,11 +167,11 @@
                 android:text="@string/bt_more_from_store"
                 android:textAllCaps="false"
                 android:textColor="@color/cian_400"
-                app:layout_constraintStart_toEndOf="@+id/btSeeCart"
+                app:layout_constraintStart_toEndOf="@+id/btDelete"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btSeeCart"
+                android:id="@+id/btDelete"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/link_height"

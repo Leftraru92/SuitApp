@@ -48,6 +48,7 @@ public class StoreShippingFragment extends Fragment implements ShippingPriceAdap
 
         root = inflater.inflate(R.layout.fragment_store_shipping, container, false);
         init();
+
         return root;
     }
 

@@ -1,5 +1,7 @@
 package com.example.suitapp.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,10 +9,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,8 +23,10 @@ import com.example.suitapp.R;
 import com.example.suitapp.adapter.ArticlesGroupAdapter;
 import com.example.suitapp.api.CallWebService;
 import com.example.suitapp.api.WebService;
+import com.example.suitapp.model.Article;
 import com.example.suitapp.model.ArticleGroup;
 import com.example.suitapp.util.Constants;
+import com.example.suitapp.util.Util;
 import com.example.suitapp.viewmodel.ArticleDetailViewModel;
 
 import org.json.JSONArray;
@@ -57,6 +63,7 @@ public class ArticleAddedFragment extends Fragment implements ArticlesGroupAdapt
         pbGroups = root.findViewById(R.id.pbGroups);
         TextView tvArticleName = root.findViewById(R.id.tvArticleName);
         TextView tvVariant = root.findViewById(R.id.tvVariant);
+        ImageView ivArticle = root.findViewById(R.id.ivArticle);
         RecyclerView recyclerGroups = root.findViewById(R.id.article_groups_list);
         recyclerGroups.setAdapter(articlesGroupAdapter);
         Button btSeeCart = root.findViewById(R.id.btSeeCart);
@@ -64,12 +71,22 @@ public class ArticleAddedFragment extends Fragment implements ArticlesGroupAdapt
 
         //listener
         btSeeCart.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_article_added_to_nav_cart));
-        btBuyCart.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_article_added_to_nav_select_shipping));
+        btBuyCart.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            //bundle.putParcelableArray("articles", articleList.toArray(new Article[articleList.size()]));
+            Navigation.findNavController(root).navigate(R.id.action_nav_article_added_to_nav_select_shipping, bundle);
+        });
 
         //viewmodel
         tvArticleName.setText(adViewModel.getName().getValue());
         String variant = "Talle: " + adViewModel.getSize().getValue() + " Color: " + adViewModel.getColor().getValue();
         tvVariant.setText(variant);
+        if (adViewModel.getImagesString() != null && adViewModel.getImagesString().size() > 0) {
+            byte[] decodedString = Base64.decode(adViewModel.getImagesString().get(0), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ivArticle.setImageBitmap(decodedByte);
+        } else
+            ivArticle.setImageResource(R.drawable.ic_emoji_picture);
     }
 
     private void callWs() {
@@ -101,7 +118,7 @@ public class ArticleAddedFragment extends Fragment implements ArticlesGroupAdapt
                     articlesGroupAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }finally {
+                } finally {
                     pbGroups.setVisibility(View.GONE);
                 }
                 break;

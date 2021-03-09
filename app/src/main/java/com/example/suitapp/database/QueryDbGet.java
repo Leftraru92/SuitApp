@@ -33,12 +33,20 @@ public class QueryDbGet {
         return c;
     }
 
-    public static Cursor getColorHexById(Context context, int id) {
+    public static Cursor getColorById(Context context, int id) {
         HelpDb helpDb = HelpDb.getInstance(context);
         SQLiteDatabase db = helpDb.getReadableDatabase();
 
         Cursor c = db.query(DataDb.TABLE_COLOR, DataDb.getProjectionColor(), DataDb.COL_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
 
+        return c;
+    }
+
+    public static Cursor getColorId(Context context, String value) {
+        HelpDb helpDb = HelpDb.getInstance(context);
+        SQLiteDatabase db = helpDb.getReadableDatabase();
+
+        Cursor c = db.query(DataDb.TABLE_COLOR, DataDb.getProjectionColor(), DataDb.COL_NAME + "=?", new String[]{value}, null, null, null);
         return c;
     }
 
@@ -56,6 +64,23 @@ public class QueryDbGet {
         SQLiteDatabase db = helpDb.getReadableDatabase();
 
         Cursor c = db.query(DataDb.TABLE_SEARCH, DataDb.getProjectionSearch(), null, null, null, null, "rowid DESC");
+        return c;
+    }
+
+    public static Cursor getSizeId(Context context, String value) {
+        HelpDb helpDb = HelpDb.getInstance(context);
+        SQLiteDatabase db = helpDb.getReadableDatabase();
+
+        Cursor c = db.query(DataDb.TABLE_SIZES, DataDb.getProjectionSize(), DataDb.COL_NAME + "=?", new String[]{value}, null, null, null);
+        return c;
+    }
+
+    public static Cursor getSizeById(Context context, int id) {
+        HelpDb helpDb = HelpDb.getInstance(context);
+        SQLiteDatabase db = helpDb.getReadableDatabase();
+
+        Cursor c = db.query(DataDb.TABLE_SIZES, DataDb.getProjectionSize(), DataDb.COL_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
+
         return c;
     }
 }

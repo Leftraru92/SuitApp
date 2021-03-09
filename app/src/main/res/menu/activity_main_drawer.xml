@@ -23,6 +23,10 @@
             android:icon="@drawable/ic_heart_solid"
             android:title="@string/menu_favs" />
         <item
+            android:id="@+id/nav_cart"
+            android:icon="@drawable/ic_shopping_cart_solid"
+            android:title="@string/menu_cart" />
+        <item
             android:id="@+id/nav_shopping"
             android:icon="@drawable/ic_shopping_bag_solid"
             android:title="@string/menu_shopping" />

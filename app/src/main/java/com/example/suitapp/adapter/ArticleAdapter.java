@@ -126,7 +126,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         @Override
         public void onClick(View v) {
             if (ibOpciones != null && v.getId() == ibOpciones.getId())
-                onArticleListener.onArticleEditClick(getAdapterPosition(), v);
+                onArticleListener.onArticleEditClick(mValues.get(getAdapterPosition()).getId(), v);
             else
                 onArticleListener.onArticleClick(mValues.get(getAdapterPosition()).getId());
         }

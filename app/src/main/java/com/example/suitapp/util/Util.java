@@ -6,6 +6,9 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Util {
 
@@ -29,5 +32,30 @@ public class Util {
         byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         return decodedByte;
+    }
+
+    public static String getDateFormatted(String fecha, boolean hora) {
+
+        SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat formateador;
+        if (hora) {
+            formateador = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+        } else {
+            formateador = new SimpleDateFormat("dd/MM/yyyy");
+        }
+
+        Date date = null;
+        String dateFormat = null;
+        if (!fecha.toString().equals("0001-01-01T00:00:00")) {
+            try {
+                date = parseador.parse(fecha);
+                dateFormat = formateador.format(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                dateFormat = fecha;
+            }
+        }
+        return dateFormat;
+
     }
 }

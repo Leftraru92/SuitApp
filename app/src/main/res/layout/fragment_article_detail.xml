@@ -333,9 +333,11 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ccPrecio"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ccViewPager">
 
@@ -353,12 +355,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
-                tools:text="850"
                 android:textColor="@color/gray_900"
                 android:textSize="30sp"
                 app:layout_constraintBottom_toBottomOf="@+id/ivPrice"
                 app:layout_constraintStart_toEndOf="@+id/ivPrice"
-                app:layout_constraintTop_toTopOf="@+id/ivPrice" />
+                app:layout_constraintTop_toTopOf="@+id/ivPrice"
+                tools:text="850" />
 
             <TextView
                 android:id="@+id/tvPriceDecimal"
@@ -370,9 +372,29 @@
                 android:text="00"
                 android:textColor="@color/gray_900"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvPrice"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btVisitStore"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Visitar Tienda"
+                android:textAllCaps="false"
+                android:textColor="@color/cian_400"
+                app:icon="@drawable/ic_external_link_alt_solid"
+                app:iconGravity="end"
+                app:iconSize="16dp"
+                app:iconTint="@color/cian_400"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivArticle"
+                app:layout_constraintTop_toBottomOf="@+id/tvArticleName" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
