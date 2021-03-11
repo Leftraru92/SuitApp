@@ -51,7 +51,7 @@ public class AddArticleActivity extends AppCompatActivity implements CallWebServ
         setContentView(R.layout.activity_add_article);
 
         int articleId = (getIntent().getExtras() != null) ?getIntent().getExtras().getInt("ARTICLEID", 0)  : 0;
-        int storeId = getIntent().getExtras().getInt("STOREID", 0);
+        int storeId = (getIntent().getExtras() != null) ?getIntent().getExtras().getInt("STOREID", 0) : 0;
 
         AppBarLayout appBarLayout = findViewById(R.id.appBarLayout);
         toolbar = findViewById(R.id.toolbar);

@@ -39,18 +39,30 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:text='Seleccione "Por correo" si realiza envíos. Seleccione "En persona" si los clientes pueden retirar sus productos desde su tienda.'
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbShippingType" />
+
             <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
                 android:id="@+id/tgShippingType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
                 app:flexWrap="wrap"
                 app:justifyContent="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lbShippingType"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
                 app:toggle_requiredAmount="0"
                 app:toggle_selectableAmount="3">
 
@@ -59,8 +71,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/store_logo_height"
                     app:layout_flexGrow="1"
-                    app:toggle_icon="@drawable/ic_truck_solid"
                     app:toggle_btnCornerRadius="8dp"
+                    app:toggle_icon="@drawable/ic_truck_solid"
                     app:toggle_iconGravity="top|center"
                     app:toggle_iconPaddingHorizontal="15dp"
                     app:toggle_iconPaddingTop="15dp"
@@ -75,11 +87,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/store_logo_height"
                     app:layout_flexGrow="1"
+                    app:toggle_btnCornerRadius="8dp"
                     app:toggle_icon="@drawable/ic_people_arrows_solid"
                     app:toggle_iconGravity="top|center"
                     app:toggle_iconPaddingHorizontal="15dp"
                     app:toggle_iconPaddingTop="15dp"
-                    app:toggle_btnCornerRadius="8dp"
                     app:toggle_selectedBackgroundColor="@color/cian_400"
                     app:toggle_selectedTextColor="@android:color/white"
                     app:toggle_text="En persona"

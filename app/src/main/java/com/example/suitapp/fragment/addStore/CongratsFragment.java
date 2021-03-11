@@ -77,6 +77,7 @@ public class CongratsFragment extends Fragment implements CallWebService {
             lbSub.setText(getString(R.string.congrats_art));
             lbSub2.setText(getString(R.string.congrats_det_article));
         } else {
+            btAddProduct.setVisibility(View.GONE);
             lbSub.setText(getString(R.string.congrats_store));
             lbSub2.setText(getString(R.string.congrats_det_store));
         }
@@ -84,6 +85,8 @@ public class CongratsFragment extends Fragment implements CallWebService {
         //listener
         btAddProduct.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), AddArticleActivity.class);
+            if (isArticle)
+                intent.putExtra("STOREID", mViewModelArt.getStoreId().getValue());
             getContext().startActivity(intent);
             getActivity().finish();
         });
@@ -126,7 +129,7 @@ public class CongratsFragment extends Fragment implements CallWebService {
         if (result) {
             clPublicado.setVisibility(View.VISIBLE);
             clError.setVisibility(View.GONE);
-        }else{
+        } else {
             clError.setVisibility(View.VISIBLE);
         }
     }

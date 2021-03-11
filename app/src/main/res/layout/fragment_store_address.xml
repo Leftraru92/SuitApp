@@ -45,6 +45,7 @@
         android:layout_marginEnd="16dp"
         app:counterEnabled="true"
         app:counterMaxLength="100"
+        app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilProvince">
@@ -67,6 +68,7 @@
         android:layout_marginEnd="16dp"
         app:counterEnabled="true"
         app:counterMaxLength="50"
+        app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilCity">
@@ -97,6 +99,7 @@
             android:layout_marginEnd="8dp"
             app:counterEnabled="true"
             app:counterMaxLength="5"
+            app:endIconMode="clear_text"
             app:layout_constraintEnd_toStartOf="@+id/tilFloor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -119,6 +122,7 @@
             android:layout_marginEnd="8dp"
             app:counterEnabled="true"
             app:counterMaxLength="2"
+            app:endIconMode="clear_text"
             app:layout_constraintEnd_toStartOf="@+id/tilApartment"
             app:layout_constraintStart_toEndOf="@+id/tilNumber"
             app:layout_constraintTop_toTopOf="parent">
@@ -141,6 +145,7 @@
             android:layout_marginEnd="16dp"
             app:counterEnabled="true"
             app:counterMaxLength="2"
+            app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tilFloor"
             app:layout_constraintTop_toTopOf="parent">

@@ -230,7 +230,7 @@ public class AddStoreViewModel extends ViewModel implements DialogSelectItemView
 
     public void addShippingPrice(int price) {
         //Si es editado primero lo elimino de la lista
-        ArrayList<ShippingPrice> editedListSP = mListShippingPrice;
+        ArrayList<ShippingPrice> editedListSP = new ArrayList<>();
         for (ShippingPrice sp : mListShippingPrice) {
             if (sp.getProvince().getId() == mEditShippingPrice.getValue().getProvince().getId())
                 editedListSP.add(sp);

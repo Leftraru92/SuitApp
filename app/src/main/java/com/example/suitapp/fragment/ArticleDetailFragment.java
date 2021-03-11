@@ -263,14 +263,19 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
     }
 
     private void onFavClick() throws JSONException {
-        favStatus = !favStatus;
-        if (favStatus)
-            webServiceFavs.callService(this, Constants.WS_DOMINIO + Constants.WS_FAV, null, Request.Method.POST, Constants.JSON_TYPE.OBJECT, bodyFav);
-        else
-            webServiceFavs.callService(this, Constants.WS_DOMINIO + Constants.WS_FAV, null, Request.Method.PUT, Constants.JSON_TYPE.OBJECT, bodyFav);
+        if (SingletonUser.getInstance(getContext()).isLogued()) {
+            favStatus = !favStatus;
+            if (favStatus)
+                webServiceFavs.callService(this, Constants.WS_DOMINIO + Constants.WS_FAV, null, Request.Method.POST, Constants.JSON_TYPE.OBJECT, bodyFav);
+            else
+                webServiceFavs.callService(this, Constants.WS_DOMINIO + Constants.WS_FAV, null, Request.Method.PUT, Constants.JSON_TYPE.OBJECT, bodyFav);
+        } else {
+            ((MainActivity) getActivity()).mostrarMensaje();
+        }
     }
 
     private void setIconFav() {
+
         if (favStatus)
             btFav.setIcon(R.drawable.ic_heart_solid);
         else
@@ -313,8 +318,7 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
                 Article[] articles = {mArticle};
                 bundle.putParcelableArray("articles", articles);
                 Navigation.findNavController(root).navigate(R.id.action_nav_article_detail_to_nav_select_shipping, bundle);
-            }
-            else
+            } else
                 Snackbar.make(tvColor, getResources().getString(R.string.error_select_variant), BaseTransientBottomBar.LENGTH_LONG).show();
         } else {
             ((MainActivity) getActivity()).mostrarMensaje();
