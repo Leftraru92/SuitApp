@@ -12,12 +12,6 @@ public class ArticleGroup {
     String title;
     List<Article> articleList;
 
-    public ArticleGroup(int id, String title, List<Article> articleList) {
-        this.id = id;
-        this.title = title;
-        this.articleList = articleList;
-    }
-
     public ArticleGroup(JSONObject dataItem) throws JSONException {
         id = dataItem.getInt("groupId");
         title = dataItem.getString("title");

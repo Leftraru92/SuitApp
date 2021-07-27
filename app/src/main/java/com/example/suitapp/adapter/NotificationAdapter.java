@@ -12,10 +12,6 @@ import com.example.suitapp.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
     private final List<DummyItem> mValues;

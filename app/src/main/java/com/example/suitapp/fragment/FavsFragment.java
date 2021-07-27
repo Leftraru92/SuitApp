@@ -22,8 +22,6 @@ import com.example.suitapp.adapter.FavAdapter;
 import com.example.suitapp.R;
 import com.example.suitapp.api.CallWebService;
 import com.example.suitapp.api.WebService;
-import com.example.suitapp.database.QueryDbInsert;
-import com.example.suitapp.dummy.DummyArticles;
 import com.example.suitapp.model.Article;
 import com.example.suitapp.util.Constants;
 import com.example.suitapp.util.SingletonUser;

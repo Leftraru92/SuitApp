@@ -50,20 +50,6 @@ public class WebService {
             Log.d(Constants.LOG, "Body: " + jsonBody.toString());
 
         trabajoOnline();
-/*
-        //Trabajo offline?
-        boolean offline = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("swTrabajarOffline", false);
-        if (offline && Arrays.asList(Constantes.WS_FUNCIONA_OFFLINE).contains(partialUrl)) {
-            if (!comprobarBaseOffline(offline)) {
-                Log.i(Constantes.LOG_NAME, "No se encontraron datos offline: ");
-                Log.i(Constantes.LOG_NAME, "Buscando Online...: ");
-                trabajoOnline();
-            }
-
-        } else {
-            trabajoOnline();
-        }
-*/
     }
 
     private void trabajoOnline() {
@@ -188,20 +174,4 @@ public class WebService {
                 };
     }
 
-    /*private void getNuevoToken() {
-
-        Log.i(Constantes.LOG_NAME, "Cierro ");
-        String[] token = Util.getTokenId(context);
-
-    }
-
-    private Map<String, String> getToken(Context context) {
-        Map<String, String> params = new HashMap<String, String>();
-
-        String token = context.getSharedPreferences("_", MODE_PRIVATE).getString("TOKEN", "");
-        Log.d(Constantes.LOG_NAME, "token: " + token);
-        params.put("Authorization", "jwt " + token);
-        //params.put("Authorization", "bearer " + Constantes.TOKEN);
-        return params;
-    }*/
 }

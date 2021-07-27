@@ -25,7 +25,6 @@ import com.example.suitapp.activity.AddStoreActivity;
 import com.example.suitapp.adapter.StoresAdapter;
 import com.example.suitapp.api.CallWebService;
 import com.example.suitapp.api.WebService;
-import com.example.suitapp.dummy.DummyStores;
 import com.example.suitapp.model.Store;
 import com.example.suitapp.R;
 import com.example.suitapp.util.Constants;

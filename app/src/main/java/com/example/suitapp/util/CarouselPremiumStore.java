@@ -7,11 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.suitapp.R;
 import com.example.suitapp.adapter.PremiumStoreAdapter;
-import com.example.suitapp.dummy.DummyPremiumStores;
 import com.example.suitapp.model.Store;
 import com.example.suitapp.viewmodel.SearchViewModel;
 
