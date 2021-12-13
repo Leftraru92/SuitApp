@@ -12,3 +12,5 @@ Aplicación realizadas para la cátedra TFI de la Universidad Abierta Interameri
 
 ### Presentación de la app
 
+https://user-images.githubusercontent.com/3338903/145737107-37e82611-99db-4487-90b3-367d1cb7ae8d.mp4
+
