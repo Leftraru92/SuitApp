@@ -131,7 +131,8 @@ public class Article implements Parcelable {
     public String getPriceDecimal() {
         DecimalFormat format = new DecimalFormat("#.00");
         String result = format.format(price);
-        int indexOfDecimal = result.indexOf(".");
+        int indexOfDecimal = (result.indexOf(",")==-1) ? result.indexOf(".") : result.indexOf(",");
+
         return result.substring(indexOfDecimal + 1);
     }
 

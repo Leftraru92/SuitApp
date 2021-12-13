@@ -5,10 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Util {
 
@@ -56,6 +61,18 @@ public class Util {
             }
         }
         return dateFormat;
+    }
 
+    public static JSONObject createBody(HashMap<String, Object> bodyData){
+        JSONObject body = null;
+        try {
+            body = new JSONObject();
+            for (Map.Entry<String, Object> entry : bodyData.entrySet()) {
+                body.put(entry.getKey(), entry.getValue());
+            }
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return body;
     }
 }

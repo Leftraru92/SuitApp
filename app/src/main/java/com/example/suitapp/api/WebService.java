@@ -67,11 +67,6 @@ public class WebService {
             case OBJECT:
                 JsonObjectRequest stringRequestPost = new JsonObjectRequest(method, url, jsonBody,
                         jsonObjectListener(url), newErrorListener(url)) {
-/*
-                    @Override
-                    public Map<String, String> getHeaders() {
-                        return getToken(context);
-                    }*/
                 };
                 stringRequestPost.setRetryPolicy(policy);
                 queue.add(stringRequestPost);
@@ -80,11 +75,6 @@ public class WebService {
             case ARRAY:
                 JsonArrayRequest stringRequest = new JsonArrayRequest(method, url, null,
                         jsonArrayListener(url), newErrorListener(url)) {
-/*
-                    @Override
-                    public Map<String, String> getHeaders() {
-                        return getToken(context);
-                    }*/
                 };
                 stringRequest.setRetryPolicy(policy);
                 queue.add(stringRequest);
@@ -112,7 +102,7 @@ public class WebService {
     private Response.ErrorListener newErrorListener(String url) {
 
         return
-                (Response.ErrorListener) error -> {
+                error -> {
                     error.printStackTrace();
                     String description = "";
                     String message;

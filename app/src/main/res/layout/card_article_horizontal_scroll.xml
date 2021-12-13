@@ -58,6 +58,7 @@
         android:fontFamily="sans-serif-light"
         android:includeFontPadding="false"
         android:minLines="4"
+        android:maxLines="4"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"

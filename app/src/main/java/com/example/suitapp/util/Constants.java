@@ -21,6 +21,7 @@ public class Constants {
     public static final String WS_CART = "/api/Cart";
     public static final String WS_ADDRESS = "/api/Address";
     public static final String WS_SHOPPING = "/api/Shopping";
+    public static final String WS_COMMENTS = "/api/Questions";
 
     public static String LOG = "SuitApp";
     public static String LAST_PHOTO_URI ="";

@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -33,6 +34,7 @@ import com.android.volley.Request;
 import com.example.suitapp.activity.MainActivity;
 import com.example.suitapp.R;
 import com.example.suitapp.adapter.ArticlesGroupAdapter;
+import com.example.suitapp.adapter.CommentAdapter;
 import com.example.suitapp.adapter.ImageAdapter;
 import com.example.suitapp.api.CallWebService;
 import com.example.suitapp.api.WebService;
@@ -40,6 +42,7 @@ import com.example.suitapp.database.AccessDataDb;
 import com.example.suitapp.listener.OclQtySelector;
 import com.example.suitapp.model.Article;
 import com.example.suitapp.model.ArticleGroup;
+import com.example.suitapp.model.Comment;
 import com.example.suitapp.model.Variant;
 import com.example.suitapp.util.Constants;
 import com.example.suitapp.util.SingletonUser;
@@ -48,35 +51,52 @@ import com.example.suitapp.viewmodel.ArticleDetailViewModel;
 import com.example.suitapp.viewmodel.SearchViewModel;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdapter.OnGroupListener, CallWebService, ImageAdapter.OnImageSelectListener {
+public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdapter.OnGroupListener, CallWebService, ImageAdapter.OnImageSelectListener, CommentAdapter.OnCommentListener {
 
     ArticleDetailViewModel adViewModel;
     View root;
     LayoutInflater inflater;
     MenuItem btFav;
     boolean favStatus;
-    TextView tvSize, tvColor, tvStock, tvQuantity;
+    TextView tvSize, tvColor, tvStock, tvQuantity, tvNoQuestion;
     int articleId;
-    final int RC_ARTICLE = 1, RC_GROUPS = 2, RC_IMAGES = 3, RC_FAV = 4, RC_FAV_ACT = 5, RC_CART = 6;
+    final int RC_ARTICLE = 1,
+            RC_GROUPS = 2,
+            RC_IMAGES = 3,
+            RC_FAV = 4,
+            RC_FAV_ACT = 5,
+            RC_CART = 6,
+            RC_COMMENT = 7,
+            RC_QUESTION = 8,
+            RC_ANSWER = 9;
     RelativeLayout.LayoutParams params, params2;
     ThemedToggleButtonGroup tbgSize, tbgColor;
     ConstraintLayout ccProgressArt;
     ArticlesGroupAdapter articlesGroupAdapter;
+    CommentAdapter commentsAdapter;
     List<ArticleGroup> artcilegroups;
+    List<Comment> comments;
     ProgressBar progressBarGroup;
     ViewPager2 viewPager;
     CardView cardPgrogessImage, cardNotImage, btQuantity;
     Article mArticle;
-    WebService webServiceFavs;
+    WebService webServiceFavs, webServiceQuestion, webServiceAnswer;
     JSONObject bodyFav;
+    private TextInputLayout tilComment;
+    private TextInputEditText tietComment;
+    private Button btAsk;
+    private LinearLayoutCompat llPreguntas;
 
     public static ArticleDetailFragment newInstance() {
         return new ArticleDetailFragment();
@@ -106,8 +126,11 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
         params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, pxWidth);
         params.setMargins(pxMargin, pxMargin, pxMargin, pxMargin);
         artcilegroups = new ArrayList<>();
+        comments = new ArrayList<>();
         articlesGroupAdapter = new ArticlesGroupAdapter(null, this, root, R.layout.card_article_group_horizontal_scroll);
+        commentsAdapter = new CommentAdapter(null, this);
         webServiceFavs = new WebService(getContext(), RC_FAV_ACT);
+        webServiceQuestion = new WebService(getContext(), RC_QUESTION);
 
         //bind
         ccProgressArt = root.findViewById(R.id.ccProgressArt);
@@ -115,6 +138,7 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
         viewPager = root.findViewById(R.id.viewPager);
         Button btAddToCart = root.findViewById(R.id.btAddToCart);
         Button btBuyNow = root.findViewById(R.id.btBuyNow);
+        btAsk = root.findViewById(R.id.btAsk);
         btQuantity = root.findViewById(R.id.btQuantity);
         tvColor = root.findViewById(R.id.tvColor);
         tvSize = root.findViewById(R.id.tvSize);
@@ -124,13 +148,22 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
         cardNotImage = root.findViewById(R.id.cardNotImage);
         tvStock = root.findViewById(R.id.tvStock);
         tvQuantity = root.findViewById(R.id.tvQuantity);
+        tvNoQuestion = root.findViewById(R.id.tvNoQuestion);
+        tilComment = root.findViewById(R.id.tilComment);
+        tietComment = root.findViewById(R.id.tietComment);
+        llPreguntas = root.findViewById(R.id.llPreguntas);
 
         RecyclerView recyclerGroups = root.findViewById(R.id.article_groups_list);
         recyclerGroups.setAdapter(articlesGroupAdapter);
 
+        RecyclerView recyclerComments = root.findViewById(R.id.article_questions);
+        recyclerComments.setAdapter(commentsAdapter);
+
         //Listener
         btAddToCart.setOnClickListener(v -> onAddToCart());
         btBuyNow.setOnClickListener(v -> onBuyNow());
+        btAsk.setOnClickListener(v -> onAsk());
+
         tbgColor.setOnSelectListener((ThemedButton btn) -> {
             if (((ThemedToggleButtonGroup) btn.getParent()).getSelectedButtons().size() > 0) {
                 tvColor.setText(btn.getTag().toString());
@@ -201,6 +234,7 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
         cardPgrogessImage.setVisibility(View.GONE);
         setOptionsFromViewModel();
         callRelatedArticles();
+        callComments();
     }
 
     private void callWs() {
@@ -214,18 +248,17 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
 
         callRelatedArticles();
 
+        callComments();
+
         if (!SingletonUser.getInstance(getContext()).getHash().equals("")) {
             WebService webService4 = new WebService(getContext(), RC_FAV);
             String params4 = "?hashFavoritos=" + SingletonUser.getInstance(getContext()).getHash();
             webService4.callService(this, Constants.WS_DOMINIO + Constants.WS_FAV, params4, Request.Method.GET, Constants.JSON_TYPE.ARRAY, null);
 
-            try {
-                bodyFav = new JSONObject();
-                bodyFav.put("email", SingletonUser.getInstance(getContext()).getHash());
-                bodyFav.put("articleId", articleId);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            HashMap<String, Object> body = new HashMap<>();
+            body.put("email", SingletonUser.getInstance(getContext()).getHash());
+            body.put("articleId", articleId);
+            bodyFav = Util.createBody(body);
         }
     }
 
@@ -233,6 +266,12 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
         WebService webService2 = new WebService(getContext(), RC_GROUPS);
         String params2 = "?groupQty=2&artQty=6&idArticle=" + articleId;
         webService2.callService(this, Constants.WS_DOMINIO + Constants.WS_ARTICLES, params2, Request.Method.GET, Constants.JSON_TYPE.ARRAY, null);
+    }
+
+    private void callComments() {
+        WebService webService = new WebService(getContext(), RC_COMMENT);
+        String params = "?idArticle=" + articleId + "&email=" + SingletonUser.getInstance(getContext()).getHash();
+        webService.callService(this, Constants.WS_DOMINIO + Constants.WS_COMMENTS, params, Request.Method.GET, Constants.JSON_TYPE.ARRAY, null);
     }
 
     @Override
@@ -285,20 +324,20 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
     private void onAddToCart() {
         if (SingletonUser.getInstance(getContext()).isLogued()) {
             if (validateVariants()) {
-                try {
-                    AccessDataDb accessDataDb = AccessDataDb.getInstance(getContext());
-                    WebService webService = new WebService(getContext(), RC_CART);
-                    JSONObject body = new JSONObject();
-                    body.put("email", SingletonUser.getInstance(getContext()).getHash());
-                    body.put("articleId", articleId);
-                    body.put("colorId", accessDataDb.getColorId(adViewModel.getColor().getValue()));
-                    body.put("sizeId", accessDataDb.getSizeId(adViewModel.getSize().getValue()));
-                    body.put("quantity", adViewModel.getQty().getValue());
+                AccessDataDb accessDataDb = AccessDataDb.getInstance(getContext());
+                WebService webService = new WebService(getContext(), RC_CART);
+                HashMap<String, Object> bodyMap = new HashMap<>();
+                bodyMap.put("email", SingletonUser.getInstance(getContext()).getHash());
+                bodyMap.put("articleId", articleId);
+                bodyMap.put("colorId", accessDataDb.getColorId(adViewModel.getColor().getValue()));
+                bodyMap.put("sizeId", accessDataDb.getSizeId(adViewModel.getSize().getValue()));
+                bodyMap.put("quantity", adViewModel.getQty().getValue());
+                JSONObject body = Util.createBody(bodyMap);
+                if (body != null) {
                     webService.callService(this, Constants.WS_DOMINIO + Constants.WS_CART, null, Request.Method.POST, Constants.JSON_TYPE.OBJECT, body);
                     Navigation.findNavController(root).navigate(R.id.action_nav_article_detail_to_nav_article_added);
-                } catch (JSONException ex) {
-                    Log.d(Constants.LOG, ex.getMessage());
-                }
+                } else
+                    Snackbar.make(tvColor, "Ocurrió un error", BaseTransientBottomBar.LENGTH_LONG).show();
 
             } else
                 Snackbar.make(tvColor, getResources().getString(R.string.error_select_variant), BaseTransientBottomBar.LENGTH_LONG).show();
@@ -322,6 +361,34 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
                 Snackbar.make(tvColor, getResources().getString(R.string.error_select_variant), BaseTransientBottomBar.LENGTH_LONG).show();
         } else {
             ((MainActivity) getActivity()).mostrarMensaje();
+        }
+    }
+
+    private void onAsk() {
+        if (SingletonUser.getInstance(getContext()).isLogued()) {
+            if (tietComment.length() == 0)
+                tilComment.setError(getResources().getString(R.string.mandatory_field));
+            else
+                sendQuestion();
+        } else {
+            ((MainActivity) getActivity()).mostrarMensaje();
+        }
+    }
+
+    private void sendQuestion() {
+        btAsk.setEnabled(false);
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("email", SingletonUser.getInstance(getContext()).getHash());
+        body.put("articleId", articleId);
+        body.put("question", tietComment.getText().toString());
+        JSONObject bodyQuestion = Util.createBody(body);
+
+        if (bodyQuestion != null) {
+            webServiceQuestion.callService(this, Constants.WS_DOMINIO + Constants.WS_COMMENTS, null, Request.Method.POST, Constants.JSON_TYPE.OBJECT, bodyQuestion);
+            tietComment.setText("");
+        }else {
+            Snackbar.make(root, "Ocurrió un error al intentar enviar la pregunta", BaseTransientBottomBar.LENGTH_LONG).show();
+            btAsk.setEnabled(true);
         }
     }
 
@@ -447,7 +514,7 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
             case RC_IMAGES:
                 try {
                     List<String> lImagenes = new ArrayList<>();
-                    if (response.has("images") && response.getJSONArray("images") != null && response.getJSONArray("images").length() > 0) {
+                    if (response.has("images") && response.getJSONArray("images").length() > 0) {
                         for (int i = 0; i < response.getJSONArray("images").length(); i++) {
                             JSONObject imageObject = response.getJSONArray("images").getJSONObject(i);
                             lImagenes.add(imageObject.getString("image"));
@@ -470,6 +537,14 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
                     Snackbar.make(root, "Se agregó a favoritos", BaseTransientBottomBar.LENGTH_LONG).show();
                 else
                     Snackbar.make(root, "Se quitó de favoritos", BaseTransientBottomBar.LENGTH_LONG).show();
+                break;
+            case RC_QUESTION:
+                callComments();
+                btAsk.setEnabled(true);
+                break;
+            case RC_ANSWER:
+                callComments();
+                break;
 
         }
     }
@@ -481,10 +556,14 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
                 try {
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject dataItem = response.getJSONObject(i);
-                        artcilegroups.add(new ArticleGroup(dataItem));
+                        ArticleGroup ag = new ArticleGroup(dataItem);
+                        if (ag.getArticleList().size() > 0)
+                            artcilegroups.add(new ArticleGroup(dataItem));
                     }
-                    articlesGroupAdapter.setItems(artcilegroups);
-                    articlesGroupAdapter.notifyDataSetChanged();
+                    if(artcilegroups.size() > 0) {
+                        articlesGroupAdapter.setItems(artcilegroups);
+                        articlesGroupAdapter.notifyDataSetChanged();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } finally {
@@ -506,12 +585,46 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
                 } finally {
                     progressBarGroup.setVisibility(View.GONE);
                 }
+                break;
+            case RC_COMMENT:
+                try {
+                    comments.clear();
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject dataItem = response.getJSONObject(i);
+                        comments.add(new Comment(dataItem));
+                    }
+                    if (comments.size() == 0) {
+                        tvNoQuestion.setVisibility(View.VISIBLE);
+                    } else {
+                        tvNoQuestion.setVisibility(View.GONE);
+                        commentsAdapter.setItems(comments);
+                        commentsAdapter.notifyDataSetChanged();
+                        if (comments.get(0).isOwner() && webServiceAnswer == null) {
+                            webServiceAnswer = new WebService(getContext(), RC_ANSWER);
+                            //llPreguntas.setVisibility(View.GONE);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
     }
 
     @Override
     public void onError(int requestCode, String message) {
-
+        switch (requestCode) {
+            case RC_COMMENT:
+                tvNoQuestion.setVisibility(View.VISIBLE);
+                break;
+            case RC_QUESTION:
+                Snackbar.make(root, "Ocurrió un error al intentar tu pregunta", BaseTransientBottomBar.LENGTH_LONG).show();
+                btAsk.setEnabled(true);
+                break;
+            case RC_ANSWER:
+                Snackbar.make(root, "Ocurrió un error al intentar tu pregunta", BaseTransientBottomBar.LENGTH_LONG).show();
+                break;
+        }
     }
 
     @Override
@@ -520,5 +633,27 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
         bundle.putInt("imageView", Constants.IMAGE_ARTICLE_DETAIL);
         bundle.putInt("imageID", position);
         Navigation.findNavController(root).navigate(R.id.action_nav_article_detail_to_nav_view_image, bundle);
+    }
+
+    @Override
+    public void onDeleteComment(int questionId) {
+        String param = "?email=" + SingletonUser.getInstance(getContext()).getHash() + "&articleId=" + articleId + "&questionId=" + questionId;
+        webServiceAnswer.callService(this, Constants.WS_DOMINIO + Constants.WS_COMMENTS, param, Request.Method.DELETE, Constants.JSON_TYPE.OBJECT, null);
+    }
+
+    @Override
+    public void onResponseComment(int questionId, String answer) {
+        JSONObject bodyAnswer = getAnswerBody(questionId, answer);
+        webServiceAnswer.callService(this, Constants.WS_DOMINIO + Constants.WS_COMMENTS, null, Request.Method.PUT, Constants.JSON_TYPE.OBJECT, bodyAnswer);
+    }
+
+    private JSONObject getAnswerBody(int questionId, String answer) {
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("email", SingletonUser.getInstance(getContext()).getHash());
+        body.put("articleId", articleId);
+        body.put("questionId", questionId);
+        body.put("answer", answer);
+        JSONObject bodyAnswer = Util.createBody(body);
+        return bodyAnswer;
     }
 }
