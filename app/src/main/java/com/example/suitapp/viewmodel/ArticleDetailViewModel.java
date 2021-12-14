@@ -45,7 +45,15 @@ public class ArticleDetailViewModel extends ViewModel implements CaptureImageVie
     }
 
     public void setArticleId(int articleId) {
+        if(this.mArticleId.getValue() != null)
+            cleanOptions();
         this.mArticleId.setValue(articleId);
+
+    }
+
+    private void cleanOptions() {
+        mSize.setValue(null);
+        mColor.setValue(null);
     }
 
     public LiveData<Article> getArticle() {

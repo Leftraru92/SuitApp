@@ -315,7 +315,8 @@ public class ArticleFragment extends Fragment implements CallWebService, StoresA
 
         //muestro boton add article
         if (isOwner) {
-            View btAddProduct = getActivity().findViewById(R.id.btAddProduct);
+            Button btAddProduct = getActivity().findViewById(R.id.btAddProduct);
+            btAddProduct.setText("Agregar Artículo");
             btAddProduct.setVisibility(View.VISIBLE);
             btAddProduct.setOnClickListener(v -> {
                 Intent intent = new Intent(getContext(), AddArticleActivity.class);

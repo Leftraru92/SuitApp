@@ -223,6 +223,8 @@ public class ArticleDetailFragment extends Fragment implements ArticlesGroupAdap
             if (mArticle != null)
                 tvStock.setText(mArticle.getStockFormatted(s));
         });
+        adViewModel.setColor(null);
+        adViewModel.setSize(null);
     }
 
     private void loadFromViewMdel() {

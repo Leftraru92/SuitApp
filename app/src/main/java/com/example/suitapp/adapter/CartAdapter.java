@@ -52,7 +52,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         holder.tvArticleVariant.setText(variant);
         holder.tvArticleName.setText(mValues.get(position).getName());
         if (onDeleteListener == null)
-            holder.tvPrice.setText(mValues.get(position).getPriceFormated());
+            holder.tvPrice.setText(mValues.get(position).getPriceFormated(mValues.get(position).getQuantity()));
         else
             holder.tvPrice.setText(mValues.get(position).getPriceFormated(mValues.get(position).getQuantity()));
         holder.tvQuantity.setText(String.valueOf(mValues.get(position).getQuantity()));

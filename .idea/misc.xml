@@ -4,16 +4,25 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/drawable/ic_comment_dots_regular.xml" value="0.3828125" />
+        <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/app_bar_article.xml" value="0.36666666666666664" />
+        <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/app_bar_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/card_article_2.xml" value="0.36666666666666664" />
         <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/card_article_horizontal_scroll.xml" value="0.36666666666666664" />
         <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/card_article_questions.xml" value="0.37864583333333335" />
+        <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/card_cart.xml" value="0.20520833333333333" />
+        <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/card_category.xml" value="0.36666666666666664" />
         <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/card_fav.xml" value="0.36666666666666664" />
         <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/card_notification.xml" value="0.36666666666666664" />
         <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/card_package.xml" value="0.36666666666666664" />
         <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/card_premium_store.xml" value="0.36666666666666664" />
         <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/card_previus_search.xml" value="0.36666666666666664" />
+        <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/card_shop.xml" value="0.23645833333333333" />
         <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/fragment_article_detail.xml" value="0.327899394503959" />
         <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/fragment_article_name.xml" value="0.36666666666666664" />
+        <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/fragment_category_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/fragment_shopping.xml" value="0.36666666666666664" />
+        <entry key="..\:/Lautaro/Programacion/Android/SuitApp/app/src/main/res/layout/fragment_store_detail.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>
