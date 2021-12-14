@@ -142,9 +142,9 @@ public class Article implements Parcelable {
     }
 
     public String getPriceFormated(int qty) {
-        price = price * qty;
+        float totalPrice = price * qty;
         DecimalFormat formatea = new DecimalFormat("$ ###,###", DecimalFormatSymbols.getInstance(Locale.ITALY));
-        return formatea.format(price);
+        return formatea.format(totalPrice);
     }
 
     public String getDescription() {
